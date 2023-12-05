@@ -1,0 +1,591 @@
+openapi: 3.0.1
+info:
+  title: Digikam
+  description: RESTful Backend for Digikam
+  contact:
+    name: Michael Braun
+    email: braun.h.michael@gmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: "1.0"
+  x-restgeninfo: {}
+servers:
+- url: http://localhost:8087/digikambackend
+tags:
+- name: creator
+  description: Read-Only operations about Creators
+paths:
+  /creator/findByName:
+    get:
+      tags:
+      - creator
+      summary: Find Creator of an Image by Name
+      operationId: findCreatorsByName
+      parameters:
+      - name: name
+        in: query
+        required: true
+        allowEmptyValue: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: herrmannek
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                example: "[\n  {\n    \"name\": \"Birgit Herrmannek\"\n  },\n  {\n\
+                  \  \t\"name\": \"Nina Herrmannek\"\n  }\n]"
+                items:
+                  $ref: '#/components/schemas/Creator'
+        "400":
+          description: Invalid status value
+      callbacks: {}
+      x-accepts: application/json
+      x-tags:
+      - tag: creator
+  /creator/refresh:
+    summary: Refresh creator-cache. All backend-changes will be propagated 
+    tags:
+       - creator
+    get:
+      operationId: RefreshCreatorCache
+      responses:
+        "200":
+          description: Cache refreshed
+      callbacks: {}
+      x-accepts: application/json
+  /camera/findByNameAndModel:
+    tags:
+       - camera
+    summary: Find by Maker and Model
+    description: ""
+    get:
+      operationId: findCamerasByMakerAndModel
+      parameters:
+      - name: makeAndModel
+        in: query
+        description: Maker of Camera
+        required: true
+        allowEmptyValue: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: Sony
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                example: |-
+                  [
+                    {
+                      "name": "Sony, SLT-68"
+                    },
+                    {
+                      "name": "Sony, SLT-99V"
+                    }
+                  ]
+                items:
+                  $ref: '#/components/schemas/Camera'
+      callbacks: {}
+      x-accepts: application/json
+  /camera/refresh:
+    tags:
+       - camera
+    summary: Refresh creator-cache. All backend-changes will be propagated 
+    get:
+      operationId: RefreshCameraCache
+      responses:
+        "200":
+          description: Cache refreshed
+      callbacks: {}
+      x-accepts: application/json
+  /lens/findByNameAndMakeAndModel:
+    tags:
+       - lens
+    summary: Find by Maker and Model
+    description: ""
+    get:
+      operationId: findLensByNameAndMakeAndModel
+      parameters:
+      - name: name
+        in: query
+        description: Name of Lens
+        required: true
+        allowEmptyValue: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: Tamron
+      - name: makeAndModel
+        in: query
+        description: Camera (Make and Model)
+        required: true
+        allowEmptyValue: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: Sony
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                example: |-
+                  [
+                    {
+                      "name": "Tamron, 15-30mm"
+                    },
+                    {
+                      "name": "Sony, G70-400"
+                    }
+                  ]
+                items:
+                  $ref: '#/components/schemas/Lens'
+      callbacks: {}
+      x-accepts: application/json
+  /lens/refresh:
+    tags:
+       - lens
+    summary: Refresh lens-cache. All backend-changes will be propagated 
+    get:
+      operationId: RefreshLensCache
+      responses:
+        "200":
+          description: Cache refreshed
+      callbacks: {}
+      x-accepts: application/json
+  /keywords/findByName:
+    tags:
+       - keywords
+    summary: Finds Keywords by Name
+    get:
+      operationId: findKeywordsByName
+      parameters:
+      - name: name
+        in: query
+        required: true
+        allowEmptyValue: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: SLT
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                example: |-
+                  [
+                    {
+                      "id": "40",
+                      "name": "Braun | Michael"
+                    },
+                    {
+                      "id": "133",
+                      "name": "Obinger | Michael"
+                    },
+                    {
+                      "id": "44",
+                      "name": "Michaela"
+                    }
+                  ]
+                items:
+                  $ref: '#/components/schemas/Keyword'
+      callbacks: {}
+      x-accepts: application/json
+  /keywords/refresh:
+    tags:
+       - keywords
+    summary: Refresh keyword-cache. All backend-changes will be propagated 
+    get:
+      operationId: RefreshKeywordsCache
+      responses:
+        "200":
+          description: Cache refreshed
+      callbacks: {}
+      x-accepts: application/json
+  /image/find:
+    tags:
+       - image
+    summary: Find Images
+    get:
+      operationId: find images by Image-Attributes
+      parameters:
+      - name: keywords
+        in: query
+        description: List of Keywords
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: integer
+            format: int32
+      - name: creator
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: camera_maker
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: camera_model
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: lens
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: orientation
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: date_from
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: date_to
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: ratingFrom
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: ratingTo
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: exposureTimeFrom
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: number
+          format: double
+      - name: exposureTimeTo
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: number
+          format: double
+      - name: apertureFrom
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: number
+          format: double
+      - name: apertureTo
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: number
+          format: double
+      - name: focalLengthFrom
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: number
+          format: double
+      - name: focalLengthTo
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: number
+          format: double
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Images'
+      callbacks: {}
+      x-accepts: application/json
+  /image/{imageId}:
+    tags:
+       - image
+    summary: Get an image by ImageId
+    get:
+      operationId: getImage
+      parameters:
+      - name: imageId
+        in: path
+        description: Id of image to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            image/jpeg: 
+              schema:
+                type: string
+                format: byte
+      callbacks: {}
+      x-accepts: image/jpeg
+  /image/scale:
+    tags:
+       - image
+    summary: Scales un Image to provided values (height / width)
+    get:
+      operationId: scalesImage
+      parameters:
+      - name: imageId
+        in: query
+        description: Id of Image to scale
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: width
+        in: query
+        description: new width of scaled Image
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: height
+        in: query
+        description: new height of scaled Image
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            image/jpeg:
+              schema:
+                type: string
+                format: byte
+      callbacks: {}
+      x-accepts: application/json
+  /image/getInformation:
+    tags:
+       - image
+    get:
+      operationId: getInformationAboutImage
+      parameters:
+      - name: imageId
+        in: query
+        description: Id identifing an Image
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: Metadata of Image with Id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Image'
+      callbacks: {}
+      x-accepts: application/json
+components:
+  schemas:
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        type:
+          type: string
+        message:
+          type: string
+    Camera:
+      type: object
+      properties:
+        name:
+          type: string
+      example:
+        name: SONY, SLT-A99V
+    Creator:
+      type: object
+      properties:
+        name:
+          type: string
+      example:
+        name: name
+    Lens:
+      type: object
+      properties:
+        name:
+          type: string
+      example:
+        name: name
+    Keyword:
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: integer
+          format: int32
+      example:
+        name: name
+        id: 0
+    Image:
+      type: object
+      properties:
+        creator:
+          type: string
+          description: Name of the person, who has taken the picture
+        orientation:
+          type: string
+          enum:
+          - portrait
+          - landscape
+        exposureTime:
+          type: number
+          format: double
+        latitude:
+          type: number
+          format: double
+        focalLength35:
+          type: number
+          format: double
+        lens:
+          type: string
+        creationDate:
+          type: string
+          format: date-time
+        aperture:
+          type: number
+          format: double
+        width:
+          type: integer
+          format: int32
+        model:
+          type: string
+        id:
+          type: integer
+          description: unique Id identifying an Image
+          format: int32
+        make:
+          type: string
+        height:
+          type: integer
+          format: int32
+        focalLength:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+        iso:
+          type: integer
+          format: int32
+        rating:
+          type: integer
+          format: int32
+        keywords:
+          type: array
+          items:
+            type: string
+      example:
+        creator: creator
+        orientation: portrait
+        exposureTime: 0.8008281904610115
+        iso: 2
+        latitude: 6.027456183070403
+        rating: 4
+        focalLength35: 1
+        lens: lens
+        creationDate: 2000-01-23T04:56:07.000+00:00
+        aperture: 5.962133916683182
+        width: 5
+        model: model
+        id: 2
+        make: make
+        height: 7
+        focalLength: 9
+        longitude: 3.616076749251911
+    Images:
+      type: array
+      items:
+        type: object
+        properties:
+          imageId:
+            type: integer
+            format: int32
+          creationDate:
+            type: string
+            description: Date Image was taken
+            format: date-time
+  responses: {}
+  callbacks: {}

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <Resource id="jdbc/digikam" type="javax.sql.DataSource">
+   jdbcDriver=com.mysql.cj.jdbc.Driver
+   password=gesa0403
+   userName=mbraun
+   jdbcUrl=jdbc\:mysql\://192.168.0.219\:3306/digikam4?useUnicode\=true&amp;useJDBCCompliantTimezoneShift\=true&amp;useLegacyDatetimeCode\=false&amp;serverTimezone\=UTC 
+   jtaManaged = true
+   defaultAutoCommit = false
+   testOnReturn = true
+   testWhileIdle = true
+   timeBetweenEvictionRunsMillis = 60
+   initialSize = 2
+   minIdle = 2
+   validationQuery = "select 1" 
+   </Resource>
+</resources>
