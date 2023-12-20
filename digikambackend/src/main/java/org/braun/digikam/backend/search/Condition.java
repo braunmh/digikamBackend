@@ -7,7 +7,8 @@ import java.util.stream.Collectors;
 import jakarta.persistence.Query;
 
 /**
- *
+ * SQL-Condition
+ * 
  * @author mbraun
  */
 public class Condition<T> implements ICondition {
