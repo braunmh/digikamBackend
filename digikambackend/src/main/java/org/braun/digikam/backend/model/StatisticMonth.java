@@ -15,8 +15,12 @@ package org.braun.digikam.backend.model;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import jakarta.validation.constraints.*;
+import jakarta.validation.Valid;
 
 /**
  * StatisticMonth
@@ -26,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
   StatisticMonth.JSON_PROPERTY_MONTH,
   StatisticMonth.JSON_PROPERTY_CNT
 })
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJerseyServerCodegen", date = "2023-11-04T15:23:59.205784989+01:00[Europe/Berlin]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJerseyServerCodegen", date = "2023-12-27T20:04:01.965701513+01:00[Europe/Berlin]")
 public class StatisticMonth   {
   public static final String JSON_PROPERTY_YEAR = "year";
   @JsonProperty(JSON_PROPERTY_YEAR)
@@ -50,8 +54,8 @@ public class StatisticMonth   {
    * @return year
    **/
   @JsonProperty(value = "year")
-  @ApiModelProperty(value = "")
-  
+  @ApiModelProperty(required = true, value = "")
+  @NotNull 
   public Integer getYear() {
     return year;
   }
@@ -70,8 +74,8 @@ public class StatisticMonth   {
    * @return month
    **/
   @JsonProperty(value = "month")
-  @ApiModelProperty(value = "")
-  
+  @ApiModelProperty(required = true, value = "")
+  @NotNull 
   public Integer getMonth() {
     return month;
   }
@@ -90,8 +94,8 @@ public class StatisticMonth   {
    * @return cnt
    **/
   @JsonProperty(value = "cnt")
-  @ApiModelProperty(value = "")
-  
+  @ApiModelProperty(required = true, value = "")
+  @NotNull 
   public Integer getCnt() {
     return cnt;
   }

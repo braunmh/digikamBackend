@@ -28,7 +28,7 @@ import jakarta.validation.Valid;
 @JsonPropertyOrder({
   Creator.JSON_PROPERTY_NAME
 })
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJerseyServerCodegen", date = "2023-05-08T14:12:24.421753744+02:00[Europe/Berlin]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJerseyServerCodegen", date = "2023-12-27T20:04:01.965701513+01:00[Europe/Berlin]")
 public class Creator   {
   public static final String JSON_PROPERTY_NAME = "name";
   @JsonProperty(JSON_PROPERTY_NAME)
@@ -44,8 +44,8 @@ public class Creator   {
    * @return name
    **/
   @JsonProperty(value = "name")
-  @ApiModelProperty(value = "")
-  
+  @ApiModelProperty(required = true, value = "")
+  @NotNull 
   public String getName() {
     return name;
   }

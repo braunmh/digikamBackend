@@ -124,6 +124,7 @@ public class NodeFactory {
                     Keyword k = new Keyword();
                     k.setId(n.getId());
                     k.setName(n.getQualifiedName());
+                    k.setFullName(n.getFullName());
                     result.add(k);
                 }
             } else {
@@ -145,10 +146,10 @@ public class NodeFactory {
         return result;
     }
 
-    public String getKeywordById(int id) {
+    public Keyword getKeywordById(int id) {
         for (Node n : nodes) {
             if (id == n.getId()) {
-                return n.getFullName();
+                return new Keyword().fullName(n.getFullName()).id(n.getId()).name(n.getQualifiedName());
             }
         }
         return null;

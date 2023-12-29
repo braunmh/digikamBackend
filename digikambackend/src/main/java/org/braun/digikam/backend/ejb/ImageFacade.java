@@ -11,6 +11,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import jakarta.ejb.Stateless;
+import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
@@ -24,8 +25,8 @@ import org.braun.digikam.backend.NodeFactory;
 import org.braun.digikam.backend.api.NotFoundException;
 import org.braun.digikam.backend.graphics.ExifUtil;
 import org.braun.digikam.backend.graphics.ImageUtil;
-import org.braun.digikam.backend.graphics.Orientation;
 import org.braun.digikam.backend.model.Image;
+import org.braun.digikam.backend.model.ImageInternal;
 import org.braun.digikam.backend.model.ImagesInner;
 import org.braun.digikam.backend.model.Keyword;
 import org.braun.digikam.backend.model.StatisticKeyword;
@@ -58,6 +59,12 @@ public class ImageFacade {
     @PersistenceContext(unitName = "digikam")
     private EntityManager em;
 
+    @Inject
+    private ImagesFacade imagesFacade;
+    
+    @Inject
+    private ImageInformationFacade imageInformationFacade;
+    
     public InputStream getImage(int id) throws NotFoundException {
         ImageFull image = getImageFull(id);
         FileInputStream imageStream = getImageFile(image.getRelativePath(), image.getName());
@@ -65,7 +72,7 @@ public class ImageFacade {
     }
     
     public byte[] getScaledImage(int id, int width, int height) throws NotFoundException {
-        Image image = getMetadata(id);
+        ImageInternal image = getMetadata(id);
         FileInputStream fis = getImageFile(image.getRelativePath(), image.getName());
         ByteArrayOutputStream scaledImage = new ByteArrayOutputStream();
         try {
@@ -92,9 +99,9 @@ public class ImageFacade {
         }
     }
     
-    public Image getMetadata(int id) throws NotFoundException {
+    public ImageInternal getMetadata(int id) throws NotFoundException {
         ImageFull res = getImageFull(id);
-        Image image = new Image()
+        ImageInternal image = new ImageInternal()
             .id(res.getId())
             .name(res.getName())
             .relativePath(res.getRelativePath())
@@ -115,7 +122,7 @@ public class ImageFacade {
             .exposureTime(res.getExposureTime())
             .rating(res.getRating())
             .keywords(getKeywords(id))
-            .orientationTechnical(Orientation.parse("" + res.getOrientation()));
+            .orientationTechnical(res.getOrientation());
 
         TypedQuery<ImageComments> qi = getEntityManager().createNamedQuery("ImageComments.findByImageId", ImageComments.class);
         qi.setParameter("imageId", id);
@@ -264,10 +271,10 @@ public class ImageFacade {
         sql.addCondition(new RangeCondition(columnName, from, to));
     }
 
-    private List<String> getKeywords(int imageId) {
-        List<String> result = new ArrayList<>();
+    private List<Keyword> getKeywords(int imageId) {
+        List<Keyword> result = new ArrayList<>();
         for (Integer id : getKeyordIds(imageId)) {
-            String k = NodeFactory.getInstance().getKeywordById(id);
+            Keyword k = NodeFactory.getInstance().getKeywordById(id);
             if (k != null) {
                 result.add(k);
             }
@@ -324,6 +331,61 @@ public class ImageFacade {
         return result; 
     }
 
+    public void update(int id, String title, String description, int rating, List<Tags> tags, String creator) throws NotFoundException {
+        Images images = imagesFacade.find(id);
+        if (images == null) {
+            String msg = String.format("Image with id %s not found or exists anymore", id);
+            throw new NotFoundException(404, msg);
+        }
+
+        ImageInformation information = imageInformationFacade.findByImageId(id);
+        if (null != information) {
+            information.setRating(rating);
+            getEntityManager().merge(information);
+        }
+
+        updateComment(3, title, images);
+        updateComment(1, description, images);
+
+        updateCreator(creator, images);
+        
+        images.getTags().clear();
+        images.getTags().addAll(tags);
+        getEntityManager().merge(images);
+        getEntityManager().flush();
+    }
+
+    private void updateComment(int type, String value, Images images) {
+        for (ImageComments c : images.getComments()) {
+            if (null != c.getType() && type == c.getType()) {
+                c.setComment(value);
+                return;
+            }
+        }
+
+        ImageComments imageComments = new ImageComments();
+        imageComments.setType(type);
+        imageComments.setImage(images);
+        imageComments.setLanguage("x-default");
+        imageComments.setComment(value);
+        imageComments.setType(type);
+        images.getComments().add(imageComments);
+    }
+
+    private void updateCreator(String value, Images image) {
+        for (ImageCopyright c : image.getCopyrights()) {
+            if (null != c.getProperty() && "creator".equals(c.getProperty())) {
+                c.setValue(value);
+                return;
+            }
+        }
+        ImageCopyright ic = new ImageCopyright();
+        ic.setImage(image);
+        ic.setProperty("creator");
+        ic.setValue(value);
+        image.getCopyrights().add(ic);
+    }
+    
     class DateWrapper {
 
         private UncompleteDateTime udt;

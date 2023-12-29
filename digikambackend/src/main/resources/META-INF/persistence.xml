@@ -4,8 +4,6 @@
     <jta-data-source>jdbc/digikam</jta-data-source>
     <class>org.braun.digikam.backend.ejb.Tags</class>
     <class>org.braun.digikam.backend.ejb.Images</class>
-    <class>org.braun.digikam.backend.ejb.Albums</class>
-    <class>org.braun.digikam.backend.ejb.AlbumRoots</class>
     <class>org.braun.digikam.backend.ejb.ImageCopyright</class>
     <class>org.braun.digikam.backend.ejb.ImageFull</class>
     <class>org.braun.digikam.backend.ejb.ImageComments</class>

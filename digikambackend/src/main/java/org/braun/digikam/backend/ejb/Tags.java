@@ -1,24 +1,19 @@
 package org.braun.digikam.backend.ejb;
 
 import java.io.Serializable;
-import java.util.Collection;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -30,8 +25,7 @@ import jakarta.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Tags.findAll", query = "SELECT t FROM Tags t"),
     @NamedQuery(name = "Tags.findById", query = "SELECT t FROM Tags t WHERE t.id = :id"),
-    @NamedQuery(name = "Tags.findByPid", query = "SELECT t FROM Tags t WHERE t.pid = :pid"),
-})
+    @NamedQuery(name = "Tags.findByPid", query = "SELECT t FROM Tags t WHERE t.pid = :pid"),})
 public class Tags implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -48,11 +42,6 @@ public class Tags implements Serializable {
     @Size(min = 1, max = 2147483647)
     @Column(name = "name")
     private String name;
-    @ManyToMany(mappedBy = "tagsCollection")
-    private Collection<Images> imagesCollection;
-    @JoinColumn(name = "icon", referencedColumnName = "id")
-    @ManyToOne
-    private Images icon;
 
     public Tags() {
     }
@@ -90,29 +79,21 @@ public class Tags implements Serializable {
         this.name = name;
     }
 
-
-    @XmlTransient
-    public Collection<Images> getImagesCollection() {
-        return imagesCollection;
-    }
-
-    public void setImagesCollection(Collection<Images> imagesCollection) {
-        this.imagesCollection = imagesCollection;
-    }
-
-    public Images getIcon() {
-        return icon;
-    }
-
-    public void setIcon(Images icon) {
-        this.icon = icon;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);
         return hash;
+    }
+
+    public Tags name(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public Tags id(Integer id) {
+        this.id = id;
+        return this;
     }
 
     @Override
@@ -128,5 +109,5 @@ public class Tags implements Serializable {
     public String toString() {
         return "org.braun.digikam.backend.ejb.Tags[ id=" + id + " ]";
     }
-    
+
 }

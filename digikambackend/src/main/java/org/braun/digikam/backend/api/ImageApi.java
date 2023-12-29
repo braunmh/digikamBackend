@@ -5,7 +5,10 @@ import org.braun.digikam.backend.api.factories.ImageApiServiceFactory;
 import io.swagger.annotations.ApiParam;
 
 import org.braun.digikam.backend.model.Image;
+import org.braun.digikam.backend.model.ImageUpdate;
 import org.braun.digikam.backend.model.ImagesInner;
+import org.braun.digikam.backend.model.StatisticKeyword;
+import org.braun.digikam.backend.model.StatisticMonth;
 
 import java.util.List;
 
@@ -16,14 +19,11 @@ import jakarta.ws.rs.core.SecurityContext;
 import jakarta.ws.rs.*;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
-import org.braun.digikam.backend.model.StatisticKeyword;
-import org.braun.digikam.backend.model.StatisticMonth;
 
 @Path("/image")
 
-
 @io.swagger.annotations.Api(description = "the image API")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJerseyServerCodegen", date = "2023-07-23T19:06:32.804013829+02:00[Europe/Berlin]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJerseyServerCodegen", date = "2023-12-20T15:37:11.894728920+01:00[Europe/Berlin]")
 public class ImageApi  {
    private final ImageApiService delegate;
 
@@ -85,6 +85,30 @@ public class ImageApi  {
         return delegate.getInformationAboutImage(imageId, securityContext);
     }
     @jakarta.ws.rs.GET
+    @Path("/status")
+    
+    
+    @io.swagger.annotations.ApiOperation(value = "", notes = "", response = Void.class, tags={ "image", })
+    @io.swagger.annotations.ApiResponses(value = {
+        @io.swagger.annotations.ApiResponse(code = 200, message = "Cache refreshed", response = Void.class)
+    })
+    public Response imageStatus(@Context SecurityContext securityContext)
+    throws NotFoundException {
+        return delegate.imageStatus(securityContext);
+    }
+    @jakarta.ws.rs.POST
+    @Path("/update")
+    @Consumes({ "application/json" })
+    
+    @io.swagger.annotations.ApiOperation(value = "", notes = "", response = Void.class, tags={ "image", })
+    @io.swagger.annotations.ApiResponses(value = {
+        @io.swagger.annotations.ApiResponse(code = 201, message = "Update image successful", response = Void.class)
+    })
+    public Response imageUpdate(@ApiParam(value = "one parameter must be provided", required = true) @NotNull @Valid  ImageUpdate imageUpdate,@Context SecurityContext securityContext)
+    throws NotFoundException {
+        return delegate.imageUpdate(imageUpdate, securityContext);
+    }
+    @jakarta.ws.rs.GET
     @Path("/rate")
     
     @Produces({ "image/jpeg" })
@@ -108,7 +132,6 @@ public class ImageApi  {
     throws NotFoundException {
         return delegate.scalesImage(imageId, width, height, securityContext);
     }
-
     @jakarta.ws.rs.GET
     @Path("/statKeyword")
     
@@ -117,14 +140,13 @@ public class ImageApi  {
     @io.swagger.annotations.ApiResponses(value = {
         @io.swagger.annotations.ApiResponse(code = 200, message = "OK", response = StatisticKeyword.class, responseContainer = "List")
     })
-    public Response statKeyword(@ApiParam(value = "Id of Keyord", required = true) @QueryParam("keywordId") @NotNull  Integer keywordId,
-        @ApiParam(value = "Year", required = true) @QueryParam("year") @NotNull  Integer year,@Context SecurityContext securityContext)
+    public Response statKeyword(@ApiParam(value = "Id of Keyord", required = true) @QueryParam("keywordId") @NotNull  Integer keywordId,@ApiParam(value = "Year", required = true) @QueryParam("year") @NotNull  Integer year,@Context SecurityContext securityContext)
     throws NotFoundException {
         return delegate.statKeyword(keywordId, year, securityContext);
     }
-
     @jakarta.ws.rs.GET
     @Path("/statMonth")
+    
     @Produces({ "application/json" })
     @io.swagger.annotations.ApiOperation(value = "", notes = "", response = StatisticMonth.class, responseContainer = "List", tags={ "image", })
     @io.swagger.annotations.ApiResponses(value = {
@@ -133,16 +155,5 @@ public class ImageApi  {
     public Response statMonth(@ApiParam(value = "Year for which the Statistic should be calculated. If left an overall Statistic will be calculated.") @QueryParam("year")  Integer year,@Context SecurityContext securityContext)
     throws NotFoundException {
         return delegate.statMonth(year, securityContext);
-    }
- 
-    @jakarta.ws.rs.GET
-    @Path("/status")
-    @io.swagger.annotations.ApiOperation(value = "", notes = "", response = Void.class, tags={ "image", })
-    @io.swagger.annotations.ApiResponses(value = {
-        @io.swagger.annotations.ApiResponse(code = 200, message = "Cache refreshed", response = Void.class)
-    })
-    public Response imageStatus(@Context SecurityContext securityContext)
-    throws NotFoundException {
-        return delegate.imageStatus(securityContext);
     }
 }

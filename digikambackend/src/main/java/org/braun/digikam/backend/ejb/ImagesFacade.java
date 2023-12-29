@@ -23,4 +23,9 @@ public class ImagesFacade extends AbstractFacade<Images> {
         super(Images.class);
     }
     
+   public void addTag(Images image, Tags tag) {
+      image.getTags().add(tag);
+      getEntityManager().merge(image);
+      getEntityManager().flush();
+   }
 }

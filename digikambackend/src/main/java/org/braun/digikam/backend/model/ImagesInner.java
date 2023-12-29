@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
@@ -31,7 +31,7 @@ import jakarta.validation.Valid;
   ImagesInner.JSON_PROPERTY_IMAGE_ID,
   ImagesInner.JSON_PROPERTY_CREATION_DATE
 })
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJerseyServerCodegen", date = "2023-05-08T14:12:24.421753744+02:00[Europe/Berlin]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJerseyServerCodegen", date = "2023-12-27T20:04:01.965701513+01:00[Europe/Berlin]")
 public class ImagesInner   {
   public static final String JSON_PROPERTY_IMAGE_ID = "imageId";
   @JsonProperty(JSON_PROPERTY_IMAGE_ID)
@@ -39,7 +39,7 @@ public class ImagesInner   {
 
   public static final String JSON_PROPERTY_CREATION_DATE = "creationDate";
   @JsonProperty(JSON_PROPERTY_CREATION_DATE)
-  private OffsetDateTime creationDate;
+  private LocalDateTime creationDate;
 
   public ImagesInner imageId(Integer imageId) {
     this.imageId = imageId;
@@ -61,7 +61,7 @@ public class ImagesInner   {
     this.imageId = imageId;
   }
 
-  public ImagesInner creationDate(OffsetDateTime creationDate) {
+  public ImagesInner creationDate(LocalDateTime creationDate) {
     this.creationDate = creationDate;
     return this;
   }
@@ -73,11 +73,11 @@ public class ImagesInner   {
   @JsonProperty(value = "creationDate")
   @ApiModelProperty(value = "Date Image was taken")
   
-  public OffsetDateTime getCreationDate() {
+  public LocalDateTime getCreationDate() {
     return creationDate;
   }
 
-  public void setCreationDate(OffsetDateTime creationDate) {
+  public void setCreationDate(LocalDateTime creationDate) {
     this.creationDate = creationDate;
   }
 

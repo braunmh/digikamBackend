@@ -2,7 +2,7 @@ package org.braun.digikam.backend.graphics;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.HashSet;
@@ -30,6 +30,7 @@ import org.apache.commons.imaging.formats.tiff.write.TiffOutputSet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.braun.digikam.backend.model.Image;
+import org.braun.digikam.backend.model.Keyword;
 
 /**
  *
@@ -89,11 +90,11 @@ public class ExifUtil {
 
     private static final DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy:MM:dd HH:mm:ss");
 
-    private static String convert(OffsetDateTime value) {
+    private static String convert(LocalDateTime value) {
         if (null == value) {
             return null;
         }
-        return fmt.format(value.toLocalDateTime());
+        return fmt.format(value);
     }
     private static String convert(Collection<String> values) {
         if (null == values || values.isEmpty()) {
@@ -112,13 +113,13 @@ public class ExifUtil {
         return builder.toString();
     }
 
-    private static String convertTags(List<String> tags) {
+    private static String convertTags(List<Keyword> tags) {
         if (null == tags || tags.isEmpty()) {
             return null;
         }
         Set<String> values = new HashSet<>();
-        for (String t : tags) {
-            for (String v : t.split("/")) {
+        for (Keyword t : tags) {
+            for (String v : t.getFullName().split("/")) {
                 if (v.trim().length() == 0) {
                     continue;
                 }

@@ -16,6 +16,8 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 /**
  *
@@ -26,7 +28,7 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "ImageComments.findAll", query = "SELECT i FROM ImageComments i"),
-    @NamedQuery(name = "ImageComments.findByImageId", query = "SELECT i FROM ImageComments i WHERE i.imageId = :imageId"),
+    @NamedQuery(name = "ImageComments.findByImageId", query = "SELECT ic FROM ImageComments ic JOIN ic.image i WHERE i.id = :imageId order by ic.type"),
     @NamedQuery(name = "ImageComments.findByType", query = "SELECT i FROM ImageComments i WHERE i.type = :type"),
     @NamedQuery(name = "ImageComments.findByLanguage", query = "SELECT i FROM ImageComments i WHERE i.language = :language"),
     @NamedQuery(name = "ImageComments.findByDate", query = "SELECT i FROM ImageComments i WHERE i.date = :date")})
@@ -38,8 +40,6 @@ public class ImageComments implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Column(name = "imageid")
-    private Integer imageId;
     @Column(name = "type")
     private Integer type;
     @Size(max = 128)
@@ -56,6 +56,10 @@ public class ImageComments implements Serializable {
     @Size(max = 2147483647)
     @Column(name = "comment")
     private String comment;
+
+    @ManyToOne
+    @JoinColumn(name = "imageid", referencedColumnName = "id") // the names of the columns (foreign key in ImageComments and primary key in Images
+    private Images image;
 
     public ImageComments() {
     }
@@ -112,12 +116,12 @@ public class ImageComments implements Serializable {
         this.comment = comment;
     }
 
-    public Integer getImageId() {
-        return imageId;
+    public Images getImage() {
+        return image;
     }
 
-    public void setImageId(Integer imageId) {
-        this.imageId = imageId;
+    public void setImage(Images image) {
+        this.image = image;
     }
 
     @Override
@@ -140,5 +144,5 @@ public class ImageComments implements Serializable {
     public String toString() {
         return "org.braun.digikam.backend.ejb.ImageComments[ id=" + id + " ]";
     }
-    
+
 }

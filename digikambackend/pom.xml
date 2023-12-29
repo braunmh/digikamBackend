@@ -15,9 +15,43 @@
       <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <swagger.version>1.6.10</swagger.version>
+      <johnzon.version>1.2.19</johnzon.version>
    </properties>
     
    <dependencies>
+<!--  
+      <dependency>
+         <groupId>org.apache.tomee</groupId>
+         <artifactId>cxf-shade</artifactId>
+         <version>9.0.0</version>
+         <scope>provided</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.apache.johnzon</groupId>
+         <artifactId>johnzon-jaxrs</artifactId>
+         <version>${johnzon.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>org.apache.johnzon</groupId>
+         <artifactId>johnzon-core</artifactId>
+         <version>${johnzon.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>org.apache.johnzon</groupId>
+         <artifactId>johnzon-jsonb</artifactId>
+         <version>${johnzon.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>org.apache.johnzon</groupId>
+         <artifactId>johnzon-mapper</artifactId>
+         <version>${johnzon.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>org.apache.johnzon</groupId>
+         <artifactId>johnzon-jsonp-strict</artifactId>
+         <version>${johnzon.version}</version>
+      </dependency>
+-->
       <dependency>
          <groupId>org.eclipse.persistence</groupId>
          <artifactId>org.eclipse.persistence.core</artifactId>
@@ -137,10 +171,10 @@
       </dependency>
 
       <dependency>
-          <groupId>com.github.victools</groupId>
-          <artifactId>jsonschema-generator</artifactId>
-          <version>4.31.1</version>
-          <scope>test</scope>
+         <groupId>com.github.victools</groupId>
+         <artifactId>jsonschema-generator</artifactId>
+         <version>4.31.1</version>
+         <scope>test</scope>
       </dependency>            
    </dependencies>
 

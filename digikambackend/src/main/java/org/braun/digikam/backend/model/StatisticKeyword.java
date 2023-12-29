@@ -15,8 +15,12 @@ package org.braun.digikam.backend.model;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import jakarta.validation.constraints.*;
+import jakarta.validation.Valid;
 
 /**
  * StatisticKeyword
@@ -25,7 +29,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
   StatisticKeyword.JSON_PROPERTY_NAME,
   StatisticKeyword.JSON_PROPERTY_COUNT
 })
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJerseyServerCodegen", date = "2023-11-02T16:29:05.722779185+01:00[Europe/Berlin]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJerseyServerCodegen", date = "2023-12-27T20:04:01.965701513+01:00[Europe/Berlin]")
 public class StatisticKeyword   {
   public static final String JSON_PROPERTY_NAME = "name";
   @JsonProperty(JSON_PROPERTY_NAME)
@@ -45,8 +49,8 @@ public class StatisticKeyword   {
    * @return name
    **/
   @JsonProperty(value = "name")
-  @ApiModelProperty(value = "")
-  
+  @ApiModelProperty(required = true, value = "")
+  @NotNull 
   public String getName() {
     return name;
   }
@@ -65,8 +69,8 @@ public class StatisticKeyword   {
    * @return count
    **/
   @JsonProperty(value = "count")
-  @ApiModelProperty(value = "")
-  
+  @ApiModelProperty(required = true, value = "")
+  @NotNull 
   public Integer getCount() {
     return count;
   }

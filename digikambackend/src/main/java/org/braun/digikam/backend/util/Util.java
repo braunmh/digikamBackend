@@ -1,6 +1,8 @@
 package org.braun.digikam.backend.util;
 
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.Properties;
@@ -44,11 +46,11 @@ public final class Util {
         }
     }
     
-    public static OffsetDateTime convert(Date date) {
+    public static LocalDateTime convert(Date date) {
         if (date == null) {
             return null;
         }
         
-        return date.toInstant().atOffset(ZoneOffset.UTC);
+        return LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
     }
 }

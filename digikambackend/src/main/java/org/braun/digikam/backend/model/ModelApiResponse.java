@@ -31,7 +31,7 @@ import jakarta.validation.Valid;
   ModelApiResponse.JSON_PROPERTY_TYPE,
   ModelApiResponse.JSON_PROPERTY_MESSAGE
 })
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJerseyServerCodegen", date = "2023-05-08T14:12:24.421753744+02:00[Europe/Berlin]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJerseyServerCodegen", date = "2023-12-27T20:04:01.965701513+01:00[Europe/Berlin]")
 public class ModelApiResponse   {
   public static final String JSON_PROPERTY_CODE = "code";
   @JsonProperty(JSON_PROPERTY_CODE)

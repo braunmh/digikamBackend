@@ -1,11 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package org.braun.digikam.backend.ejb;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Date;
 import jakarta.persistence.Basic;
@@ -15,10 +10,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
@@ -28,7 +21,8 @@ import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlTransient;
+import java.util.Set;
+import jakarta.persistence.JoinTable;
 
 /**
  *
@@ -46,53 +40,55 @@ import jakarta.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Images.findByFileSize", query = "SELECT i FROM Images i WHERE i.fileSize = :fileSize"),
     @NamedQuery(name = "Images.findByUniqueHash", query = "SELECT i FROM Images i WHERE i.uniqueHash = :uniqueHash"),
     @NamedQuery(name = "Images.findByTagHash", query = "SELECT i FROM Images i WHERE i.tagHash = :tagHash"),
-    @NamedQuery(name = "Images.findByManualOrder", query = "SELECT i FROM Images i WHERE i.manualOrder = :manualOrder")})
+    })
 public class Images implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id")
-    private Integer id;
-    @Basic(optional = false)
-    @NotNull
-    @Lob
-    @Size(min = 1, max = 2147483647)
-    @Column(name = "name")
-    private String name;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "status")
-    private int status;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "category")
-    private int category;
-    @Column(name = "modificationDate")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date modificationDate;
-    @Column(name = "fileSize")
-    private BigInteger fileSize;
-    @Size(max = 128)
-    @Column(name = "uniqueHash")
-    private String uniqueHash;
-    @Column(name = "tagHash")
-    private Integer tagHash;
-    @Column(name = "manualOrder")
-    private Integer manualOrder;
-    @JoinTable(name = "ImageTags", joinColumns = {
-        @JoinColumn(name = "imageid", referencedColumnName = "id")}, inverseJoinColumns = {
-        @JoinColumn(name = "tagid", referencedColumnName = "id")})
-    @ManyToMany
-    private Collection<Tags> tagsCollection;
-    @JoinColumn(name = "album", referencedColumnName = "id")
-    @ManyToOne
-    private Albums album;
-    @OneToMany(mappedBy = "icon")
-    private Collection<Tags> tagsCollection1;
-    @OneToMany(mappedBy = "icon")
-    private Collection<Albums> albumsCollection;
+   @Id
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
+   @Basic(optional = false)
+   @Column(name = "id", nullable = false)
+   private Integer id;
+   @Column(name = "album")
+   private Integer album;
+   @Basic(optional = false)
+   @NotNull
+   @Lob
+   @Size(min = 1, max = 2147483647)
+   @Column(name = "name", nullable = false, length = 2147483647)
+   private String name;
+   @Basic(optional = false)
+   @NotNull
+   @Column(name = "status", nullable = false)
+   private int status;
+   @Basic(optional = false)
+   @NotNull
+   @Column(name = "category", nullable = false)
+   private int category;
+   @Column(name = "modificationDate")
+   @Temporal(TemporalType.TIMESTAMP)
+   private Date modificationDate;
+   @Column(name = "fileSize")
+   private Integer fileSize;
+   @Size(max = 128)
+   @Column(name = "uniqueHash", length = 128)
+   private String uniqueHash;
+   @Column(name = "tagHash")
+   private Integer tagHash;
+   
+   @OneToMany (mappedBy = "image") // mappedBy is the name of Attribute in class ImageComments; not the name of the column
+   private Collection<ImageComments> comments;
+
+   @OneToMany (mappedBy = "image")
+   private Collection<ImageCopyright> copyrights;
+   
+   @ManyToMany
+   @JoinTable(
+           name="ImageTags",
+      joinColumns={@JoinColumn(name="imageid", referencedColumnName="id")},
+      inverseJoinColumns={@JoinColumn(name="tagid", referencedColumnName="id")}
+   )
+   private Set<Tags> tags;
 
     public Images() {
     }
@@ -148,11 +144,11 @@ public class Images implements Serializable {
         this.modificationDate = modificationDate;
     }
 
-    public BigInteger getFileSize() {
+    public Integer getFileSize() {
         return fileSize;
     }
 
-    public void setFileSize(BigInteger fileSize) {
+    public void setFileSize(Integer fileSize) {
         this.fileSize = fileSize;
     }
 
@@ -172,47 +168,36 @@ public class Images implements Serializable {
         this.tagHash = tagHash;
     }
 
-    public Integer getManualOrder() {
-        return manualOrder;
-    }
-
-    public void setManualOrder(Integer manualOrder) {
-        this.manualOrder = manualOrder;
-    }
-
-    @XmlTransient
-    public Collection<Tags> getTagsCollection() {
-        return tagsCollection;
-    }
-
-    public void setTagsCollection(Collection<Tags> tagsCollection) {
-        this.tagsCollection = tagsCollection;
-    }
-
-    public Albums getAlbum() {
+    public Integer getAlbum() {
         return album;
     }
 
-    public void setAlbum(Albums album) {
+    public void setAlbum(Integer album) {
         this.album = album;
     }
 
-    @XmlTransient
-    public Collection<Tags> getTagsCollection1() {
-        return tagsCollection1;
+    public Collection<ImageComments> getComments() {
+        return comments;
     }
 
-    public void setTagsCollection1(Collection<Tags> tagsCollection1) {
-        this.tagsCollection1 = tagsCollection1;
+    public void setComments(Collection<ImageComments> comments) {
+        this.comments = comments;
     }
 
-    @XmlTransient
-    public Collection<Albums> getAlbumsCollection() {
-        return albumsCollection;
+    public Collection<ImageCopyright> getCopyrights() {
+        return copyrights;
     }
 
-    public void setAlbumsCollection(Collection<Albums> albumsCollection) {
-        this.albumsCollection = albumsCollection;
+    public void setCopyrights(Collection<ImageCopyright> copyrights) {
+        this.copyrights = copyrights;
+    }
+
+    public Set<Tags> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<Tags> tags) {
+        this.tags = tags;
     }
 
     @Override

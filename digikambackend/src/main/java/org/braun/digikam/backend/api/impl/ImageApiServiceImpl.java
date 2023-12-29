@@ -5,10 +5,14 @@ import java.util.List;
 import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
+import java.util.ArrayList;
 import org.braun.digikam.backend.CameraFactory;
+import org.braun.digikam.backend.NodeFactory;
 import org.braun.digikam.backend.api.*;
 import org.braun.digikam.backend.ejb.ImageFacade;
+import org.braun.digikam.backend.ejb.Tags;
 import org.braun.digikam.backend.model.Image;
+import org.braun.digikam.backend.model.ImageUpdate;
 import org.braun.digikam.backend.model.ImagesInner;
 import org.braun.digikam.backend.model.StatisticKeyword;
 import org.braun.digikam.backend.model.StatisticMonth;
@@ -129,6 +133,25 @@ public class ImageApiServiceImpl extends ImageApiService {
 
     @Override
     public Response imageStatus(SecurityContext securityContext) throws NotFoundException {
+        return Response.ok().build();
+    }
+
+    /**
+     * 
+     * @param imageUpdate Information of Image to update
+     * @param securityContext 
+     * @return Response.ok()
+     * @throws NotFoundException if image with supplied imageId was not found
+     */
+    @Override
+    public Response imageUpdate(ImageUpdate imageUpdate, SecurityContext securityContext) throws NotFoundException {
+        ImageFacade facade = Util.EJB.lookup(ImageFacade.class);
+        List<Tags> tags = new ArrayList<>();
+        for (Integer tagId : imageUpdate.getKeywords()) {
+            tags.add(new Tags().name(NodeFactory.getInstance().getKeywordById(tagId).getName()).id(tagId));
+        }
+        facade.update(imageUpdate.getImageId(), imageUpdate.getTitle(), imageUpdate.getDescription(), imageUpdate.getRating()
+            , tags, imageUpdate.getCreator());
         return Response.ok().build();
     }
 }

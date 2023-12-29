@@ -27,13 +27,18 @@ import jakarta.validation.Valid;
  */
 @JsonPropertyOrder({
   Keyword.JSON_PROPERTY_NAME,
+  Keyword.JSON_PROPERTY_FULL_NAME,
   Keyword.JSON_PROPERTY_ID
 })
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJerseyServerCodegen", date = "2023-05-08T14:12:24.421753744+02:00[Europe/Berlin]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJerseyServerCodegen", date = "2023-12-27T20:04:01.965701513+01:00[Europe/Berlin]")
 public class Keyword   {
   public static final String JSON_PROPERTY_NAME = "name";
   @JsonProperty(JSON_PROPERTY_NAME)
   private String name;
+
+  public static final String JSON_PROPERTY_FULL_NAME = "fullName";
+  @JsonProperty(JSON_PROPERTY_FULL_NAME)
+  private String fullName;
 
   public static final String JSON_PROPERTY_ID = "id";
   @JsonProperty(JSON_PROPERTY_ID)
@@ -49,14 +54,34 @@ public class Keyword   {
    * @return name
    **/
   @JsonProperty(value = "name")
-  @ApiModelProperty(value = "")
-  
+  @ApiModelProperty(required = true, value = "")
+  @NotNull 
   public String getName() {
     return name;
   }
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public Keyword fullName(String fullName) {
+    this.fullName = fullName;
+    return this;
+  }
+
+  /**
+   * Get fullName
+   * @return fullName
+   **/
+  @JsonProperty(value = "fullName")
+  @ApiModelProperty(required = true, value = "")
+  @NotNull 
+  public String getFullName() {
+    return fullName;
+  }
+
+  public void setFullName(String fullName) {
+    this.fullName = fullName;
   }
 
   public Keyword id(Integer id) {
@@ -69,8 +94,8 @@ public class Keyword   {
    * @return id
    **/
   @JsonProperty(value = "id")
-  @ApiModelProperty(value = "")
-  
+  @ApiModelProperty(required = true, value = "")
+  @NotNull 
   public Integer getId() {
     return id;
   }
@@ -90,12 +115,13 @@ public class Keyword   {
     }
     Keyword keyword = (Keyword) o;
     return Objects.equals(this.name, keyword.name) &&
+        Objects.equals(this.fullName, keyword.fullName) &&
         Objects.equals(this.id, keyword.id);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, id);
+    return Objects.hash(name, fullName, id);
   }
 
   @Override
@@ -104,6 +130,7 @@ public class Keyword   {
     sb.append("class Keyword {\n");
     
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    fullName: ").append(toIndentedString(fullName)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("}");
     return sb.toString();
