@@ -25,7 +25,6 @@ import org.braun.digikam.backend.NodeFactory;
 import org.braun.digikam.backend.api.NotFoundException;
 import org.braun.digikam.backend.graphics.ExifUtil;
 import org.braun.digikam.backend.graphics.ImageUtil;
-import org.braun.digikam.backend.model.Image;
 import org.braun.digikam.backend.model.ImageInternal;
 import org.braun.digikam.backend.model.ImagesInner;
 import org.braun.digikam.backend.model.Keyword;

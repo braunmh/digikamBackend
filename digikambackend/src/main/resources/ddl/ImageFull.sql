@@ -1,5 +1,6 @@
 select i.id AS id,
     i.name AS name,
+    substr(ar.identifier, 16) root,
     a.relativePath AS relativePath,
     i.status AS status,
     i.category AS category,
@@ -23,9 +24,9 @@ select i.id AS id,
     ic.value AS creator,
     gip.latitudeNumber AS latitudeNumber,
     gip.longitudeNumber AS longitudeNumber 
-from ((((Images i join Albums a on((i.album = a.id))) 
+from ((((Images i join Albums a on((i.album = a.id))) join AlbumRoots ar on (ar.id = a.albumRoot)
     join (ImageInformation ii 
     left join ImageMetadata im on((ii.imageid = im.imageid)))) 
     left join ImageCopyright ic on(((ii.imageid = ic.imageid) and (ic.property = 'creator')))) 
     join (Images gi left join ImagePositions gip on((gi.id = gip.imageid)))) 
-where ((ii.imageid = i.id) and (gi.id = i.id) and (ii.imageid is not null))
+where (ii.imageid = i.id) and (gi.id = i.id) and not (im.imageid is null)

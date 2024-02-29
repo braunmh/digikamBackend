@@ -63,8 +63,7 @@ public class ImageFull implements Serializable {
     @Column(name = "fileSize")
     private BigInteger fileSize;
     @Size(max = 128)
-    @Column(name = "uniqueHash")
-    private String uniqueHash;
+
     @Column(name = "rating")
     private Integer rating;
     @Column(name = "creationDate")
@@ -76,10 +75,6 @@ public class ImageFull implements Serializable {
     private Integer width;
     @Column(name = "height")
     private Integer height;
-    @Column(name = "colorDepth")
-    private Integer colorDepth;
-    @Column(name = "colorModel")
-    private Integer colorModel;
     @Lob
     @Size(max = 2147483647)
     @Column(name = "make")
@@ -107,8 +102,6 @@ public class ImageFull implements Serializable {
     private Integer exposureMode;
     @Column(name = "sensitivity")
     private Integer sensitivity;
-    @Column(name = "flash")
-    private Integer flash;
     @Lob
     @Size(max = 2147483647)
     @Column(name = "creator")
@@ -177,14 +170,6 @@ public class ImageFull implements Serializable {
         this.fileSize = fileSize;
     }
 
-    public String getUniqueHash() {
-        return uniqueHash;
-    }
-
-    public void setUniqueHash(String uniqueHash) {
-        this.uniqueHash = uniqueHash;
-    }
-
     public Integer getRating() {
         return rating;
     }
@@ -223,22 +208,6 @@ public class ImageFull implements Serializable {
 
     public void setHeight(Integer height) {
         this.height = height;
-    }
-
-    public Integer getColorDepth() {
-        return colorDepth;
-    }
-
-    public void setColorDepth(Integer colorDepth) {
-        this.colorDepth = colorDepth;
-    }
-
-    public Integer getColorModel() {
-        return colorModel;
-    }
-
-    public void setColorModel(Integer colorModel) {
-        this.colorModel = colorModel;
     }
 
     public String getMake() {
@@ -319,14 +288,6 @@ public class ImageFull implements Serializable {
 
     public void setSensitivity(Integer sensitivity) {
         this.sensitivity = sensitivity;
-    }
-
-    public Integer getFlash() {
-        return flash;
-    }
-
-    public void setFlash(Integer flash) {
-        this.flash = flash;
     }
 
     public String getCreator() {
