@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 import org.braun.digikam.backend.ejb.ImageCopyrightFacade;
 import org.braun.digikam.backend.ejb.ImageMetadataFacade;
 import org.braun.digikam.backend.ejb.TagsFacade;
+import org.braun.digikam.backend.util.Util;
 
 /**
  *
@@ -31,8 +32,17 @@ public class InitListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         LOG.info("Initialize application");
+        if (tagsFacade == null) {
+            tagsFacade = Util.EJB.lookup(TagsFacade.class);
+        }
         NodeFactory.getInstance().refresh(tagsFacade.findAll());
+        if (imageCopyrightFacade == null) {
+            imageCopyrightFacade = Util.EJB.lookup(ImageCopyrightFacade.class);
+        }
         CreatorFactory.getInstance().refresh(imageCopyrightFacade.findAllCreators());
+        if (imageMetadataFacade == null) {
+            imageMetadataFacade = Util.EJB.lookup(ImageMetadataFacade.class);
+        }
         CameraFactory.getInstance().refresh(imageMetadataFacade.findAllCameras());
         LOG.info("Initialize application done");
     }

@@ -10,6 +10,8 @@ import org.braun.digikam.backend.CameraFactory;
 import org.braun.digikam.backend.NodeFactory;
 import org.braun.digikam.backend.api.*;
 import org.braun.digikam.backend.ejb.ImageFacade;
+import org.braun.digikam.backend.ejb.ImageInformationFacade;
+import org.braun.digikam.backend.ejb.ImagesFacade;
 import org.braun.digikam.backend.ejb.Tags;
 import org.braun.digikam.backend.model.Image;
 import org.braun.digikam.backend.model.ImageUpdate;
@@ -108,7 +110,7 @@ public class ImageApiServiceImpl extends ImageApiService {
 
     @Override
     public Response rateImage(Integer imageId, Integer rating, SecurityContext securityContext) throws NotFoundException {
-        ImageFacade facade = Util.EJB.lookup(ImageFacade.class);
+        ImageInformationFacade facade = Util.EJB.lookup(ImageInformationFacade.class);
         facade.updateRating(imageId, rating);
         return Response.ok().entity("Okay").build();
     }
@@ -145,7 +147,7 @@ public class ImageApiServiceImpl extends ImageApiService {
      */
     @Override
     public Response imageUpdate(ImageUpdate imageUpdate, SecurityContext securityContext) throws NotFoundException {
-        ImageFacade facade = Util.EJB.lookup(ImageFacade.class);
+        ImagesFacade facade = Util.EJB.lookup(ImagesFacade.class);
         List<Tags> tags = new ArrayList<>();
         for (Integer tagId : imageUpdate.getKeywords()) {
             tags.add(new Tags().name(NodeFactory.getInstance().getKeywordById(tagId).getName()).id(tagId));

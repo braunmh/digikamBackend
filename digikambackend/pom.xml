@@ -6,7 +6,7 @@
 
    <groupId>org.braun.digikam</groupId>
    <artifactId>digikambackend</artifactId>
-   <version>1.0-SNAPSHOT</version>
+   <version>1.1-SNAPSHOT</version>
    <packaging>war</packaging>
 
    <name>digikambackend</name>
@@ -175,7 +175,18 @@
          <artifactId>jsonschema-generator</artifactId>
          <version>4.31.1</version>
          <scope>test</scope>
-      </dependency>            
+      </dependency>
+      <dependency>
+         <groupId>org.bytedeco</groupId>
+         <artifactId>javacv-platform</artifactId>
+         <version>1.5.10</version>
+      </dependency>
+        <!-- Optional GPL builds with (almost) everything enabled -->
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>ffmpeg-platform-gpl</artifactId>
+            <version>6.1.1-1.5.10</version>
+        </dependency>
    </dependencies>
 
    <build>
@@ -230,26 +241,6 @@
                </execution>
             </executions>
          </plugin>
-         <!--plugin>
-             <groupId>org.openapitools</groupId>
-             <artifactId>openapi-generator-maven-plugin</artifactId>
-             <version>6.2.1</version>
-             <executions>
-                 <execution>
-                     <goals>
-                         <goal>generate</goal>
-                     </goals>
-                     <configuration>
-                         <inputSpec>${project.basedir}/src/main/resources/org/braun/digikam/backend/openapi.yaml</inputSpec>
-                         <generatorName>jaxrs-jersey</generatorName>
-                         <apiPackage>org.braun.digikam.backend.api</apiPackage>
-                         <invokerPackage>org.braun.digikam.backend.invoker</invokerPackage>
-                         <modelPackage>org.braun.digikam.backend.model</modelPackage>
-                         <interfaceOnly>true</interfaceOnly>
-                     </configuration>
-                 </execution>
-             </executions>
-         </plugin-->            
       </plugins>
    </build>
 

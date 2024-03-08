@@ -31,6 +31,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.braun.digikam.backend.model.Image;
 import org.braun.digikam.backend.model.Keyword;
+import org.braun.digikam.backend.model.Video;
+import org.braun.digikam.backend.model.VideoInternal;
 
 /**
  *
@@ -76,6 +78,48 @@ public class ExifUtil {
 
                     if (null != image.getLongitude()&& null != image.getLatitude()) {
                         outputSet.setGPSInDegrees(image.getLongitude(), image.getLatitude());
+                    }
+                }
+            }
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            new ExifRewriter().updateExifMetadataLossless(imageByte, baos, outputSet);
+            return baos;
+        } catch (ImageReadException | ImageWriteException e) {
+            LOG.error(e);
+            throw new IOException(e.getMessage());
+        }
+    }
+
+    public static ByteArrayOutputStream writeExifData(VideoInternal video, byte[] imageByte) throws IOException {
+        try {
+            TiffOutputSet outputSet = null;
+            final ImageMetadata metadata = Imaging.getMetadata(imageByte);
+            final JpegImageMetadata jpegMetadata = (JpegImageMetadata) metadata;
+            if (null != jpegMetadata) {
+                final TiffImageMetadata exif = jpegMetadata.getExif();
+                if (null != exif) {
+                    outputSet = exif.getOutputSet();
+                }
+            }
+            if (null == outputSet) {
+                outputSet = new TiffOutputSet();
+            }
+            boolean execute = true;
+            {
+                final TiffOutputDirectory exifDirectory = outputSet.getOrCreateExifDirectory();
+                if (execute) {
+                    addTag(exifDirectory, ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL, convert(video.getCreationDate()));
+                    addTag(exifDirectory, TiffTagConstants.TIFF_TAG_ARTIST, video.getCreator());
+                    addTag(exifDirectory, TiffTagConstants.TIFF_TAG_COPYRIGHT, "Alle Rechte vorbehalten");
+                    addTag(exifDirectory, TiffTagConstants.TIFF_TAG_ORIENTATION, video.getOrientationExif());
+                    addTag(exifDirectory, MicrosoftTagConstants.EXIF_TAG_RATING, video.getRating());
+                    addTag(exifDirectory, MicrosoftTagConstants.EXIF_TAG_XPTITLE, video.getTitle());
+                    addTag(exifDirectory, MicrosoftTagConstants.EXIF_TAG_XPCOMMENT, video.getDescription());
+                    addTag(exifDirectory, MicrosoftTagConstants.EXIF_TAG_XPKEYWORDS, convertTags(video.getKeywords()));
+                    addTag(exifDirectory, MicrosoftTagConstants.EXIF_TAG_XPSUBJECT, convertTags(video.getKeywords()));
+
+                    if (null != video.getLongitude()&& null != video.getLatitude()) {
+                        outputSet.setGPSInDegrees(video.getLongitude(), video.getLatitude());
                     }
                 }
             }

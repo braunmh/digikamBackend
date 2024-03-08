@@ -1,7 +1,5 @@
 package org.braun.digikam.backend.ejb;
 
-import java.io.Serializable;
-import java.util.Date;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,23 +15,37 @@ import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  *
  * @author mbraun
  */
 @Entity
-@Table(name = "ImageFull")
+@Table(name = "VideoFull")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "ImageFull.findById", query = "SELECT i FROM ImageFull i WHERE i.id = :id"),
-})
-public class ImageFull implements Serializable {
+    @NamedQuery(name = "VideoFull.findAll", query = "SELECT v FROM VideoFull v"),
+    @NamedQuery(name = "VideoFull.findById", query = "SELECT v FROM VideoFull v WHERE v.id = :id"),
+    @NamedQuery(name = "VideoFull.findByStatus", query = "SELECT v FROM VideoFull v WHERE v.status = :status"),
+    @NamedQuery(name = "VideoFull.findByCategory", query = "SELECT v FROM VideoFull v WHERE v.category = :category"),
+    @NamedQuery(name = "VideoFull.findByCreationDate", query = "SELECT v FROM VideoFull v WHERE v.creationDate = :creationDate"),
+    @NamedQuery(name = "VideoFull.findByFileSize", query = "SELECT v FROM VideoFull v WHERE v.fileSize = :fileSize"),
+    @NamedQuery(name = "VideoFull.findByRating", query = "SELECT v FROM VideoFull v WHERE v.rating = :rating"),
+    @NamedQuery(name = "VideoFull.findByModificationDate", query = "SELECT v FROM VideoFull v WHERE v.modificationDate = :modificationDate"),
+    @NamedQuery(name = "VideoFull.findByOrientation", query = "SELECT v FROM VideoFull v WHERE v.orientation = :orientation"),
+    @NamedQuery(name = "VideoFull.findByWidth", query = "SELECT v FROM VideoFull v WHERE v.width = :width"),
+    @NamedQuery(name = "VideoFull.findByHeight", query = "SELECT v FROM VideoFull v WHERE v.height = :height"),
+    @NamedQuery(name = "VideoFull.findByLatitudeNumber", query = "SELECT v FROM VideoFull v WHERE v.latitudeNumber = :latitudeNumber"),
+    @NamedQuery(name = "VideoFull.findByLongitudeNumber", query = "SELECT v FROM VideoFull v WHERE v.longitudeNumber = :longitudeNumber")})
+public class VideoFull implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
+    @NotNull
     @Column(name = "id")
     private int id;
     @Basic(optional = false)
@@ -42,11 +54,10 @@ public class ImageFull implements Serializable {
     @Size(min = 1, max = 2147483647)
     @Column(name = "name")
     private String name;
-    
     @Lob
+    @Size(max = 2147483647)
     @Column(name = "root")
     private String root;
-    
     @Basic(optional = false)
     @NotNull
     @Lob
@@ -61,18 +72,16 @@ public class ImageFull implements Serializable {
     @NotNull
     @Column(name = "category")
     private int category;
-    @Column(name = "modificationDate")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date modificationDate;
-    @Column(name = "fileSize")
-    private Integer fileSize;
-    @Size(max = 128)
-
-    @Column(name = "rating")
-    private Integer rating;
     @Column(name = "creationDate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date creationDate;
+    @Column(name = "fileSize")
+    private Integer fileSize;
+    @Column(name = "rating")
+    private Integer rating;
+    @Column(name = "modificationDate")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date modificationDate;
     @Column(name = "orientation")
     private Integer orientation;
     @Column(name = "width")
@@ -80,42 +89,24 @@ public class ImageFull implements Serializable {
     @Column(name = "height")
     private Integer height;
     @Lob
-    @Size(max = 2147483647)
-    @Column(name = "make")
-    private String make;
+    @Size(max = 65535)
+    @Column(name = "duration")
+    private String duration;
     @Lob
-    @Size(max = 2147483647)
-    @Column(name = "model")
-    private String model;
-    @Lob
-    @Size(max = 2147483647)
-    @Column(name = "lens")
-    private String lens;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(name = "aperture")
-    private Double aperture;
-    @Column(name = "focalLength")
-    private Double focalLength;
-    @Column(name = "focalLength35")
-    private Double focalLength35;
-    @Column(name = "exposureTime")
-    private Double exposureTime;
-    @Column(name = "exposureProgram")
-    private Integer exposureProgram;
-    @Column(name = "exposureMode")
-    private Integer exposureMode;
-    @Column(name = "sensitivity")
-    private Integer sensitivity;
+    @Size(max = 65535)
+    @Column(name = "codec")
+    private String codec;
     @Lob
     @Size(max = 2147483647)
     @Column(name = "creator")
     private String creator;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "latitudeNumber")
     private Double latitudeNumber;
     @Column(name = "longitudeNumber")
     private Double longitudeNumber;
 
-    public ImageFull() {
+    public VideoFull() {
     }
 
     public int getId() {
@@ -166,12 +157,12 @@ public class ImageFull implements Serializable {
         this.category = category;
     }
 
-    public Date getModificationDate() {
-        return modificationDate;
+    public Date getCreationDate() {
+        return creationDate;
     }
 
-    public void setModificationDate(Date modificationDate) {
-        this.modificationDate = modificationDate;
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
     }
 
     public Integer getFileSize() {
@@ -190,12 +181,12 @@ public class ImageFull implements Serializable {
         this.rating = rating;
     }
 
-    public Date getCreationDate() {
-        return creationDate;
+    public Date getModificationDate() {
+        return modificationDate;
     }
 
-    public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
+    public void setModificationDate(Date modificationDate) {
+        this.modificationDate = modificationDate;
     }
 
     public Integer getOrientation() {
@@ -222,84 +213,20 @@ public class ImageFull implements Serializable {
         this.height = height;
     }
 
-    public String getMake() {
-        return make;
+    public String getDuration() {
+        return duration;
     }
 
-    public void setMake(String make) {
-        this.make = make;
+    public void setDuration(String duration) {
+        this.duration = duration;
     }
 
-    public String getModel() {
-        return model;
+    public String getCodec() {
+        return codec;
     }
 
-    public void setModel(String model) {
-        this.model = model;
-    }
-
-    public String getLens() {
-        return lens;
-    }
-
-    public void setLens(String lens) {
-        this.lens = lens;
-    }
-
-    public Double getAperture() {
-        return aperture;
-    }
-
-    public void setAperture(Double aperture) {
-        this.aperture = aperture;
-    }
-
-    public Double getFocalLength() {
-        return focalLength;
-    }
-
-    public void setFocalLength(Double focalLength) {
-        this.focalLength = focalLength;
-    }
-
-    public Double getFocalLength35() {
-        return focalLength35;
-    }
-
-    public void setFocalLength35(Double focalLength35) {
-        this.focalLength35 = focalLength35;
-    }
-
-    public Double getExposureTime() {
-        return exposureTime;
-    }
-
-    public void setExposureTime(Double exposureTime) {
-        this.exposureTime = exposureTime;
-    }
-
-    public Integer getExposureProgram() {
-        return exposureProgram;
-    }
-
-    public void setExposureProgram(Integer exposureProgram) {
-        this.exposureProgram = exposureProgram;
-    }
-
-    public Integer getExposureMode() {
-        return exposureMode;
-    }
-
-    public void setExposureMode(Integer exposureMode) {
-        this.exposureMode = exposureMode;
-    }
-
-    public Integer getSensitivity() {
-        return sensitivity;
-    }
-
-    public void setSensitivity(Integer sensitivity) {
-        this.sensitivity = sensitivity;
+    public void setCodec(String codec) {
+        this.codec = codec;
     }
 
     public String getCreator() {
@@ -325,5 +252,5 @@ public class ImageFull implements Serializable {
     public void setLongitudeNumber(Double longitudeNumber) {
         this.longitudeNumber = longitudeNumber;
     }
-    
+
 }

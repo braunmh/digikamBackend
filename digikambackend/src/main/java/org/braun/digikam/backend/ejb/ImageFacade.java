@@ -1,9 +1,7 @@
 package org.braun.digikam.backend.ejb;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -11,16 +9,16 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import jakarta.ejb.Stateless;
-import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
+import java.io.File;
+import java.io.FileNotFoundException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.braun.digikam.backend.BadRequestException;
 import org.braun.digikam.backend.NodeFactory;
 import org.braun.digikam.backend.api.NotFoundException;
 import org.braun.digikam.backend.graphics.ExifUtil;
@@ -39,7 +37,6 @@ import org.braun.digikam.backend.search.RangeCondition;
 import org.braun.digikam.backend.search.SimpleCondition;
 import org.braun.digikam.backend.search.SortOrder;
 import org.braun.digikam.backend.search.Sql;
-import org.braun.digikam.backend.util.UncompleteDateTime;
 import org.braun.digikam.backend.util.Util;
 
 /**
@@ -51,58 +48,39 @@ public class ImageFacade {
 
     private static final Logger LOG = LogManager.getLogger();
     private static final String FIND_BY_ATTRIBUTES
-        = "SELECT i.id, i.name, i.relativePath, i.fileSize, i.rating, i.creationDate, i.orientation, i.width, i.height, i.make, i.model, "
+        = "SELECT i.id, i.name, i.root, i.relativePath, i.fileSize, i.rating, i.creationDate, i.orientation, i.width, i.height, i.make, i.model, "
         + "i.lens, i.aperture, i.focalLength, i.focalLength35, i.exposureTime, i.sensitivity, i.creator, i.latitudeNumber, i.longitudeNumber "
         + "FROM ImageFull i";
 
     @PersistenceContext(unitName = "digikam")
     private EntityManager em;
 
-    @Inject
-    private ImagesFacade imagesFacade;
-    
-    @Inject
-    private ImageInformationFacade imageInformationFacade;
-    
     public InputStream getImage(int id) throws NotFoundException {
         ImageFull image = getImageFull(id);
-        FileInputStream imageStream = getImageFile(image.getRelativePath(), image.getName());
+        FileInputStream imageStream = getImageFile(image.getRoot(), image.getRelativePath(), image.getName());
         return imageStream;
     }
-    
+
     public byte[] getScaledImage(int id, int width, int height) throws NotFoundException {
         ImageInternal image = getMetadata(id);
-        FileInputStream fis = getImageFile(image.getRelativePath(), image.getName());
+        FileInputStream fis = getImageFile(image.getRoot(), image.getRelativePath(), image.getName());
         ByteArrayOutputStream scaledImage = new ByteArrayOutputStream();
         try {
             ImageUtil.scaleImage(fis, scaledImage, width, height, image.getOrientationTechnical());
             ByteArrayOutputStream taggedImage = ExifUtil.writeExifData(image, scaledImage.toByteArray());
             return taggedImage.toByteArray();
         } catch (IOException e) {
-            LOG.error("Error scaling image with id = " + id,  e);
+            LOG.error("Error scaling image with id = " + id, e);
             throw new NotFoundException(404, e.getMessage());
         }
     }
-    
-    private FileInputStream getImageFile(String path, String name) throws NotFoundException {
-        File file = new File("/data/pictures" + path + "/" + name);
-        if (!file.exists() || !file.canRead()) {
-            LOG.error("File {} does not exists or can not be read.", file.getPath());
-            throw new NotFoundException(404, "File +" + path + "/" + name + " existiert nicht");
-        }
-        try {
-            return new FileInputStream(file);
-        } catch (FileNotFoundException e) {
-            LOG.error("Reading File {} failed. Msg: {}", file.getPath(), e.getMessage());
-            throw new NotFoundException(404, "File +" + path + "/" + name + " existiert nicht");
-        }
-    }
-    
+
     public ImageInternal getMetadata(int id) throws NotFoundException {
         ImageFull res = getImageFull(id);
         ImageInternal image = new ImageInternal()
             .id(res.getId())
             .name(res.getName())
+            .root(res.getRoot())
             .relativePath(res.getRelativePath())
             .aperture(res.getAperture())
             .creationDate(Util.convert(res.getCreationDate()))
@@ -207,26 +185,6 @@ public class ImageFacade {
         return result;
     }
 
-    /**
-     * 
-     * @param id of Image to rate
-     * @param rating new rating 
-     * @throws NotFoundException 
-     */
-    public void updateRating(int id, int rating) throws NotFoundException {
-        TypedQuery<ImageInformation> query = getEntityManager().createNamedQuery("ImageInformation.findByImageId", ImageInformation.class);
-        query.setParameter("imageId", id);
-        try {
-            ImageInformation imageInformation = query.getSingleResult();
-            imageInformation.setRating(rating);
-            getEntityManager().merge(imageInformation);
-        } catch (NoResultException e) {
-            String msg = String.format("Image with id %s not found or exists anymore", id);
-            LOG.info("msg");
-            throw new NotFoundException(404, msg);
-        }
-    }
-    
     public List<StatisticKeyword> statKeyword(int keywordId, int year) throws ConditionParseException {
         Sql sql = new Sql("select count(*) cnt, t.id, t.name from Tags t inner join ImageTags it on t.id = it.tagid inner join ImageInformation ii on it.imageid = ii.imageid");
         sql.addGroupClause("t.name");
@@ -246,7 +204,7 @@ public class ImageFacade {
         now.set(Calendar.MONTH, 11);
         now.set(Calendar.DATE, 31);
         Date to = now.getTime();
-        sql.addCondition(new RangeCondition("ii.creationDate",from, to));
+        sql.addCondition(new RangeCondition("ii.creationDate", from, to));
         Query q = sql.buildQuery(getEntityManager(), StatisticKeywordEntity.class);
         List<StatisticKeywordEntity> res = q.getResultList();
         List<StatisticKeyword> result = new ArrayList<>();
@@ -254,6 +212,55 @@ public class ImageFacade {
             result.add(new StatisticKeyword().count(e.getCount()).name(NodeFactory.getInstance().getKeywordQualById(e.getId())));
         }
         return result;
+    }
+
+    private ImageFull getImageFull(int id) throws NotFoundException {
+        TypedQuery<ImageFull> query = getEntityManager().createNamedQuery("ImageFull.findById", ImageFull.class);
+        query.setParameter("id", id);
+        try {
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            String msg = String.format("Image with id %s not found or exists anymore", id);
+            LOG.info("msg");
+            throw new NotFoundException(404, msg);
+        }
+    }
+
+    public List<StatisticMonth> statMonth(Integer year) {
+        String select = "select year(creationDate) year, month(creationDate) month, count(*) 'count' from ImageInformation";
+        Sql sql = new Sql(select);
+        if (year != null && year > 0) {
+            sql.addCondition(new SimpleCondition("year(creationDate)", year));
+        }
+        sql.addGroupClause("year(creationDate)");
+        sql.addGroupClause("month(creationDate)");
+        sql.addOrderClause("year(creationDate)", SortOrder.Descending);
+        sql.addOrderClause("month(creationDate)", SortOrder.Descending);
+        Query query = sql.buildQuery(getEntityManager(), StatistikMonthEntity.class);
+        List<StatistikMonthEntity> temp = query.getResultList();
+        List<StatisticMonth> result = new ArrayList<>();
+        for (StatistikMonthEntity e : temp) {
+            result.add(new StatisticMonth()
+                .month(e.getKey().getMonth())
+                .year(e.getKey().getYear())
+                .cnt(e.getCount())
+            );
+        }
+        return result;
+    }
+
+    private FileInputStream getImageFile(String root, String path, String name) throws NotFoundException {
+        File file = new File(root + path + "/" + name);
+        if (!file.exists() || !file.canRead()) {
+            LOG.error("File {} does not exists or can not be read.", file.getPath());
+            throw new NotFoundException(404, "File +" + path + "/" + name + " existiert nicht");
+        }
+        try {
+            return new FileInputStream(file);
+        } catch (FileNotFoundException e) {
+            LOG.error("Reading File {} failed. Msg: {}", file.getPath(), e.getMessage());
+            throw new NotFoundException(404, "File +" + path + "/" + name + " existiert nicht");
+        }
     }
     
     private void addCondition(Sql sql, String columnName, String value) {
@@ -287,195 +294,12 @@ public class ImageFacade {
         return query.getResultList();
     }
 
-    private ImageFull getImageFull(int id) throws NotFoundException {
-        TypedQuery<ImageFull> query = getEntityManager().createNamedQuery("ImageFull.findById", ImageFull.class);
-        query.setParameter("id", id);
-        try {
-            return query.getSingleResult();
-        } catch (NoResultException e) {
-            String msg = String.format("Image with id %s not found or exists anymore", id);
-            LOG.info("msg");
-            throw new NotFoundException(404, msg);
-        }
-    }
-    
     protected EntityManager getEntityManager() {
         return em;
     }
 
-    void setEntityManager(EntityManager em) {
+    public void setEntityManager(EntityManager em) {
         this.em = em;
     }
 
-    public List<StatisticMonth> statMonth(Integer year) {
-        String select = "select year(creationDate) year, month(creationDate) month, count(*) 'count' from ImageInformation";
-        Sql sql = new Sql(select);
-        if (year != null && year > 0) {
-            sql.addCondition(new SimpleCondition("year(creationDate)", year));
-        }
-        sql.addGroupClause("year(creationDate)");
-        sql.addGroupClause("month(creationDate)");
-        sql.addOrderClause("year(creationDate)", SortOrder.Descending);
-        sql.addOrderClause("month(creationDate)", SortOrder.Descending);
-        Query query = sql.buildQuery(getEntityManager(), StatistikMonthEntity.class);
-        List<StatistikMonthEntity> temp = query.getResultList();
-        List<StatisticMonth> result = new ArrayList<>();
-        for (StatistikMonthEntity e : temp) {
-            result.add(new StatisticMonth()
-                .month(e.getKey().getMonth())
-                .year(e.getKey().getYear())
-                .cnt(e.getCount())
-            );
-        }
-        return result; 
-    }
-
-    public void update(int id, String title, String description, int rating, List<Tags> tags, String creator) throws NotFoundException {
-        Images images = imagesFacade.find(id);
-        if (images == null) {
-            String msg = String.format("Image with id %s not found or exists anymore", id);
-            throw new NotFoundException(404, msg);
-        }
-
-        ImageInformation information = imageInformationFacade.findByImageId(id);
-        if (null != information) {
-            information.setRating(rating);
-            getEntityManager().merge(information);
-        }
-
-        updateComment(3, title, images);
-        updateComment(1, description, images);
-
-        updateCreator(creator, images);
-        
-        images.getTags().clear();
-        images.getTags().addAll(tags);
-        getEntityManager().merge(images);
-        getEntityManager().flush();
-    }
-
-    private void updateComment(int type, String value, Images images) {
-        for (ImageComments c : images.getComments()) {
-            if (null != c.getType() && type == c.getType()) {
-                c.setComment(value);
-                return;
-            }
-        }
-
-        ImageComments imageComments = new ImageComments();
-        imageComments.setType(type);
-        imageComments.setImage(images);
-        imageComments.setLanguage("x-default");
-        imageComments.setComment(value);
-        imageComments.setType(type);
-        images.getComments().add(imageComments);
-    }
-
-    private void updateCreator(String value, Images image) {
-        for (ImageCopyright c : image.getCopyrights()) {
-            if (null != c.getProperty() && "creator".equals(c.getProperty())) {
-                c.setValue(value);
-                return;
-            }
-        }
-        ImageCopyright ic = new ImageCopyright();
-        ic.setImage(image);
-        ic.setProperty("creator");
-        ic.setValue(value);
-        image.getCopyrights().add(ic);
-    }
-    
-    class DateWrapper {
-
-        private UncompleteDateTime udt;
-
-        public DateWrapper(String udt) {
-            try {
-                this.udt = new UncompleteDateTime( udt);
-            } catch (BadRequestException e) {
-                this.udt = null;
-            }
-        }
-
-        public boolean isEmpty() {
-            return udt == null || isEmpty(udt.getYear());
-        }
-
-        public Date getLowerBound() {
-            Calendar temp = Calendar.getInstance();
-            temp.set(Calendar.YEAR, udt.getYear());
-            if (isEmpty(udt.getMonth())) {
-                temp.set(Calendar.MONTH, 0);
-            } else {
-                temp.set(Calendar.MONTH, udt.getMonth() - 1);
-            }
-
-            if (isEmpty(udt.getDay())) {
-                temp.set(Calendar.DATE, 1);
-            } else {
-                temp.set(Calendar.DATE, udt.getDay());
-            }
-
-            if (isEmpty(udt.getHour())) {
-                temp.set(Calendar.HOUR_OF_DAY, 0);
-            } else {
-                temp.set(Calendar.HOUR_OF_DAY, udt.getHour());
-            }
-
-            if (isEmpty(udt.getMinute())) {
-                temp.set(Calendar.MINUTE, 0);
-            } else {
-                temp.set(Calendar.MINUTE, udt.getMinute());
-            }
-
-            if (isEmpty(udt.getSecond())) {
-                temp.set(Calendar.SECOND, 0);
-            } else {
-                temp.set(Calendar.SECOND, udt.getSecond());
-            }
-
-            return temp.getTime();
-        }
-
-        public Date getUpperBound() {
-            Calendar temp = Calendar.getInstance();
-            temp.set(Calendar.YEAR, udt.getYear());
-            if (isEmpty(udt.getMonth())) {
-                temp.set(Calendar.MONTH, 11);
-            } else {
-                temp.set(Calendar.MONTH, udt.getMonth() - 1);
-            }
-
-            if (isEmpty(udt.getDay())) {
-                temp.add(Calendar.MONTH, 1);
-                temp.add(Calendar.DATE, -1);
-            } else {
-                temp.set(Calendar.DATE, udt.getDay());
-            }
-
-            if (isEmpty(udt.getHour())) {
-                temp.set(Calendar.HOUR_OF_DAY, 23);
-            } else {
-                temp.set(Calendar.HOUR_OF_DAY, udt.getHour());
-            }
-
-            if (isEmpty(udt.getMinute())) {
-                temp.set(Calendar.MINUTE, 59);
-            } else {
-                temp.set(Calendar.MINUTE, udt.getMinute());
-            }
-
-            if (isEmpty(udt.getSecond())) {
-                temp.set(Calendar.SECOND, 59);
-            } else {
-                temp.set(Calendar.SECOND, udt.getSecond());
-            }
-
-            return temp.getTime();
-        }
-
-        private boolean isEmpty(Integer i) {
-            return i == null || i == 0;
-        }
-    }
 }

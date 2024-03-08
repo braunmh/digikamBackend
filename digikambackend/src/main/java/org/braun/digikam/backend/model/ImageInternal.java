@@ -32,6 +32,12 @@ public class ImageInternal extends Image {
     }
 
     @Override
+    public ImageInternal root(String name) {
+        setRoot(name);
+        return this;
+    }
+    
+    @Override
     public ImageInternal relativePath(String relativePath) {
         setRelativePath(relativePath);
         return this;

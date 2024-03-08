@@ -8,6 +8,8 @@
     <class>org.braun.digikam.backend.ejb.ImageFull</class>
     <class>org.braun.digikam.backend.ejb.ImageComments</class>
     <class>org.braun.digikam.backend.ejb.ImageInformation</class>
+    <class>org.braun.digikam.backend.ejb.VideoFull</class>
+    <class>org.braun.digikam.backend.api.Thumbnail</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
     <properties>

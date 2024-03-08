@@ -13,7 +13,7 @@ public enum Orientation {
       this.angle = angle;
    }
 
-   public int getValue() {
+   public int getAngle() {
       return angle;
    }
    

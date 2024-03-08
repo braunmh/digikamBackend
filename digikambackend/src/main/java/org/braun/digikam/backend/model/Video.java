@@ -13,47 +13,40 @@
 
 package org.braun.digikam.backend.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModelProperty;
-import jakarta.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import jakarta.validation.Valid;
 
 /**
- * Image
+ * Video
  */
 @JsonPropertyOrder({
-  Image.JSON_PROPERTY_CREATOR,
-  Image.JSON_PROPERTY_ORIENTATION,
-  Image.JSON_PROPERTY_EXPOSURE_TIME,
-  Image.JSON_PROPERTY_LATITUDE,
-  Image.JSON_PROPERTY_FOCAL_LENGTH35,
-  Image.JSON_PROPERTY_LENS,
-  Image.JSON_PROPERTY_CREATION_DATE,
-  Image.JSON_PROPERTY_APERTURE,
-  Image.JSON_PROPERTY_WIDTH,
-  Image.JSON_PROPERTY_MODEL,
-  Image.JSON_PROPERTY_ID,
-  Image.JSON_PROPERTY_MAKE,
-  Image.JSON_PROPERTY_HEIGHT,
-  Image.JSON_PROPERTY_FOCAL_LENGTH,
-  Image.JSON_PROPERTY_LONGITUDE,
-  Image.JSON_PROPERTY_ISO,
-  Image.JSON_PROPERTY_RATING,
-  Image.JSON_PROPERTY_KEYWORDS,
-  Image.JSON_PROPERTY_TITLE,
-  Image.JSON_PROPERTY_DESCRIPTION,
-  Image.JSON_PROPERTY_RELATIVE_PATH,
-  Image.JSON_PROPERTY_ROOT,
-  Image.JSON_PROPERTY_NAME
+  Video.JSON_PROPERTY_CREATOR,
+  Video.JSON_PROPERTY_ORIENTATION,
+  Video.JSON_PROPERTY_LATITUDE,
+  Video.JSON_PROPERTY_CREATION_DATE,
+  Video.JSON_PROPERTY_WIDTH,
+  Video.JSON_PROPERTY_ID,
+  Video.JSON_PROPERTY_HEIGHT,
+  Video.JSON_PROPERTY_LONGITUDE,
+  Video.JSON_PROPERTY_RATING,
+  Video.JSON_PROPERTY_KEYWORDS,
+  Video.JSON_PROPERTY_TITLE,
+  Video.JSON_PROPERTY_DESCRIPTION,
+  Video.JSON_PROPERTY_DURATION,
+  Video.JSON_PROPERTY_RELATIVE_PATH,
+  Video.JSON_PROPERTY_ROOT,
+  Video.JSON_PROPERTY_NAME
 })
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJerseyServerCodegen", date = "2024-03-03T13:50:19.095650335+01:00[Europe/Berlin]")
-public class Image   {
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJerseyServerCodegen", date = "2024-03-03T14:20:34.367983949+01:00[Europe/Berlin]")
+public class Video   {
   public static final String JSON_PROPERTY_CREATOR = "creator";
   @JsonProperty(JSON_PROPERTY_CREATOR)
   private String creator;
@@ -93,61 +86,29 @@ public class Image   {
   @JsonProperty(JSON_PROPERTY_ORIENTATION)
   private OrientationEnum orientation;
 
-  public static final String JSON_PROPERTY_EXPOSURE_TIME = "exposureTime";
-  @JsonProperty(JSON_PROPERTY_EXPOSURE_TIME)
-  private Double exposureTime;
-
   public static final String JSON_PROPERTY_LATITUDE = "latitude";
   @JsonProperty(JSON_PROPERTY_LATITUDE)
   private Double latitude;
-
-  public static final String JSON_PROPERTY_FOCAL_LENGTH35 = "focalLength35";
-  @JsonProperty(JSON_PROPERTY_FOCAL_LENGTH35)
-  private Double focalLength35;
-
-  public static final String JSON_PROPERTY_LENS = "lens";
-  @JsonProperty(JSON_PROPERTY_LENS)
-  private String lens;
 
   public static final String JSON_PROPERTY_CREATION_DATE = "creationDate";
   @JsonProperty(JSON_PROPERTY_CREATION_DATE)
   private LocalDateTime creationDate;
 
-  public static final String JSON_PROPERTY_APERTURE = "aperture";
-  @JsonProperty(JSON_PROPERTY_APERTURE)
-  private Double aperture;
-
   public static final String JSON_PROPERTY_WIDTH = "width";
   @JsonProperty(JSON_PROPERTY_WIDTH)
   private Integer width;
-
-  public static final String JSON_PROPERTY_MODEL = "model";
-  @JsonProperty(JSON_PROPERTY_MODEL)
-  private String model;
 
   public static final String JSON_PROPERTY_ID = "id";
   @JsonProperty(JSON_PROPERTY_ID)
   private Integer id;
 
-  public static final String JSON_PROPERTY_MAKE = "make";
-  @JsonProperty(JSON_PROPERTY_MAKE)
-  private String make;
-
   public static final String JSON_PROPERTY_HEIGHT = "height";
   @JsonProperty(JSON_PROPERTY_HEIGHT)
   private Integer height;
 
-  public static final String JSON_PROPERTY_FOCAL_LENGTH = "focalLength";
-  @JsonProperty(JSON_PROPERTY_FOCAL_LENGTH)
-  private Double focalLength;
-
   public static final String JSON_PROPERTY_LONGITUDE = "longitude";
   @JsonProperty(JSON_PROPERTY_LONGITUDE)
   private Double longitude;
-
-  public static final String JSON_PROPERTY_ISO = "iso";
-  @JsonProperty(JSON_PROPERTY_ISO)
-  private Integer iso;
 
   public static final String JSON_PROPERTY_RATING = "rating";
   @JsonProperty(JSON_PROPERTY_RATING)
@@ -165,6 +126,10 @@ public class Image   {
   @JsonProperty(JSON_PROPERTY_DESCRIPTION)
   private String description;
 
+  public static final String JSON_PROPERTY_DURATION = "duration";
+  @JsonProperty(JSON_PROPERTY_DURATION)
+  private Integer duration;
+
   public static final String JSON_PROPERTY_RELATIVE_PATH = "relativePath";
   @JsonProperty(JSON_PROPERTY_RELATIVE_PATH)
   private String relativePath;
@@ -177,7 +142,7 @@ public class Image   {
   @JsonProperty(JSON_PROPERTY_NAME)
   private String name;
 
-  public Image creator(String creator) {
+  public Video creator(String creator) {
     this.creator = creator;
     return this;
   }
@@ -197,7 +162,7 @@ public class Image   {
     this.creator = creator;
   }
 
-  public Image orientation(OrientationEnum orientation) {
+  public Video orientation(OrientationEnum orientation) {
     this.orientation = orientation;
     return this;
   }
@@ -217,27 +182,7 @@ public class Image   {
     this.orientation = orientation;
   }
 
-  public Image exposureTime(Double exposureTime) {
-    this.exposureTime = exposureTime;
-    return this;
-  }
-
-  /**
-   * Get exposureTime
-   * @return exposureTime
-   **/
-  @JsonProperty(value = "exposureTime")
-  @ApiModelProperty(value = "")
-  
-  public Double getExposureTime() {
-    return exposureTime;
-  }
-
-  public void setExposureTime(Double exposureTime) {
-    this.exposureTime = exposureTime;
-  }
-
-  public Image latitude(Double latitude) {
+  public Video latitude(Double latitude) {
     this.latitude = latitude;
     return this;
   }
@@ -257,47 +202,7 @@ public class Image   {
     this.latitude = latitude;
   }
 
-  public Image focalLength35(Double focalLength35) {
-    this.focalLength35 = focalLength35;
-    return this;
-  }
-
-  /**
-   * Get focalLength35
-   * @return focalLength35
-   **/
-  @JsonProperty(value = "focalLength35")
-  @ApiModelProperty(value = "")
-  
-  public Double getFocalLength35() {
-    return focalLength35;
-  }
-
-  public void setFocalLength35(Double focalLength35) {
-    this.focalLength35 = focalLength35;
-  }
-
-  public Image lens(String lens) {
-    this.lens = lens;
-    return this;
-  }
-
-  /**
-   * Get lens
-   * @return lens
-   **/
-  @JsonProperty(value = "lens")
-  @ApiModelProperty(value = "")
-  
-  public String getLens() {
-    return lens;
-  }
-
-  public void setLens(String lens) {
-    this.lens = lens;
-  }
-
-  public Image creationDate(LocalDateTime creationDate) {
+  public Video creationDate(LocalDateTime creationDate) {
     this.creationDate = creationDate;
     return this;
   }
@@ -317,27 +222,7 @@ public class Image   {
     this.creationDate = creationDate;
   }
 
-  public Image aperture(Double aperture) {
-    this.aperture = aperture;
-    return this;
-  }
-
-  /**
-   * Get aperture
-   * @return aperture
-   **/
-  @JsonProperty(value = "aperture")
-  @ApiModelProperty(value = "")
-  
-  public Double getAperture() {
-    return aperture;
-  }
-
-  public void setAperture(Double aperture) {
-    this.aperture = aperture;
-  }
-
-  public Image width(Integer width) {
+  public Video width(Integer width) {
     this.width = width;
     return this;
   }
@@ -357,27 +242,7 @@ public class Image   {
     this.width = width;
   }
 
-  public Image model(String model) {
-    this.model = model;
-    return this;
-  }
-
-  /**
-   * Get model
-   * @return model
-   **/
-  @JsonProperty(value = "model")
-  @ApiModelProperty(value = "")
-  
-  public String getModel() {
-    return model;
-  }
-
-  public void setModel(String model) {
-    this.model = model;
-  }
-
-  public Image id(Integer id) {
+  public Video id(Integer id) {
     this.id = id;
     return this;
   }
@@ -397,27 +262,7 @@ public class Image   {
     this.id = id;
   }
 
-  public Image make(String make) {
-    this.make = make;
-    return this;
-  }
-
-  /**
-   * Get make
-   * @return make
-   **/
-  @JsonProperty(value = "make")
-  @ApiModelProperty(value = "")
-  
-  public String getMake() {
-    return make;
-  }
-
-  public void setMake(String make) {
-    this.make = make;
-  }
-
-  public Image height(Integer height) {
+  public Video height(Integer height) {
     this.height = height;
     return this;
   }
@@ -437,27 +282,7 @@ public class Image   {
     this.height = height;
   }
 
-  public Image focalLength(Double focalLength) {
-    this.focalLength = focalLength;
-    return this;
-  }
-
-  /**
-   * Get focalLength
-   * @return focalLength
-   **/
-  @JsonProperty(value = "focalLength")
-  @ApiModelProperty(value = "")
-  
-  public Double getFocalLength() {
-    return focalLength;
-  }
-
-  public void setFocalLength(Double focalLength) {
-    this.focalLength = focalLength;
-  }
-
-  public Image longitude(Double longitude) {
+  public Video longitude(Double longitude) {
     this.longitude = longitude;
     return this;
   }
@@ -477,27 +302,7 @@ public class Image   {
     this.longitude = longitude;
   }
 
-  public Image iso(Integer iso) {
-    this.iso = iso;
-    return this;
-  }
-
-  /**
-   * Get iso
-   * @return iso
-   **/
-  @JsonProperty(value = "iso")
-  @ApiModelProperty(value = "")
-  
-  public Integer getIso() {
-    return iso;
-  }
-
-  public void setIso(Integer iso) {
-    this.iso = iso;
-  }
-
-  public Image rating(Integer rating) {
+  public Video rating(Integer rating) {
     this.rating = rating;
     return this;
   }
@@ -517,12 +322,12 @@ public class Image   {
     this.rating = rating;
   }
 
-  public Image keywords(List<Keyword> keywords) {
+  public Video keywords(List<Keyword> keywords) {
     this.keywords = keywords;
     return this;
   }
 
-  public Image addKeywordsItem(Keyword keywordsItem) {
+  public Video addKeywordsItem(Keyword keywordsItem) {
     if (this.keywords == null) {
       this.keywords = new ArrayList<>();
     }
@@ -545,7 +350,7 @@ public class Image   {
     this.keywords = keywords;
   }
 
-  public Image title(String title) {
+  public Video title(String title) {
     this.title = title;
     return this;
   }
@@ -565,7 +370,7 @@ public class Image   {
     this.title = title;
   }
 
-  public Image description(String description) {
+  public Video description(String description) {
     this.description = description;
     return this;
   }
@@ -585,7 +390,27 @@ public class Image   {
     this.description = description;
   }
 
-  public Image relativePath(String relativePath) {
+  public Video duration(Integer duration) {
+    this.duration = duration;
+    return this;
+  }
+
+  /**
+   * Get duration
+   * @return duration
+   **/
+  @JsonProperty(value = "duration")
+  @ApiModelProperty(value = "")
+  
+  public Integer getDuration() {
+    return duration;
+  }
+
+  public void setDuration(Integer duration) {
+    this.duration = duration;
+  }
+
+  public Video relativePath(String relativePath) {
     this.relativePath = relativePath;
     return this;
   }
@@ -605,7 +430,7 @@ public class Image   {
     this.relativePath = relativePath;
   }
 
-  public Image root(String root) {
+  public Video root(String root) {
     this.root = root;
     return this;
   }
@@ -625,7 +450,7 @@ public class Image   {
     this.root = root;
   }
 
-  public Image name(String name) {
+  public Video name(String name) {
     this.name = name;
     return this;
   }
@@ -654,62 +479,48 @@ public class Image   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Image image = (Image) o;
-    return Objects.equals(this.creator, image.creator) &&
-        Objects.equals(this.orientation, image.orientation) &&
-        Objects.equals(this.exposureTime, image.exposureTime) &&
-        Objects.equals(this.latitude, image.latitude) &&
-        Objects.equals(this.focalLength35, image.focalLength35) &&
-        Objects.equals(this.lens, image.lens) &&
-        Objects.equals(this.creationDate, image.creationDate) &&
-        Objects.equals(this.aperture, image.aperture) &&
-        Objects.equals(this.width, image.width) &&
-        Objects.equals(this.model, image.model) &&
-        Objects.equals(this.id, image.id) &&
-        Objects.equals(this.make, image.make) &&
-        Objects.equals(this.height, image.height) &&
-        Objects.equals(this.focalLength, image.focalLength) &&
-        Objects.equals(this.longitude, image.longitude) &&
-        Objects.equals(this.iso, image.iso) &&
-        Objects.equals(this.rating, image.rating) &&
-        Objects.equals(this.keywords, image.keywords) &&
-        Objects.equals(this.title, image.title) &&
-        Objects.equals(this.description, image.description) &&
-        Objects.equals(this.relativePath, image.relativePath) &&
-        Objects.equals(this.root, image.root) &&
-        Objects.equals(this.name, image.name);
+    Video video = (Video) o;
+    return Objects.equals(this.creator, video.creator) &&
+        Objects.equals(this.orientation, video.orientation) &&
+        Objects.equals(this.latitude, video.latitude) &&
+        Objects.equals(this.creationDate, video.creationDate) &&
+        Objects.equals(this.width, video.width) &&
+        Objects.equals(this.id, video.id) &&
+        Objects.equals(this.height, video.height) &&
+        Objects.equals(this.longitude, video.longitude) &&
+        Objects.equals(this.rating, video.rating) &&
+        Objects.equals(this.keywords, video.keywords) &&
+        Objects.equals(this.title, video.title) &&
+        Objects.equals(this.description, video.description) &&
+        Objects.equals(this.duration, video.duration) &&
+        Objects.equals(this.relativePath, video.relativePath) &&
+        Objects.equals(this.root, video.root) &&
+        Objects.equals(this.name, video.name);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(creator, orientation, exposureTime, latitude, focalLength35, lens, creationDate, aperture, width, model, id, make, height, focalLength, longitude, iso, rating, keywords, title, description, relativePath, root, name);
+    return Objects.hash(creator, orientation, latitude, creationDate, width, id, height, longitude, rating, keywords, title, description, duration, relativePath, root, name);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Image {\n");
+    sb.append("class Video {\n");
     
     sb.append("    creator: ").append(toIndentedString(creator)).append("\n");
     sb.append("    orientation: ").append(toIndentedString(orientation)).append("\n");
-    sb.append("    exposureTime: ").append(toIndentedString(exposureTime)).append("\n");
     sb.append("    latitude: ").append(toIndentedString(latitude)).append("\n");
-    sb.append("    focalLength35: ").append(toIndentedString(focalLength35)).append("\n");
-    sb.append("    lens: ").append(toIndentedString(lens)).append("\n");
     sb.append("    creationDate: ").append(toIndentedString(creationDate)).append("\n");
-    sb.append("    aperture: ").append(toIndentedString(aperture)).append("\n");
     sb.append("    width: ").append(toIndentedString(width)).append("\n");
-    sb.append("    model: ").append(toIndentedString(model)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    make: ").append(toIndentedString(make)).append("\n");
     sb.append("    height: ").append(toIndentedString(height)).append("\n");
-    sb.append("    focalLength: ").append(toIndentedString(focalLength)).append("\n");
     sb.append("    longitude: ").append(toIndentedString(longitude)).append("\n");
-    sb.append("    iso: ").append(toIndentedString(iso)).append("\n");
     sb.append("    rating: ").append(toIndentedString(rating)).append("\n");
     sb.append("    keywords: ").append(toIndentedString(keywords)).append("\n");
     sb.append("    title: ").append(toIndentedString(title)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
+    sb.append("    duration: ").append(toIndentedString(duration)).append("\n");
     sb.append("    relativePath: ").append(toIndentedString(relativePath)).append("\n");
     sb.append("    root: ").append(toIndentedString(root)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
