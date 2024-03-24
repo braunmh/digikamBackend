@@ -24,8 +24,8 @@ import org.braun.digikam.backend.api.NotFoundException;
 import org.braun.digikam.backend.graphics.ExifUtil;
 import org.braun.digikam.backend.graphics.ImageUtil;
 import org.braun.digikam.backend.model.ImageInternal;
-import org.braun.digikam.backend.model.ImagesInner;
 import org.braun.digikam.backend.model.Keyword;
+import org.braun.digikam.backend.model.Media;
 import org.braun.digikam.backend.model.StatisticKeyword;
 import org.braun.digikam.backend.model.StatisticMonth;
 import org.braun.digikam.backend.search.ConditionParseException;
@@ -119,7 +119,7 @@ public class ImageFacade {
         return image;
     }
 
-    public List<ImagesInner> findImagesByImageAttributes(
+    public List<Media> findImagesByImageAttributes(
         List<Integer> keywords, String creator, String make, String model, String lens, String orientation,
         String dateFrom, String dateTo, Integer ratingFrom, Integer ratingTo, Integer isoFrom, Integer isoTo,
         Double exposureTimeFrom, Double exposureTimeTo, Double apertureFrom, Double apertureTo,
@@ -178,9 +178,13 @@ public class ImageFacade {
         LOG.debug(sql.toString());
 
         List<ImageFull> res = query.getResultList();
-        List<ImagesInner> result = new ArrayList<>();
+        List<Media> result = new ArrayList<>();
         for (ImageFull i : res) {
-            result.add(new ImagesInner().imageId(i.getId()).creationDate(Util.convert(i.getCreationDate())));
+            result.add(new Media().id(i.getId())
+                .creationDate(Util.convert(i.getCreationDate()))
+                .image(true)
+                .name(i.getName())
+            );
         }
         return result;
     }

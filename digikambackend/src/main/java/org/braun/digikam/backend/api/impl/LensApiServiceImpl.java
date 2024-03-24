@@ -1,5 +1,6 @@
 package org.braun.digikam.backend.api.impl;
 
+import jakarta.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import jakarta.validation.constraints.NotNull;
@@ -11,11 +12,13 @@ import org.braun.digikam.backend.ejb.ImageMetadataFacade;
 import org.braun.digikam.backend.model.Lens;
 import org.braun.digikam.backend.util.Util;
 
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJerseyServerCodegen", date = "2022-12-15T15:30:51.126+01:00[Europe/Berlin]")
 public class LensApiServiceImpl extends LensApiService {
+    
+    @Inject ImageMetadataFacade facade;
+    
     @Override
     public Response findLensByNameAndMakeAndModel( @NotNull String name,  @NotNull String makeAndModel, SecurityContext securityContext) throws NotFoundException {
-        ImageMetadataFacade facade = Util.EJB.lookup(ImageMetadataFacade.class);
+        ImageMetadataFacade facade = getFacade();
         CameraFactory.CameraEntry entry = CameraFactory.getInstance().getByName(makeAndModel);
         List<String> lenses = facade.getLens(entry.getMake(), entry.getModel());
         List<Lens> result = new ArrayList<>();
@@ -32,4 +35,13 @@ public class LensApiServiceImpl extends LensApiService {
     public Response refreshLensCache(SecurityContext securityContext) throws NotFoundException {
         return Response.ok().build();
     }
+
+    public ImageMetadataFacade getFacade() {
+        if (facade == null) {
+            facade = Util.Cdi.lookup(ImageMetadataFacade.class);
+        }
+        return facade;
+    }
+    
+    
 }

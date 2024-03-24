@@ -1,6 +1,16 @@
 package org.braun.digikam.backend.api;
 
+import org.braun.digikam.backend.api.factories.VideoApiServiceFactory;
+
 import io.swagger.annotations.ApiParam;
+
+import java.io.File;
+import org.braun.digikam.backend.model.ImageUpdate;
+import org.braun.digikam.backend.model.Media;
+import org.braun.digikam.backend.model.Video;
+
+import java.util.List;
+
 import jakarta.servlet.ServletConfig;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.Response;
@@ -9,18 +19,10 @@ import jakarta.ws.rs.*;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 
-import java.util.List;
-
-import org.braun.digikam.backend.api.factories.VideoApiServiceFactory;
-import org.braun.digikam.backend.model.ImageUpdate;
-import org.braun.digikam.backend.model.ImagesInner;
-import org.braun.digikam.backend.model.Video;
-
 @Path("/video")
 
 
 @io.swagger.annotations.Api(description = "the video API")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJerseyServerCodegen", date = "2024-03-05T11:19:58.841018430+01:00[Europe/Berlin]")
 public class VideoApi  {
    private final VideoApiService delegate;
 
@@ -49,9 +51,9 @@ public class VideoApi  {
     @Path("/find")
     
     @Produces({ "application/json" })
-    @io.swagger.annotations.ApiOperation(value = "", notes = "", response = ImagesInner.class, responseContainer = "List", tags={ "video", })
+    @io.swagger.annotations.ApiOperation(value = "", notes = "", response = Media.class, responseContainer = "List", tags={ "video", })
     @io.swagger.annotations.ApiResponses(value = {
-        @io.swagger.annotations.ApiResponse(code = 200, message = "OK", response = ImagesInner.class, responseContainer = "List")
+        @io.swagger.annotations.ApiResponse(code = 200, message = "OK", response = Media.class, responseContainer = "List")
     })
     public Response findVideosByAttributes(@ApiParam(value = "List of Keywords") @QueryParam("keywords") @Valid  List<Integer> keywords,@ApiParam(value = "") @QueryParam("creator")  String creator,@ApiParam(value = "", allowableValues="Portrait, Landscape") @QueryParam("orientation")  String orientation,@ApiParam(value = "") @QueryParam("date_from")  String dateFrom,@ApiParam(value = "") @QueryParam("date_to")  String dateTo,@ApiParam(value = "") @QueryParam("ratingFrom")  Integer ratingFrom,@ApiParam(value = "") @QueryParam("ratingTo")  Integer ratingTo,@Context SecurityContext securityContext)
     throws NotFoundException {
@@ -82,16 +84,16 @@ public class VideoApi  {
         return delegate.getThumbnail(videoId, securityContext);
     }
     @jakarta.ws.rs.GET
-    @Path("/{videoId}")
+    @Path("/stream/{videoId}")
     
-    @Produces({ "video/*" })
-    @io.swagger.annotations.ApiOperation(value = "", notes = "", response = byte[].class, tags={ "video", })
+    @Produces({ "application/octet-stream" })
+    @io.swagger.annotations.ApiOperation(value = "", notes = "", response = File.class, tags={ "video", })
     @io.swagger.annotations.ApiResponses(value = {
-        @io.swagger.annotations.ApiResponse(code = 200, message = "the content of an video as stream", response = byte[].class)
+        @io.swagger.annotations.ApiResponse(code = 200, message = "the content of an video as stream", response = File.class)
     })
-    public Response getVideo(@ApiParam(value = "Id of video to return", required = true) @PathParam("videoId") @NotNull  Integer videoId,@Context SecurityContext securityContext)
+    public Response getVideoStream(@ApiParam(value = "Id of video to return", required = true) @PathParam("videoId") @NotNull  Integer videoId,@Context SecurityContext securityContext)
     throws NotFoundException {
-        return delegate.getVideo(videoId, securityContext);
+        return delegate.getVideoStream(videoId, securityContext);
     }
     @jakarta.ws.rs.GET
     @Path("/rate")

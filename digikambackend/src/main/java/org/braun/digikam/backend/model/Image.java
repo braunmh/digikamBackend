@@ -13,16 +13,20 @@
 
 package org.braun.digikam.backend.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import jakarta.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
+import org.braun.digikam.backend.model.Keyword;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import jakarta.validation.constraints.*;
+import jakarta.validation.Valid;
 
 /**
  * Image
@@ -52,7 +56,7 @@ import java.util.Objects;
   Image.JSON_PROPERTY_ROOT,
   Image.JSON_PROPERTY_NAME
 })
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJerseyServerCodegen", date = "2024-03-03T13:50:19.095650335+01:00[Europe/Berlin]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJerseyServerCodegen", date = "2024-03-20T12:51:17.342362153+01:00[Europe/Berlin]")
 public class Image   {
   public static final String JSON_PROPERTY_CREATOR = "creator";
   @JsonProperty(JSON_PROPERTY_CREATOR)
@@ -155,7 +159,7 @@ public class Image   {
 
   public static final String JSON_PROPERTY_KEYWORDS = "keywords";
   @JsonProperty(JSON_PROPERTY_KEYWORDS)
-  private List<Keyword> keywords;
+  private List<@Valid Keyword> keywords;
 
   public static final String JSON_PROPERTY_TITLE = "title";
   @JsonProperty(JSON_PROPERTY_TITLE)
@@ -517,7 +521,7 @@ public class Image   {
     this.rating = rating;
   }
 
-  public Image keywords(List<Keyword> keywords) {
+  public Image keywords(List<@Valid Keyword> keywords) {
     this.keywords = keywords;
     return this;
   }
@@ -537,11 +541,11 @@ public class Image   {
   @JsonProperty(value = "keywords")
   @ApiModelProperty(value = "")
   @Valid 
-  public List<Keyword> getKeywords() {
+  public List<@Valid Keyword> getKeywords() {
     return keywords;
   }
 
-  public void setKeywords(List<Keyword> keywords) {
+  public void setKeywords(List<@Valid Keyword> keywords) {
     this.keywords = keywords;
   }
 

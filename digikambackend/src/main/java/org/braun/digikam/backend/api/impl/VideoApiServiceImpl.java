@@ -1,5 +1,6 @@
 package org.braun.digikam.backend.api.impl;
 
+import jakarta.inject.Inject;
 import jakarta.validation.constraints.*;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
@@ -12,21 +13,24 @@ import org.braun.digikam.backend.ejb.ImagesFacade;
 import org.braun.digikam.backend.ejb.Tags;
 import org.braun.digikam.backend.ejb.VideoFacade;
 import org.braun.digikam.backend.model.ImageUpdate;
-import org.braun.digikam.backend.model.ImagesInner;
+import org.braun.digikam.backend.model.Media;
 import org.braun.digikam.backend.model.Video;
 import org.braun.digikam.backend.search.ConditionParseException;
 import org.braun.digikam.backend.util.Util;
 
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJerseyServerCodegen", date = "2024-03-01T16:23:06.936844939+01:00[Europe/Berlin]")
 public class VideoApiServiceImpl extends VideoApiService {
 
+    @Inject VideoFacade videoFacade;
+    @Inject private ImagesFacade imagesFacade;
+    @Inject private ImageInformationFacade informationFacade;
+    
     @Override
     public Response findVideosByAttributes(List<Integer> keywords, String creator, String orientation,
         String dateFrom, String dateTo, Integer ratingFrom, Integer ratingTo, SecurityContext securityContext) throws NotFoundException {
 
-        VideoFacade facade = Util.EJB.lookup(VideoFacade.class);
+        VideoFacade facade = getVideoFacade();
         try {
-            List<ImagesInner> result = facade.findVideosByAttributes(
+            List<Media> result = facade.findVideosByAttributes(
                 keywords, creator, orientation,
                 dateFrom, dateTo, ratingFrom, ratingTo);
             return Response.ok().entity(result).build();
@@ -37,27 +41,27 @@ public class VideoApiServiceImpl extends VideoApiService {
 
     @Override
     public Response getInformationAboutVideo(Integer videoId, SecurityContext securityContext) throws NotFoundException {
-        VideoFacade facade = Util.EJB.lookup(VideoFacade.class);
+        VideoFacade facade = getVideoFacade();
         Video image = facade.getMetadata(videoId);
         return Response.ok().entity(image).build();
     }
 
     @Override
-    public Response getVideo(Integer videoId, SecurityContext securityContext) throws NotFoundException {
-        VideoFacade facade = Util.EJB.lookup(VideoFacade.class);
+    public Response getVideoStream(Integer videoId, SecurityContext securityContext) throws NotFoundException {
+        VideoFacade facade = getVideoFacade();
         return Response.ok().entity(facade.getVideo(videoId)).build();
     }
 
     @Override
     public Response rateVideo(@NotNull Integer videoId, @NotNull Integer rating, SecurityContext securityContext) throws NotFoundException {
-        ImageInformationFacade facade = Util.EJB.lookup(ImageInformationFacade.class);
+        ImageInformationFacade facade = getInformationFacade();
         facade.updateRating(videoId, rating);
         return Response.ok().entity("Okay").build();
     }
 
     @Override
     public Response videoUpdate(ImageUpdate imageUpdate, SecurityContext securityContext) throws NotFoundException {
-        ImagesFacade facade = Util.EJB.lookup(ImagesFacade.class);
+        ImagesFacade facade = getImagesFacade();
         List<Tags> tags = new ArrayList<>();
         for (Integer tagId : imageUpdate.getKeywords()) {
             tags.add(new Tags().name(NodeFactory.getInstance().getKeywordById(tagId).getName()).id(tagId));
@@ -69,7 +73,28 @@ public class VideoApiServiceImpl extends VideoApiService {
 
     @Override
     public Response getThumbnail(Integer videoId, SecurityContext securityContext) throws NotFoundException {
-        VideoFacade facade = Util.EJB.lookup(VideoFacade.class);
+        VideoFacade facade = getVideoFacade();
          return Response.ok().entity(facade.getThumbnail(videoId)).build();
    }
+
+    public VideoFacade getVideoFacade() {
+        if (videoFacade == null) {
+            videoFacade = Util.Cdi.lookup(VideoFacade.class);
+        }
+        return videoFacade;
+    }
+    
+    public ImagesFacade getImagesFacade() {
+        if (imagesFacade == null) {
+            imagesFacade = Util.Cdi.lookup(ImagesFacade.class);
+        }
+        return imagesFacade;
+    }
+
+    public ImageInformationFacade getInformationFacade() {
+        if (informationFacade == null) {
+            informationFacade = Util.Cdi.lookup(ImageInformationFacade.class);
+        }
+        return informationFacade;
+    }
 }

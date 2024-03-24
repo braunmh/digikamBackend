@@ -30,7 +30,7 @@ import jakarta.validation.Valid;
   Keyword.JSON_PROPERTY_FULL_NAME,
   Keyword.JSON_PROPERTY_ID
 })
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJerseyServerCodegen", date = "2023-12-27T20:04:01.965701513+01:00[Europe/Berlin]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJerseyServerCodegen", date = "2024-03-20T12:51:17.342362153+01:00[Europe/Berlin]")
 public class Keyword   {
   public static final String JSON_PROPERTY_NAME = "name";
   @JsonProperty(JSON_PROPERTY_NAME)

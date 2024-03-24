@@ -8,9 +8,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import org.apache.commons.imaging.ImageReadException;
-import org.apache.commons.imaging.ImageWriteException;
 import org.apache.commons.imaging.Imaging;
+import org.apache.commons.imaging.ImagingException;
 import org.apache.commons.imaging.common.ImageMetadata;
 import org.apache.commons.imaging.common.RationalNumber;
 import org.apache.commons.imaging.formats.jpeg.JpegImageMetadata;
@@ -77,14 +76,14 @@ public class ExifUtil {
                     addTag(exifDirectory, MicrosoftTagConstants.EXIF_TAG_XPSUBJECT, convertTags(image.getKeywords()));
 
                     if (null != image.getLongitude()&& null != image.getLatitude()) {
-                        outputSet.setGPSInDegrees(image.getLongitude(), image.getLatitude());
+                        outputSet.setGpsInDegrees(image.getLongitude(), image.getLatitude());
                     }
                 }
             }
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             new ExifRewriter().updateExifMetadataLossless(imageByte, baos, outputSet);
             return baos;
-        } catch (ImageReadException | ImageWriteException e) {
+        } catch (ImagingException e) {
             LOG.error(e);
             throw new IOException(e.getMessage());
         }
@@ -119,14 +118,14 @@ public class ExifUtil {
                     addTag(exifDirectory, MicrosoftTagConstants.EXIF_TAG_XPSUBJECT, convertTags(video.getKeywords()));
 
                     if (null != video.getLongitude()&& null != video.getLatitude()) {
-                        outputSet.setGPSInDegrees(video.getLongitude(), video.getLatitude());
+                        outputSet.setGpsInDegrees(video.getLongitude(), video.getLatitude());
                     }
                 }
             }
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             new ExifRewriter().updateExifMetadataLossless(imageByte, baos, outputSet);
             return baos;
-        } catch (ImageReadException | ImageWriteException e) {
+        } catch (ImagingException e) {
             LOG.error(e);
             throw new IOException(e.getMessage());
         }
@@ -173,7 +172,7 @@ public class ExifUtil {
         return convert(values);
     }
 
-    private static void addTag(TiffOutputDirectory exifDirectory, TagInfoRational tagInfo, Double value) throws ImageWriteException {
+    private static void addTag(TiffOutputDirectory exifDirectory, TagInfoRational tagInfo, Double value) throws ImagingException {
         if (null == value) {
             return;
         }
@@ -181,7 +180,7 @@ public class ExifUtil {
         exifDirectory.add(tagInfo, new RationalNumber((int) (value * 100), 100));
     }
 
-    private static void addTag(TiffOutputDirectory exifDirectory, TagInfoRationals tagInfo, Double value) throws ImageWriteException {
+    private static void addTag(TiffOutputDirectory exifDirectory, TagInfoRationals tagInfo, Double value) throws ImagingException {
         if (null == value) {
             return;
         }
@@ -189,7 +188,7 @@ public class ExifUtil {
         exifDirectory.add(tagInfo, new RationalNumber((int) (value * 1000), 1000));
     }
 
-    private static void addTag(TiffOutputDirectory exifDirectory, TagInfoShorts tagInfo, Integer... value) throws ImageWriteException {
+    private static void addTag(TiffOutputDirectory exifDirectory, TagInfoShorts tagInfo, Integer... value) throws ImagingException {
         if (null == value || value.length == 0) {
             return;
         }
@@ -203,7 +202,7 @@ public class ExifUtil {
         exifDirectory.add(tagInfo, shorts);
     }
 
-    private static void addTag(TiffOutputDirectory exifDirectory, TagInfoShort tagInfo, Double value) throws ImageWriteException {
+    private static void addTag(TiffOutputDirectory exifDirectory, TagInfoShort tagInfo, Double value) throws ImagingException {
         if (null == value) {
             return;
         }
@@ -211,7 +210,7 @@ public class ExifUtil {
         exifDirectory.add(tagInfo, value.shortValue());
     }
 
-    private static void addTag(TiffOutputDirectory exifDirectory, TagInfoShort tagInfo, Integer value) throws ImageWriteException {
+    private static void addTag(TiffOutputDirectory exifDirectory, TagInfoShort tagInfo, Integer value) throws ImagingException {
         if (null == value) {
             return;
         }
@@ -219,7 +218,7 @@ public class ExifUtil {
         exifDirectory.add(tagInfo, value.shortValue());
     }
 
-    private static void addTag(TiffOutputDirectory exifDirectory, TagInfoAscii tagInfo, String value) throws ImageWriteException {
+    private static void addTag(TiffOutputDirectory exifDirectory, TagInfoAscii tagInfo, String value) throws ImagingException {
         if (null == value) {
             return;
         }
@@ -227,7 +226,7 @@ public class ExifUtil {
         exifDirectory.add(tagInfo, value);
     }
 
-    private static void addTag(TiffOutputDirectory exifDirectory, TagInfoXpString tagInfo, String value) throws ImageWriteException {
+    private static void addTag(TiffOutputDirectory exifDirectory, TagInfoXpString tagInfo, String value) throws ImagingException {
         if (null == value) {
             return;
         }

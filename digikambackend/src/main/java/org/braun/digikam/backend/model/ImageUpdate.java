@@ -15,11 +15,15 @@ package org.braun.digikam.backend.model;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.validation.constraints.*;
+import jakarta.validation.Valid;
 
 /**
  * ImageUpdate
@@ -32,7 +36,7 @@ import jakarta.validation.constraints.*;
   ImageUpdate.JSON_PROPERTY_CREATOR,
   ImageUpdate.JSON_PROPERTY_KEYWORDS
 })
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJerseyServerCodegen", date = "2023-12-29T16:55:27.110337051+01:00[Europe/Berlin]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJerseyServerCodegen", date = "2024-03-20T12:51:17.342362153+01:00[Europe/Berlin]")
 public class ImageUpdate   {
   public static final String JSON_PROPERTY_IMAGE_ID = "imageId";
   @JsonProperty(JSON_PROPERTY_IMAGE_ID)

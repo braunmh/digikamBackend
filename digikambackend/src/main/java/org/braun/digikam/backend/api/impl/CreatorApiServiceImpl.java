@@ -1,5 +1,6 @@
 package org.braun.digikam.backend.api.impl;
 
+import jakarta.inject.Inject;
 import java.util.List;
 import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.core.Response;
@@ -11,6 +12,8 @@ import org.braun.digikam.backend.model.Creator;
 import org.braun.digikam.backend.util.Util;
 
 public class CreatorApiServiceImpl extends CreatorApiService {
+    
+    @Inject ImageCopyrightFacade facade;
     @Override
     public Response findCreatorsByName( @NotNull String name, SecurityContext securityContext) throws NotFoundException {
         List<Creator> creators = CreatorFactory.getInstance().findByName(name);
@@ -19,8 +22,15 @@ public class CreatorApiServiceImpl extends CreatorApiService {
     
     @Override
     public Response refreshCreatorCache(SecurityContext securityContext) throws NotFoundException {
-        ImageCopyrightFacade facade = Util.EJB.lookup(ImageCopyrightFacade.class);
+        ImageCopyrightFacade facade = getFacade();
         CreatorFactory.getInstance().refresh(facade.findAllCreators());
         return Response.ok().build();
+    }
+
+    public ImageCopyrightFacade getFacade() {
+        if (facade == null) {
+            facade = Util.Cdi.lookup(ImageCopyrightFacade.class);
+        }
+        return facade;
     }
 }

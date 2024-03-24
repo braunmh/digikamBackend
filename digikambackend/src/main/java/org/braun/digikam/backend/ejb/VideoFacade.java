@@ -24,8 +24,8 @@ import org.braun.digikam.backend.NodeFactory;
 import org.braun.digikam.backend.api.NotFoundException;
 import org.braun.digikam.backend.api.Thumbnail;
 import org.braun.digikam.backend.graphics.ExifUtil;
-import org.braun.digikam.backend.model.ImagesInner;
 import org.braun.digikam.backend.model.Keyword;
+import org.braun.digikam.backend.model.Media;
 import org.braun.digikam.backend.model.VideoInternal;
 import org.braun.digikam.backend.search.ConditionParseException;
 import org.braun.digikam.backend.search.ExistsCondition;
@@ -93,7 +93,7 @@ public class VideoFacade {
         }
     }
     
-    public List<ImagesInner> findVideosByAttributes(
+    public List<Media> findVideosByAttributes(
         List<Integer> keywords, String creator, String orientation,
         String dateFrom, String dateTo, Integer ratingFrom, Integer ratingTo) throws ConditionParseException {
         Sql sql = new Sql(FIND_BY_ATTRIBUTES);
@@ -142,9 +142,12 @@ public class VideoFacade {
         LOG.debug(sql.toString());
 
         List<VideoFull> res = query.getResultList();
-        List<ImagesInner> result = new ArrayList<>();
+        List<Media> result = new ArrayList<>();
         for (VideoFull i : res) {
-            result.add(new ImagesInner().imageId(i.getId()).creationDate(Util.convert(i.getCreationDate())));
+            result.add(new Media().id(i.getId())
+                .creationDate(Util.convert(i.getCreationDate()))
+                .image(false)
+                .name(i.getName()));
         }
         return result;
     }

@@ -7,7 +7,6 @@ import java.util.List;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
 import jakarta.validation.constraints.*;
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJerseyServerCodegen", date = "2023-12-20T15:37:11.894728920+01:00[Europe/Berlin]")
 public abstract class ImageApiService {
     public abstract Response findImagesByImageAttributes(List<Integer> keywords,String creator,String makeModel,String lens,String orientation,String dateFrom,String dateTo,Integer ratingFrom,Integer ratingTo,Integer isoFrom,Integer isoTo,Double exposureTimeFrom,Double exposureTimeTo,Double apertureFrom,Double apertureTo,Integer focalLengthFrom,Integer focalLengthTo,SecurityContext securityContext) throws NotFoundException;
     public abstract Response getImage(Integer imageId,SecurityContext securityContext) throws NotFoundException;

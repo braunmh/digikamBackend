@@ -6,6 +6,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.util.List;
 import org.braun.digikam.backend.api.NotFoundException;
+import org.braun.digikam.backend.util.Util;
 
 /**
  *
@@ -31,8 +32,7 @@ public class ImagesFacade extends AbstractFacade<Images> {
 
     public void addTag(Images image, Tags tag) {
         image.getTags().add(tag);
-        getEntityManager().merge(image);
-        getEntityManager().flush();
+        merge(image);
     }
 
     public void updateCreator(String value, Images image) {
@@ -56,10 +56,10 @@ public class ImagesFacade extends AbstractFacade<Images> {
             throw new NotFoundException(404, msg);
         }
 
-        ImageInformation information = imageInformationFacade.findByImageId(id);
+        ImageInformation information = getImageInformationFacade().findByImageId(id);
         if (null != information) {
             information.setRating(rating);
-            getEntityManager().merge(information);
+            getImageInformationFacade().merge(information);
         }
 
         updateComment(3, title, images);
@@ -69,8 +69,7 @@ public class ImagesFacade extends AbstractFacade<Images> {
         
         images.getTags().clear();
         images.getTags().addAll(tags);
-        getEntityManager().merge(images);
-        getEntityManager().flush();
+        merge(images);
     }
 
     private void updateComment(int type, String value, Images images) {
@@ -90,5 +89,11 @@ public class ImagesFacade extends AbstractFacade<Images> {
         images.getComments().add(imageComments);
     }
 
-    
+    public ImageInformationFacade getImageInformationFacade() {
+        if (imageInformationFacade == null) {
+            imageInformationFacade = Util.Cdi.lookup(ImageInformationFacade.class);
+        }
+        return imageInformationFacade;
+    }
+
 }

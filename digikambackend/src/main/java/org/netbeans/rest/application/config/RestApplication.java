@@ -1,4 +1,4 @@
-package org.braun.digikam.backend.invoker;
+package org.netbeans.rest.application.config;
 
 import jakarta.ws.rs.ApplicationPath;
 import jakarta.ws.rs.core.Application;

@@ -6,11 +6,12 @@ import io.swagger.annotations.ApiParam;
 
 import org.braun.digikam.backend.model.Image;
 import org.braun.digikam.backend.model.ImageUpdate;
-import org.braun.digikam.backend.model.ImagesInner;
+import org.braun.digikam.backend.model.Media;
 import org.braun.digikam.backend.model.StatisticKeyword;
 import org.braun.digikam.backend.model.StatisticMonth;
 
 import java.util.List;
+
 
 import jakarta.servlet.ServletConfig;
 import jakarta.ws.rs.core.Context;
@@ -22,8 +23,8 @@ import jakarta.validation.Valid;
 
 @Path("/image")
 
+
 @io.swagger.annotations.Api(description = "the image API")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJerseyServerCodegen", date = "2023-12-20T15:37:11.894728920+01:00[Europe/Berlin]")
 public class ImageApi  {
    private final ImageApiService delegate;
 
@@ -52,9 +53,9 @@ public class ImageApi  {
     @Path("/find")
     
     @Produces({ "application/json" })
-    @io.swagger.annotations.ApiOperation(value = "", notes = "", response = ImagesInner.class, responseContainer = "List", tags={ "image", })
+    @io.swagger.annotations.ApiOperation(value = "", notes = "", response = Media.class, responseContainer = "List", tags={ "image", })
     @io.swagger.annotations.ApiResponses(value = {
-        @io.swagger.annotations.ApiResponse(code = 200, message = "OK", response = ImagesInner.class, responseContainer = "List")
+        @io.swagger.annotations.ApiResponse(code = 200, message = "OK", response = Media.class, responseContainer = "List")
     })
     public Response findImagesByImageAttributes(@ApiParam(value = "List of Keywords") @QueryParam("keywords") @Valid  List<Integer> keywords,@ApiParam(value = "") @QueryParam("creator")  String creator,@ApiParam(value = "") @QueryParam("makeModel")  String makeModel,@ApiParam(value = "") @QueryParam("lens")  String lens,@ApiParam(value = "", allowableValues="Portrait, Landscape") @QueryParam("orientation")  String orientation,@ApiParam(value = "") @QueryParam("date_from")  String dateFrom,@ApiParam(value = "") @QueryParam("date_to")  String dateTo,@ApiParam(value = "") @QueryParam("ratingFrom")  Integer ratingFrom,@ApiParam(value = "") @QueryParam("ratingTo")  Integer ratingTo,@ApiParam(value = "") @QueryParam("isoFrom")  Integer isoFrom,@ApiParam(value = "") @QueryParam("isoTo")  Integer isoTo,@ApiParam(value = "") @QueryParam("exposureTimeFrom")  Double exposureTimeFrom,@ApiParam(value = "") @QueryParam("exposureTimeTo")  Double exposureTimeTo,@ApiParam(value = "") @QueryParam("apertureFrom")  Double apertureFrom,@ApiParam(value = "") @QueryParam("apertureTo")  Double apertureTo,@ApiParam(value = "") @QueryParam("focalLengthFrom")  Integer focalLengthFrom,@ApiParam(value = "") @QueryParam("focalLengthTo")  Integer focalLengthTo,@Context SecurityContext securityContext)
     throws NotFoundException {
@@ -102,7 +103,7 @@ public class ImageApi  {
     
     @io.swagger.annotations.ApiOperation(value = "", notes = "", response = Void.class, tags={ "image", })
     @io.swagger.annotations.ApiResponses(value = {
-        @io.swagger.annotations.ApiResponse(code = 201, message = "Update image successful", response = Void.class)
+        @io.swagger.annotations.ApiResponse(code = 200, message = "Update image successful", response = Void.class)
     })
     public Response imageUpdate(@ApiParam(value = "one parameter must be provided", required = true) @NotNull @Valid  ImageUpdate imageUpdate,@Context SecurityContext securityContext)
     throws NotFoundException {
@@ -111,10 +112,10 @@ public class ImageApi  {
     @jakarta.ws.rs.GET
     @Path("/rate")
     
-    @Produces({ "image/jpeg" })
-    @io.swagger.annotations.ApiOperation(value = "", notes = "", response = byte[].class, tags={ "image", })
+    
+    @io.swagger.annotations.ApiOperation(value = "", notes = "", response = Void.class, tags={ "image", })
     @io.swagger.annotations.ApiResponses(value = {
-        @io.swagger.annotations.ApiResponse(code = 200, message = "OK", response = byte[].class)
+        @io.swagger.annotations.ApiResponse(code = 200, message = "OK", response = Void.class)
     })
     public Response rateImage(@ApiParam(value = "Id of image to rate", required = true) @QueryParam("imageId") @NotNull  Integer imageId,@ApiParam(value = "The new rating", required = true) @QueryParam("rating") @NotNull  Integer rating,@Context SecurityContext securityContext)
     throws NotFoundException {

@@ -1,5 +1,6 @@
 package org.braun.digikam.backend.api.impl;
 
+import jakarta.inject.Inject;
 import java.io.ByteArrayInputStream;
 import java.util.List;
 import jakarta.validation.constraints.NotNull;
@@ -15,7 +16,7 @@ import org.braun.digikam.backend.ejb.ImagesFacade;
 import org.braun.digikam.backend.ejb.Tags;
 import org.braun.digikam.backend.model.Image;
 import org.braun.digikam.backend.model.ImageUpdate;
-import org.braun.digikam.backend.model.ImagesInner;
+import org.braun.digikam.backend.model.Media;
 import org.braun.digikam.backend.model.StatisticKeyword;
 import org.braun.digikam.backend.model.StatisticMonth;
 import org.braun.digikam.backend.search.ConditionParseException;
@@ -23,6 +24,10 @@ import org.braun.digikam.backend.util.Util;
 
 public class ImageApiServiceImpl extends ImageApiService {
 
+    @Inject private ImagesFacade imagesFacade;
+    @Inject private ImageFacade imageFacade;
+    @Inject private ImageInformationFacade informationFacade;
+    
     /**
      *
      * @param keywords
@@ -53,9 +58,9 @@ public class ImageApiServiceImpl extends ImageApiService {
         SecurityContext securityContext) throws NotFoundException {
         CameraFactory.CameraEntry camera = CameraFactory.getInstance().getByName(makeModel);
         
-        ImageFacade facade = Util.EJB.lookup(ImageFacade.class);
+        ImageFacade facade = getImageFacade();
         try {
-            List<ImagesInner> result = facade.findImagesByImageAttributes(
+            List<Media> result = facade.findImagesByImageAttributes(
                 keywords, creator, camera.getMake(), camera.getModel(), lens, orientation, 
                 dateFrom, dateTo, ratingFrom, ratingTo, isoFrom, isoTo, exposureTimeFrom, exposureTimeTo, 
                 apertureFrom, apertureTo, focalLengthFrom, focalLengthTo);
@@ -74,7 +79,7 @@ public class ImageApiServiceImpl extends ImageApiService {
      */
     @Override
     public Response getImage(Integer imageId, SecurityContext securityContext) throws NotFoundException {
-        ImageFacade facade = Util.EJB.lookup(ImageFacade.class);
+        ImageFacade facade = getImageFacade();
         return Response.ok().entity(facade.getImage(imageId)).build();
     }
 
@@ -87,7 +92,7 @@ public class ImageApiServiceImpl extends ImageApiService {
      */
     @Override
     public Response getInformationAboutImage(Integer imageId, SecurityContext securityContext) throws NotFoundException {
-        ImageFacade facade = Util.EJB.lookup(ImageFacade.class);
+        ImageFacade facade = getImageFacade();
         Image image = facade.getMetadata(imageId);
         return Response.ok().entity(image).build();
     }
@@ -103,21 +108,21 @@ public class ImageApiServiceImpl extends ImageApiService {
      */
     @Override
     public Response scalesImage(@NotNull Integer imageId, @NotNull Integer width, @NotNull Integer height, SecurityContext securityContext) throws NotFoundException {
-        ImageFacade facade = Util.EJB.lookup(ImageFacade.class);
+        ImageFacade facade = getImageFacade();
         byte [] result = facade.getScaledImage(imageId,width, height);
         return Response.ok().entity(new ByteArrayInputStream(result)).build();
     }
 
     @Override
     public Response rateImage(Integer imageId, Integer rating, SecurityContext securityContext) throws NotFoundException {
-        ImageInformationFacade facade = Util.EJB.lookup(ImageInformationFacade.class);
+        ImageInformationFacade facade = getInformationFacade();
         facade.updateRating(imageId, rating);
         return Response.ok().entity("Okay").build();
     }
 
     @Override
     public Response statKeyword(Integer keywordId, Integer year, SecurityContext securityContext) throws NotFoundException {
-        ImageFacade facade = Util.EJB.lookup(ImageFacade.class);
+        ImageFacade facade = getImageFacade();
         try {
             List<StatisticKeyword> result = facade.statKeyword(keywordId, year);
             return Response.ok().entity(result).build();
@@ -128,7 +133,7 @@ public class ImageApiServiceImpl extends ImageApiService {
     @Override
 
     public Response statMonth(Integer year, SecurityContext securityContext) throws NotFoundException {
-        ImageFacade facade = Util.EJB.lookup(ImageFacade.class);
+        ImageFacade facade = getImageFacade();
         List<StatisticMonth> result = facade.statMonth(year);
         return Response.ok().entity(result).build();
     }
@@ -147,7 +152,7 @@ public class ImageApiServiceImpl extends ImageApiService {
      */
     @Override
     public Response imageUpdate(ImageUpdate imageUpdate, SecurityContext securityContext) throws NotFoundException {
-        ImagesFacade facade = Util.EJB.lookup(ImagesFacade.class);
+        ImagesFacade facade = getImagesFacade();
         List<Tags> tags = new ArrayList<>();
         for (Integer tagId : imageUpdate.getKeywords()) {
             tags.add(new Tags().name(NodeFactory.getInstance().getKeywordById(tagId).getName()).id(tagId));
@@ -156,4 +161,26 @@ public class ImageApiServiceImpl extends ImageApiService {
             , tags, imageUpdate.getCreator());
         return Response.ok().build();
     }
+
+    public ImageFacade getImageFacade() {
+        if (imageFacade == null) {
+            imageFacade = Util.Cdi.lookup(ImageFacade.class);
+        }
+        return imageFacade;
+    }
+
+    public ImagesFacade getImagesFacade() {
+        if (imagesFacade == null) {
+            imagesFacade = Util.Cdi.lookup(ImagesFacade.class);
+        }
+        return imagesFacade;
+    }
+
+    public ImageInformationFacade getInformationFacade() {
+        if (informationFacade == null) {
+            informationFacade = Util.Cdi.lookup(ImageInformationFacade.class);
+        }
+        return informationFacade;
+    }
+    
 }

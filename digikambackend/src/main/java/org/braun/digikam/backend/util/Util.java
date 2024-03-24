@@ -1,5 +1,6 @@
 package org.braun.digikam.backend.util;
 
+import jakarta.enterprise.inject.spi.CDI;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
@@ -52,5 +53,15 @@ public final class Util {
         }
         
         return LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
+    }
+    
+    public static class Cdi {
+        
+        private Cdi() {}
+        
+        public static<T> T lookup(Class<T> clazz) {
+            CDI<Object> cdi = CDI.current();
+            return cdi.select(clazz).get();
+        }
     }
 }

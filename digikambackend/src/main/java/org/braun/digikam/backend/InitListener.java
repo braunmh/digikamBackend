@@ -1,6 +1,6 @@
 package org.braun.digikam.backend;
 
-import jakarta.inject.Inject;
+import jakarta.ejb.EJB;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
@@ -20,13 +20,13 @@ public class InitListener implements ServletContextListener {
 
     private static final Logger LOG = LogManager.getLogger();
     
-    @Inject
+    @EJB
     private TagsFacade tagsFacade;
     
-    @Inject
+    @EJB
     private ImageMetadataFacade imageMetadataFacade;
     
-    @Inject
+    @EJB
     private ImageCopyrightFacade imageCopyrightFacade;
     
     @Override
