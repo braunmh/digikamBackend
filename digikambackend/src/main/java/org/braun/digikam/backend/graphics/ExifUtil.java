@@ -76,7 +76,7 @@ public class ExifUtil {
                     addTag(exifDirectory, MicrosoftTagConstants.EXIF_TAG_XPSUBJECT, convertTags(image.getKeywords()));
 
                     if (null != image.getLongitude()&& null != image.getLatitude()) {
-                        outputSet.setGpsInDegrees(image.getLongitude(), image.getLatitude());
+                        outputSet.setGPSInDegrees(image.getLongitude(), image.getLatitude());
                     }
                 }
             }
@@ -118,7 +118,7 @@ public class ExifUtil {
                     addTag(exifDirectory, MicrosoftTagConstants.EXIF_TAG_XPSUBJECT, convertTags(video.getKeywords()));
 
                     if (null != video.getLongitude()&& null != video.getLatitude()) {
-                        outputSet.setGpsInDegrees(video.getLongitude(), video.getLatitude());
+                        outputSet.setGPSInDegrees(video.getLongitude(), video.getLatitude());
                     }
                 }
             }
