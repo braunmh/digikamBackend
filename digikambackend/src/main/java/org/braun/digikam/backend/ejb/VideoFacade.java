@@ -161,7 +161,7 @@ public class VideoFacade {
         VideoInternal video = new VideoInternal()
             .id(videoFull.getId())
             .name(videoFull.getName())
-            .root(videoFull.getRoot())
+            .root(normAlbumPath(videoFull.getRoot()))
             .relativePath(videoFull.getRelativePath())
             //            .duration(res.getDuration()) String to Integer number of seconds
             .creationDate(Util.convert(videoFull.getCreationDate()))
@@ -206,7 +206,7 @@ public class VideoFacade {
     }
 
     private FileInputStream getImageFile(String root, String path, String name) throws NotFoundException {
-        File file = new File(root + path + "/" + name);
+        File file = new File(normAlbumPath(root) + path + "/" + name);
         if (!file.exists() || !file.canRead()) {
             LOG.error("File {} does not exists or can not be read.", file.getPath());
             throw new NotFoundException(404, "File +" + path + "/" + name + " existiert nicht");
@@ -254,4 +254,8 @@ public class VideoFacade {
         this.em = em;
     }
 
+    private String normAlbumPath(String value) {
+        int amp = value.indexOf('&');
+        return (amp > 0) ? value.substring(0, amp) : value;
+    }
 }
