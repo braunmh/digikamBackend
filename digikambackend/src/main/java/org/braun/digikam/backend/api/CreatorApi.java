@@ -1,21 +1,10 @@
 package org.braun.digikam.backend.api;
 
-import org.braun.digikam.backend.api.CreatorApiService;
 import org.braun.digikam.backend.api.factories.CreatorApiServiceFactory;
 
 import io.swagger.annotations.ApiParam;
-import io.swagger.jaxrs.*;
 
 import org.braun.digikam.backend.model.Creator;
-
-import java.util.Map;
-import java.util.List;
-import org.braun.digikam.backend.api.NotFoundException;
-
-import java.io.InputStream;
-
-import org.glassfish.jersey.media.multipart.FormDataParam;
-import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 
 import jakarta.servlet.ServletConfig;
 import jakarta.ws.rs.core.Context;
@@ -23,7 +12,6 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
 import jakarta.ws.rs.*;
 import jakarta.validation.constraints.*;
-import jakarta.validation.Valid;
 
 @Path("/creator")
 

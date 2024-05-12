@@ -15,7 +15,6 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -39,7 +38,6 @@ public class ImageFull implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Lob
-    @Size(min = 1, max = 2147483647)
     @Column(name = "name")
     private String name;
     
@@ -50,7 +48,6 @@ public class ImageFull implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Lob
-    @Size(min = 1, max = 2147483647)
     @Column(name = "relativePath")
     private String relativePath;
     @Basic(optional = false)
@@ -66,8 +63,6 @@ public class ImageFull implements Serializable {
     private Date modificationDate;
     @Column(name = "fileSize")
     private Integer fileSize;
-    @Size(max = 128)
-
     @Column(name = "rating")
     private Integer rating;
     @Column(name = "creationDate")
@@ -80,15 +75,12 @@ public class ImageFull implements Serializable {
     @Column(name = "height")
     private Integer height;
     @Lob
-    @Size(max = 2147483647)
     @Column(name = "make")
     private String make;
     @Lob
-    @Size(max = 2147483647)
     @Column(name = "model")
     private String model;
     @Lob
-    @Size(max = 2147483647)
     @Column(name = "lens")
     private String lens;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
@@ -107,7 +99,6 @@ public class ImageFull implements Serializable {
     @Column(name = "sensitivity")
     private Integer sensitivity;
     @Lob
-    @Size(max = 2147483647)
     @Column(name = "creator")
     private String creator;
     @Column(name = "latitudeNumber")

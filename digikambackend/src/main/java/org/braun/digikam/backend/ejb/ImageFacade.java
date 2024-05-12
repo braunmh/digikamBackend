@@ -80,7 +80,7 @@ public class ImageFacade {
         ImageInternal image = new ImageInternal()
             .id(res.getId())
             .name(res.getName())
-            .root(res.getRoot())
+            .root(normAlbumPath(res.getRoot()))
             .relativePath(res.getRelativePath())
             .aperture(res.getAperture())
             .creationDate(Util.convert(res.getCreationDate()))
@@ -306,4 +306,8 @@ public class ImageFacade {
         this.em = em;
     }
 
+    private String normAlbumPath(String value) {
+        int amp = value.indexOf('&');
+        return (amp > 0) ? value.substring(0, amp) : value;
+    }
 }
