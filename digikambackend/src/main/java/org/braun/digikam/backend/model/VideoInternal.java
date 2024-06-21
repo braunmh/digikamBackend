@@ -100,7 +100,7 @@ public class VideoInternal extends Video {
     }
 
     @Override
-    public VideoInternal id(Integer id) {
+    public VideoInternal id(Long id) {
         setId(id);
         return this;
     }

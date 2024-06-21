@@ -34,7 +34,7 @@ public class ImageFull implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
-    private int id;
+    private long id;
     @Basic(optional = false)
     @NotNull
     @Lob
@@ -109,11 +109,11 @@ public class ImageFull implements Serializable {
     public ImageFull() {
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

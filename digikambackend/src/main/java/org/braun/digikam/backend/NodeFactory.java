@@ -40,8 +40,8 @@ public class NodeFactory {
             Node root = new Node(0, "");
             root.setFullName("");
             root.setQualifiedName("");
-            Map<Integer, Node> map = new HashMap<>();
-            map.put(0, root);
+            Map<Long, Node> map = new HashMap<>();
+            map.put(0l, root);
 
             List<Tags> list = new ArrayList<>();
 
@@ -146,7 +146,7 @@ public class NodeFactory {
         return result;
     }
 
-    public Keyword getKeywordById(int id) {
+    public Keyword getKeywordById(long id) {
         for (Node n : nodes) {
             if (id == n.getId()) {
                 return new Keyword().fullName(n.getFullName()).id(n.getId()).name(n.getQualifiedName());
@@ -155,7 +155,7 @@ public class NodeFactory {
         return null;
     }
     
-    public String getKeywordQualById(int id) {
+    public String getKeywordQualById(long id) {
         for (Node n : nodes) {
             if (id == n.getId()) {
                 return n.getQualifiedName();
@@ -164,10 +164,10 @@ public class NodeFactory {
         return null;
     }
     
-    public List<Integer> getChildrensRec(int id) {
+    public List<Long> getChildrensRec(long id) {
         for (Node n : nodes) {
             if (id == n.getId()) {
-                List<Integer> result = new ArrayList<>();
+                List<Long> result = new ArrayList<>();
                 getChildren(result, n);
                 return result;
             }
@@ -175,7 +175,7 @@ public class NodeFactory {
         return Collections.emptyList();
     }
     
-    private void getChildren(List<Integer> children, Node parent) {
+    private void getChildren(List<Long> children, Node parent) {
         children.add(parent.getId());
         for (Node c : parent.getChildren()) {
             getChildren(children, c);

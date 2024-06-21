@@ -55,13 +55,13 @@ public class VideoFacade {
     @PersistenceContext(unitName = "digikam")
     private EntityManager em;
 
-    public InputStream getVideo(int id) throws NotFoundException {
+    public InputStream getVideo(long id) throws NotFoundException {
         VideoFull image = getVideoFull(id);
         FileInputStream imageStream = getImageFile(image.getRoot(), image.getRelativePath(), image.getName());
         return imageStream;
     }
 
-    public byte[] getThumbnail(int id) throws NotFoundException {
+    public byte[] getThumbnail(long id) throws NotFoundException {
         Thumbnail thumbnail = getEntityManager().find(Thumbnail.class, id);
         if (thumbnail == null) {
             VideoFull videoFull = getVideoFull(id);
@@ -94,7 +94,7 @@ public class VideoFacade {
     }
     
     public List<Media> findVideosByAttributes(
-        List<Integer> keywords, String creator, String orientation,
+        List<Long> keywords, String creator, String orientation,
         String dateFrom, String dateTo, Integer ratingFrom, Integer ratingTo) throws ConditionParseException {
         Sql sql = new Sql(FIND_BY_ATTRIBUTES);
         addCondition(sql, "i.creator", creator);
@@ -125,8 +125,8 @@ public class VideoFacade {
         }
 
         if (keywords != null && !keywords.isEmpty()) {
-            for (Integer k : keywords) {
-                List<Integer> ks = NodeFactory.getInstance().getChildrensRec(k);
+            for (Long k : keywords) {
+                List<Long> ks = NodeFactory.getInstance().getChildrensRec(k);
                 if (ks.isEmpty()) {
                     continue;
                 }
@@ -152,7 +152,7 @@ public class VideoFacade {
         return result;
     }
 
-    public VideoInternal getMetadata(int id) throws NotFoundException {
+    public VideoInternal getMetadata(long id) throws NotFoundException {
         VideoFull videoFull = getVideoFull(id);
         return getMetadata(videoFull);
     }
@@ -193,7 +193,7 @@ public class VideoFacade {
         return video;
     }
     
-    private VideoFull getVideoFull(int id) throws NotFoundException {
+    private VideoFull getVideoFull(long id) throws NotFoundException {
         TypedQuery<VideoFull> query = getEntityManager().createNamedQuery("VideoFull.findById", VideoFull.class);
         query.setParameter("id", id);
         try {
@@ -229,9 +229,9 @@ public class VideoFacade {
         sql.addCondition(new RangeCondition(columnName, from, to));
     }
 
-    private List<Keyword> getKeywords(int imageId) {
+    private List<Keyword> getKeywords(Long imageId) {
         List<Keyword> result = new ArrayList<>();
-        for (Integer id : getKeyordIds(imageId)) {
+        for (Long id : getKeyordIds(imageId)) {
             Keyword k = NodeFactory.getInstance().getKeywordById(id);
             if (k != null) {
                 result.add(k);
@@ -240,7 +240,7 @@ public class VideoFacade {
         return result;
     }
 
-    private List<Integer> getKeyordIds(int imageId) {
+    private List<Long> getKeyordIds(Long imageId) {
         Query query = getEntityManager().createNativeQuery("select tagId from ImageTags where imageid = ?");
         query.setParameter(1, imageId);
         return query.getResultList();

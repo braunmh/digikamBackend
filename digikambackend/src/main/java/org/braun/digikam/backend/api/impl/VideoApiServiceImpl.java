@@ -25,7 +25,7 @@ public class VideoApiServiceImpl extends VideoApiService {
     @Inject private ImageInformationFacade informationFacade;
     
     @Override
-    public Response findVideosByAttributes(List<Integer> keywords, String creator, String orientation,
+    public Response findVideosByAttributes(List<Long> keywords, String creator, String orientation,
         String dateFrom, String dateTo, Integer ratingFrom, Integer ratingTo, SecurityContext securityContext) throws NotFoundException {
 
         VideoFacade facade = getVideoFacade();
@@ -40,20 +40,20 @@ public class VideoApiServiceImpl extends VideoApiService {
     }
 
     @Override
-    public Response getInformationAboutVideo(Integer videoId, SecurityContext securityContext) throws NotFoundException {
+    public Response getInformationAboutVideo(Long videoId, SecurityContext securityContext) throws NotFoundException {
         VideoFacade facade = getVideoFacade();
         Video image = facade.getMetadata(videoId);
         return Response.ok().entity(image).build();
     }
 
     @Override
-    public Response getVideoStream(Integer videoId, SecurityContext securityContext) throws NotFoundException {
+    public Response getVideoStream(Long videoId, SecurityContext securityContext) throws NotFoundException {
         VideoFacade facade = getVideoFacade();
         return Response.ok().entity(facade.getVideo(videoId)).build();
     }
 
     @Override
-    public Response rateVideo(@NotNull Integer videoId, @NotNull Integer rating, SecurityContext securityContext) throws NotFoundException {
+    public Response rateVideo(@NotNull Long videoId, @NotNull Integer rating, SecurityContext securityContext) throws NotFoundException {
         ImageInformationFacade facade = getInformationFacade();
         facade.updateRating(videoId, rating);
         return Response.ok().entity("Okay").build();
@@ -63,7 +63,7 @@ public class VideoApiServiceImpl extends VideoApiService {
     public Response videoUpdate(ImageUpdate imageUpdate, SecurityContext securityContext) throws NotFoundException {
         ImagesFacade facade = getImagesFacade();
         List<Tags> tags = new ArrayList<>();
-        for (Integer tagId : imageUpdate.getKeywords()) {
+        for (Long tagId : imageUpdate.getKeywords()) {
             tags.add(new Tags().name(NodeFactory.getInstance().getKeywordById(tagId).getName()).id(tagId));
         }
         facade.update(imageUpdate.getImageId(), imageUpdate.getTitle(), imageUpdate.getDescription(), imageUpdate.getRating(),
@@ -72,7 +72,7 @@ public class VideoApiServiceImpl extends VideoApiService {
     }
 
     @Override
-    public Response getThumbnail(Integer videoId, SecurityContext securityContext) throws NotFoundException {
+    public Response getThumbnail(Long videoId, SecurityContext securityContext) throws NotFoundException {
         VideoFacade facade = getVideoFacade();
          return Response.ok().entity(facade.getThumbnail(videoId)).build();
    }

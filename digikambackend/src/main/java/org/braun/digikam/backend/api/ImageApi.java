@@ -57,7 +57,7 @@ public class ImageApi  {
     @io.swagger.annotations.ApiResponses(value = {
         @io.swagger.annotations.ApiResponse(code = 200, message = "OK", response = Media.class, responseContainer = "List")
     })
-    public Response findImagesByImageAttributes(@ApiParam(value = "List of Keywords") @QueryParam("keywords") @Valid  List<Integer> keywords,@ApiParam(value = "") @QueryParam("creator")  String creator,@ApiParam(value = "") @QueryParam("makeModel")  String makeModel,@ApiParam(value = "") @QueryParam("lens")  String lens,@ApiParam(value = "", allowableValues="Portrait, Landscape") @QueryParam("orientation")  String orientation,@ApiParam(value = "") @QueryParam("date_from")  String dateFrom,@ApiParam(value = "") @QueryParam("date_to")  String dateTo,@ApiParam(value = "") @QueryParam("ratingFrom")  Integer ratingFrom,@ApiParam(value = "") @QueryParam("ratingTo")  Integer ratingTo,@ApiParam(value = "") @QueryParam("isoFrom")  Integer isoFrom,@ApiParam(value = "") @QueryParam("isoTo")  Integer isoTo,@ApiParam(value = "") @QueryParam("exposureTimeFrom")  Double exposureTimeFrom,@ApiParam(value = "") @QueryParam("exposureTimeTo")  Double exposureTimeTo,@ApiParam(value = "") @QueryParam("apertureFrom")  Double apertureFrom,@ApiParam(value = "") @QueryParam("apertureTo")  Double apertureTo,@ApiParam(value = "") @QueryParam("focalLengthFrom")  Integer focalLengthFrom,@ApiParam(value = "") @QueryParam("focalLengthTo")  Integer focalLengthTo,@Context SecurityContext securityContext)
+    public Response findImagesByImageAttributes(@ApiParam(value = "List of Keywords") @QueryParam("keywords") @Valid  List<Long> keywords,@ApiParam(value = "") @QueryParam("creator")  String creator,@ApiParam(value = "") @QueryParam("makeModel")  String makeModel,@ApiParam(value = "") @QueryParam("lens")  String lens,@ApiParam(value = "", allowableValues="Portrait, Landscape") @QueryParam("orientation")  String orientation,@ApiParam(value = "") @QueryParam("date_from")  String dateFrom,@ApiParam(value = "") @QueryParam("date_to")  String dateTo,@ApiParam(value = "") @QueryParam("ratingFrom")  Integer ratingFrom,@ApiParam(value = "") @QueryParam("ratingTo")  Integer ratingTo,@ApiParam(value = "") @QueryParam("isoFrom")  Integer isoFrom,@ApiParam(value = "") @QueryParam("isoTo")  Integer isoTo,@ApiParam(value = "") @QueryParam("exposureTimeFrom")  Double exposureTimeFrom,@ApiParam(value = "") @QueryParam("exposureTimeTo")  Double exposureTimeTo,@ApiParam(value = "") @QueryParam("apertureFrom")  Double apertureFrom,@ApiParam(value = "") @QueryParam("apertureTo")  Double apertureTo,@ApiParam(value = "") @QueryParam("focalLengthFrom")  Integer focalLengthFrom,@ApiParam(value = "") @QueryParam("focalLengthTo")  Integer focalLengthTo,@Context SecurityContext securityContext)
     throws NotFoundException {
         return delegate.findImagesByImageAttributes(keywords, creator, makeModel, lens, orientation, dateFrom, dateTo, ratingFrom, ratingTo, isoFrom, isoTo, exposureTimeFrom, exposureTimeTo, apertureFrom, apertureTo, focalLengthFrom, focalLengthTo, securityContext);
     }
@@ -69,7 +69,7 @@ public class ImageApi  {
     @io.swagger.annotations.ApiResponses(value = {
         @io.swagger.annotations.ApiResponse(code = 200, message = "OK", response = byte[].class)
     })
-    public Response getImage(@ApiParam(value = "Id of image to return", required = true) @PathParam("imageId") @NotNull  Integer imageId,@Context SecurityContext securityContext)
+    public Response getImage(@ApiParam(value = "Id of image to return", required = true) @PathParam("imageId") @NotNull  Long imageId,@Context SecurityContext securityContext)
     throws NotFoundException {
         return delegate.getImage(imageId, securityContext);
     }
@@ -81,7 +81,7 @@ public class ImageApi  {
     @io.swagger.annotations.ApiResponses(value = {
         @io.swagger.annotations.ApiResponse(code = 200, message = "Metadata of Image with Id", response = Image.class)
     })
-    public Response getInformationAboutImage(@ApiParam(value = "Id identifing an Image") @QueryParam("imageId")  Integer imageId,@Context SecurityContext securityContext)
+    public Response getInformationAboutImage(@ApiParam(value = "Id identifing an Image") @QueryParam("imageId")  Long imageId,@Context SecurityContext securityContext)
     throws NotFoundException {
         return delegate.getInformationAboutImage(imageId, securityContext);
     }
@@ -117,7 +117,7 @@ public class ImageApi  {
     @io.swagger.annotations.ApiResponses(value = {
         @io.swagger.annotations.ApiResponse(code = 200, message = "OK", response = Void.class)
     })
-    public Response rateImage(@ApiParam(value = "Id of image to rate", required = true) @QueryParam("imageId") @NotNull  Integer imageId,@ApiParam(value = "The new rating", required = true) @QueryParam("rating") @NotNull  Integer rating,@Context SecurityContext securityContext)
+    public Response rateImage(@ApiParam(value = "Id of image to rate", required = true) @QueryParam("imageId") @NotNull  Long imageId,@ApiParam(value = "The new rating", required = true) @QueryParam("rating") @NotNull  Integer rating,@Context SecurityContext securityContext)
     throws NotFoundException {
         return delegate.rateImage(imageId, rating, securityContext);
     }
@@ -129,7 +129,7 @@ public class ImageApi  {
     @io.swagger.annotations.ApiResponses(value = {
         @io.swagger.annotations.ApiResponse(code = 200, message = "OK", response = byte[].class)
     })
-    public Response scalesImage(@ApiParam(value = "Id of Image to scale", required = true) @QueryParam("imageId") @NotNull  Integer imageId,@ApiParam(value = "new width of scaled Image", required = true) @QueryParam("width") @NotNull  Integer width,@ApiParam(value = "new height of scaled Image", required = true) @QueryParam("height") @NotNull  Integer height,@Context SecurityContext securityContext)
+    public Response scalesImage(@ApiParam(value = "Id of Image to scale", required = true) @QueryParam("imageId") @NotNull  Long imageId,@ApiParam(value = "new width of scaled Image", required = true) @QueryParam("width") @NotNull  Integer width,@ApiParam(value = "new height of scaled Image", required = true) @QueryParam("height") @NotNull  Integer height,@Context SecurityContext securityContext)
     throws NotFoundException {
         return delegate.scalesImage(imageId, width, height, securityContext);
     }
@@ -141,7 +141,7 @@ public class ImageApi  {
     @io.swagger.annotations.ApiResponses(value = {
         @io.swagger.annotations.ApiResponse(code = 200, message = "OK", response = StatisticKeyword.class, responseContainer = "List")
     })
-    public Response statKeyword(@ApiParam(value = "Id of Keyord", required = true) @QueryParam("keywordId") @NotNull  Integer keywordId,@ApiParam(value = "Year", required = true) @QueryParam("year") @NotNull  Integer year,@Context SecurityContext securityContext)
+    public Response statKeyword(@ApiParam(value = "Id of Keyord", required = true) @QueryParam("keywordId") @NotNull  Long keywordId,@ApiParam(value = "Year", required = true) @QueryParam("year") @NotNull  Integer year,@Context SecurityContext securityContext)
     throws NotFoundException {
         return delegate.statKeyword(keywordId, year, securityContext);
     }

@@ -98,7 +98,7 @@ public class ImageInternal extends Image {
     }
 
     @Override
-    public ImageInternal id(Integer id) {
+    public ImageInternal id(Long id) {
         setId(id);
         return this;
     }

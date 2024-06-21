@@ -31,11 +31,11 @@ public class Tags implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id")
-    private Integer id;
+//    @Basic(optional = false)
+    @Column(name = "id", updatable = false, nullable = false)
+    private Long id;
     @Column(name = "pid")
-    private Integer pid;
+    private Long pid;
     @Basic(optional = false)
     @NotNull
     @Lob
@@ -46,28 +46,28 @@ public class Tags implements Serializable {
     public Tags() {
     }
 
-    public Tags(Integer id) {
+    public Tags(Long id) {
         this.id = id;
     }
 
-    public Tags(Integer id, String name) {
+    public Tags(Long id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Integer getPid() {
+    public Long getPid() {
         return pid;
     }
 
-    public void setPid(Integer pid) {
+    public void setPid(Long pid) {
         this.pid = pid;
     }
 
@@ -91,7 +91,7 @@ public class Tags implements Serializable {
         return this;
     }
 
-    public Tags id(Integer id) {
+    public Tags id(Long id) {
         this.id = id;
         return this;
     }

@@ -55,7 +55,7 @@ public class VideoApi  {
     @io.swagger.annotations.ApiResponses(value = {
         @io.swagger.annotations.ApiResponse(code = 200, message = "OK", response = Media.class, responseContainer = "List")
     })
-    public Response findVideosByAttributes(@ApiParam(value = "List of Keywords") @QueryParam("keywords") @Valid  List<Integer> keywords,@ApiParam(value = "") @QueryParam("creator")  String creator,@ApiParam(value = "", allowableValues="Portrait, Landscape") @QueryParam("orientation")  String orientation,@ApiParam(value = "") @QueryParam("date_from")  String dateFrom,@ApiParam(value = "") @QueryParam("date_to")  String dateTo,@ApiParam(value = "") @QueryParam("ratingFrom")  Integer ratingFrom,@ApiParam(value = "") @QueryParam("ratingTo")  Integer ratingTo,@Context SecurityContext securityContext)
+    public Response findVideosByAttributes(@ApiParam(value = "List of Keywords") @QueryParam("keywords") @Valid  List<Long> keywords,@ApiParam(value = "") @QueryParam("creator")  String creator,@ApiParam(value = "", allowableValues="Portrait, Landscape") @QueryParam("orientation")  String orientation,@ApiParam(value = "") @QueryParam("date_from")  String dateFrom,@ApiParam(value = "") @QueryParam("date_to")  String dateTo,@ApiParam(value = "") @QueryParam("ratingFrom")  Integer ratingFrom,@ApiParam(value = "") @QueryParam("ratingTo")  Integer ratingTo,@Context SecurityContext securityContext)
     throws NotFoundException {
         return delegate.findVideosByAttributes(keywords, creator, orientation, dateFrom, dateTo, ratingFrom, ratingTo, securityContext);
     }
@@ -67,7 +67,7 @@ public class VideoApi  {
     @io.swagger.annotations.ApiResponses(value = {
         @io.swagger.annotations.ApiResponse(code = 200, message = "Metadata of Video with Id", response = Video.class)
     })
-    public Response getInformationAboutVideo(@ApiParam(value = "Id identifing an Video") @QueryParam("videoId")  Integer videoId,@Context SecurityContext securityContext)
+    public Response getInformationAboutVideo(@ApiParam(value = "Id identifing an Video") @QueryParam("videoId")  Long videoId,@Context SecurityContext securityContext)
     throws NotFoundException {
         return delegate.getInformationAboutVideo(videoId, securityContext);
     }
@@ -79,7 +79,7 @@ public class VideoApi  {
     @io.swagger.annotations.ApiResponses(value = {
         @io.swagger.annotations.ApiResponse(code = 200, message = "OK", response = byte[].class)
     })
-    public Response getThumbnail(@ApiParam(value = "Id of video to return an thumbnail", required = true) @PathParam("videoId") @NotNull  Integer videoId,@Context SecurityContext securityContext)
+    public Response getThumbnail(@ApiParam(value = "Id of video to return an thumbnail", required = true) @PathParam("videoId") @NotNull  Long videoId,@Context SecurityContext securityContext)
     throws NotFoundException {
         return delegate.getThumbnail(videoId, securityContext);
     }
@@ -91,7 +91,7 @@ public class VideoApi  {
     @io.swagger.annotations.ApiResponses(value = {
         @io.swagger.annotations.ApiResponse(code = 200, message = "the content of an video as stream", response = File.class)
     })
-    public Response getVideoStream(@ApiParam(value = "Id of video to return", required = true) @PathParam("videoId") @NotNull  Integer videoId,@Context SecurityContext securityContext)
+    public Response getVideoStream(@ApiParam(value = "Id of video to return", required = true) @PathParam("videoId") @NotNull  Long videoId,@Context SecurityContext securityContext)
     throws NotFoundException {
         return delegate.getVideoStream(videoId, securityContext);
     }
@@ -103,7 +103,7 @@ public class VideoApi  {
     @io.swagger.annotations.ApiResponses(value = {
         @io.swagger.annotations.ApiResponse(code = 200, message = "Update successful", response = Void.class)
     })
-    public Response rateVideo(@ApiParam(value = "Id of video to rate", required = true) @QueryParam("videoId") @NotNull  Integer videoId,@ApiParam(value = "The new rating", required = true) @QueryParam("rating") @NotNull  Integer rating,@Context SecurityContext securityContext)
+    public Response rateVideo(@ApiParam(value = "Id of video to rate", required = true) @QueryParam("videoId") @NotNull  Long videoId,@ApiParam(value = "The new rating", required = true) @QueryParam("rating") @NotNull  Integer rating,@Context SecurityContext securityContext)
     throws NotFoundException {
         return delegate.rateVideo(videoId, rating, securityContext);
     }

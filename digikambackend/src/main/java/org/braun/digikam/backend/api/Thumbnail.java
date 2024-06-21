@@ -34,7 +34,7 @@ public class Thumbnail implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "imageid")
-    private Integer imageid;
+    private Long imageid;
     @Column(name = "modificationDate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date modificationDate;
@@ -47,15 +47,15 @@ public class Thumbnail implements Serializable {
     public Thumbnail() {
     }
 
-    public Thumbnail(Integer imageid) {
+    public Thumbnail(Long imageid) {
         this.imageid = imageid;
     }
 
-    public Integer getImageid() {
+    public Long getImageid() {
         return imageid;
     }
 
-    public void setImageid(Integer imageid) {
+    public void setImageid(Long imageid) {
         this.imageid = imageid;
     }
 

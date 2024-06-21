@@ -8,7 +8,7 @@ import java.util.List;
  * @author mbraun
  */
 public class Node {
-    private final int id;
+    private final long id;
     private final  String name;
     private String fullName;
     private String qualifiedName;
@@ -17,7 +17,7 @@ public class Node {
 
     private Node parent;
     
-    public Node(int id, String name) {
+    public Node(long id, String name) {
         this.id = id;
         this.name = name;
         this.children = new ArrayList<>();
@@ -39,7 +39,7 @@ public class Node {
         this.qualifiedName = qualifiedName;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 

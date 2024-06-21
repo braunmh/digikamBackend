@@ -60,7 +60,7 @@ public class ImageUpdate   {
 
   public static final String JSON_PROPERTY_KEYWORDS = "keywords";
   @JsonProperty(JSON_PROPERTY_KEYWORDS)
-  private List<Integer> keywords;
+  private List<Long> keywords;
 
   public ImageUpdate imageId(Integer imageId) {
     this.imageId = imageId;
@@ -162,12 +162,12 @@ public class ImageUpdate   {
     this.creator = creator;
   }
 
-  public ImageUpdate keywords(List<Integer> keywords) {
+  public ImageUpdate keywords(List<Long> keywords) {
     this.keywords = keywords;
     return this;
   }
 
-  public ImageUpdate addKeywordsItem(Integer keywordsItem) {
+  public ImageUpdate addKeywordsItem(Long keywordsItem) {
     if (this.keywords == null) {
       this.keywords = new ArrayList<>();
     }
@@ -182,11 +182,11 @@ public class ImageUpdate   {
   @JsonProperty(value = "keywords")
   @ApiModelProperty(value = "")
   
-  public List<Integer> getKeywords() {
+  public List<Long> getKeywords() {
     return keywords;
   }
 
-  public void setKeywords(List<Integer> keywords) {
+  public void setKeywords(List<Long> keywords) {
     this.keywords = keywords;
   }
 

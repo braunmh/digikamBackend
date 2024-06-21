@@ -15,12 +15,9 @@ package org.braun.digikam.backend.model;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.validation.constraints.*;
-import jakarta.validation.Valid;
 
 /**
  * Keyword
@@ -42,7 +39,7 @@ public class Keyword   {
 
   public static final String JSON_PROPERTY_ID = "id";
   @JsonProperty(JSON_PROPERTY_ID)
-  private Integer id;
+  private Long id;
 
   public Keyword name(String name) {
     this.name = name;
@@ -84,7 +81,7 @@ public class Keyword   {
     this.fullName = fullName;
   }
 
-  public Keyword id(Integer id) {
+  public Keyword id(Long id) {
     this.id = id;
     return this;
   }
@@ -96,11 +93,11 @@ public class Keyword   {
   @JsonProperty(value = "id")
   @ApiModelProperty(required = true, value = "")
   @NotNull 
-  public Integer getId() {
+  public Long getId() {
     return id;
   }
 
-  public void setId(Integer id) {
+  public void setId(Long id) {
     this.id = id;
   }
 

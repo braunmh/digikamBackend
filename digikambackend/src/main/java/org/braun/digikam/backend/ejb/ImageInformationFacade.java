@@ -44,7 +44,7 @@ public class ImageInformationFacade extends AbstractFacade<ImageInformation> {
         return result.get(0);
     }
 
-    public ImageInformation findByImageId(int imageId) {
+    public ImageInformation findByImageId(Long imageId) {
         TypedQuery<ImageInformation> query = getEntityManager().createNamedQuery("ImageInformation.findByImageId", ImageInformation.class);
         query.setParameter("imageId", imageId);
         List<ImageInformation> result = query.getResultList();
@@ -60,7 +60,7 @@ public class ImageInformationFacade extends AbstractFacade<ImageInformation> {
      * @param rating new rating 
      * @throws NotFoundException 
      */
-    public final void updateRating(int id, int rating) throws NotFoundException {
+    public final void updateRating(Long id, int rating) throws NotFoundException {
         TypedQuery<ImageInformation> query = getEntityManager().createNamedQuery("ImageInformation.findByImageId", ImageInformation.class);
         query.setParameter("imageId", id);
         try {

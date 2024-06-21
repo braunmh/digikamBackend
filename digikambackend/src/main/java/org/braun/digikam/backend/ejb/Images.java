@@ -38,7 +38,7 @@ import jakarta.persistence.JoinTable;
     @NamedQuery(name = "Images.findByCategory", query = "SELECT i FROM Images i WHERE i.category = :category"),
     @NamedQuery(name = "Images.findByModificationDate", query = "SELECT i FROM Images i WHERE i.modificationDate = :modificationDate"),
     @NamedQuery(name = "Images.findByFileSize", query = "SELECT i FROM Images i WHERE i.fileSize = :fileSize"),
-    @NamedQuery(name = "Images.findByUniqueHash", query = "SELECT i FROM Images i WHERE i.uniqueHash = :uniqueHash"),
+    @NamedQuery(name = "Images.findByNameAndAlbumId", query = "SELECT i FROM Images i WHERE i.name = :name and i.album = :albumId"),
     @NamedQuery(name = "Images.findByTagHash", query = "SELECT i FROM Images i WHERE i.tagHash = :tagHash"),
     })
 public class Images implements Serializable {
@@ -48,9 +48,9 @@ public class Images implements Serializable {
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    @Basic(optional = false)
    @Column(name = "id", nullable = false)
-   private Integer id;
+   private Long id;
    @Column(name = "album")
-   private Integer album;
+   private Long album;
    @Basic(optional = false)
    @NotNull
    @Lob
@@ -69,12 +69,12 @@ public class Images implements Serializable {
    @Temporal(TemporalType.TIMESTAMP)
    private Date modificationDate;
    @Column(name = "fileSize")
-   private Integer fileSize;
+   private Long fileSize;
    @Size(max = 128)
    @Column(name = "uniqueHash", length = 128)
    private String uniqueHash;
    @Column(name = "tagHash")
-   private Integer tagHash;
+   private Long tagHash;
    
    @OneToMany (mappedBy = "image") // mappedBy is the name of Attribute in class ImageComments; not the name of the column
    private Collection<ImageComments> comments;
@@ -93,22 +93,22 @@ public class Images implements Serializable {
     public Images() {
     }
 
-    public Images(Integer id) {
+    public Images(Long id) {
         this.id = id;
     }
 
-    public Images(Integer id, String name, int status, int category) {
+    public Images(Long id, String name, int status, int category) {
         this.id = id;
         this.name = name;
         this.status = status;
         this.category = category;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -144,11 +144,11 @@ public class Images implements Serializable {
         this.modificationDate = modificationDate;
     }
 
-    public Integer getFileSize() {
+    public Long getFileSize() {
         return fileSize;
     }
 
-    public void setFileSize(Integer fileSize) {
+    public void setFileSize(Long fileSize) {
         this.fileSize = fileSize;
     }
 
@@ -160,19 +160,19 @@ public class Images implements Serializable {
         this.uniqueHash = uniqueHash;
     }
 
-    public Integer getTagHash() {
+    public Long getTagHash() {
         return tagHash;
     }
 
-    public void setTagHash(Integer tagHash) {
+    public void setTagHash(Long tagHash) {
         this.tagHash = tagHash;
     }
 
-    public Integer getAlbum() {
+    public Long getAlbum() {
         return album;
     }
 
-    public void setAlbum(Integer album) {
+    public void setAlbum(Long album) {
         this.album = album;
     }
 

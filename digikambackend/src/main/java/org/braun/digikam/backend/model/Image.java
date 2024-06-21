@@ -17,15 +17,11 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import org.braun.digikam.backend.model.Keyword;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 
 /**
@@ -131,7 +127,7 @@ public class Image   {
 
   public static final String JSON_PROPERTY_ID = "id";
   @JsonProperty(JSON_PROPERTY_ID)
-  private Integer id;
+  private Long id;
 
   public static final String JSON_PROPERTY_MAKE = "make";
   @JsonProperty(JSON_PROPERTY_MAKE)
@@ -381,7 +377,7 @@ public class Image   {
     this.model = model;
   }
 
-  public Image id(Integer id) {
+  public Image id(Long id) {
     this.id = id;
     return this;
   }
@@ -393,11 +389,11 @@ public class Image   {
   @JsonProperty(value = "id")
   @ApiModelProperty(value = "unique Id identifying an Image")
   
-  public Integer getId() {
+  public Long getId() {
     return id;
   }
 
-  public void setId(Integer id) {
+  public void setId(Long id) {
     this.id = id;
   }
 
@@ -732,4 +728,3 @@ public class Image   {
     return o.toString().replace("\n", "\n    ");
   }
 }
-

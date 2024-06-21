@@ -55,13 +55,13 @@ public class ImageFacade {
     @PersistenceContext(unitName = "digikam")
     private EntityManager em;
 
-    public InputStream getImage(int id) throws NotFoundException {
+    public InputStream getImage(long id) throws NotFoundException {
         ImageFull image = getImageFull(id);
         FileInputStream imageStream = getImageFile(image.getRoot(), image.getRelativePath(), image.getName());
         return imageStream;
     }
 
-    public byte[] getScaledImage(int id, int width, int height) throws NotFoundException {
+    public byte[] getScaledImage(long id, int width, int height) throws NotFoundException {
         ImageInternal image = getMetadata(id);
         FileInputStream fis = getImageFile(image.getRoot(), image.getRelativePath(), image.getName());
         ByteArrayOutputStream scaledImage = new ByteArrayOutputStream();
@@ -75,7 +75,7 @@ public class ImageFacade {
         }
     }
 
-    public ImageInternal getMetadata(int id) throws NotFoundException {
+    public ImageInternal getMetadata(long id) throws NotFoundException {
         ImageFull res = getImageFull(id);
         ImageInternal image = new ImageInternal()
             .id(res.getId())
@@ -120,7 +120,7 @@ public class ImageFacade {
     }
 
     public List<Media> findImagesByImageAttributes(
-        List<Integer> keywords, String creator, String make, String model, String lens, String orientation,
+        List<Long> keywords, String creator, String make, String model, String lens, String orientation,
         String dateFrom, String dateTo, Integer ratingFrom, Integer ratingTo, Integer isoFrom, Integer isoTo,
         Double exposureTimeFrom, Double exposureTimeTo, Double apertureFrom, Double apertureTo,
         Integer focalLengthFrom, Integer focalLengthTo) throws ConditionParseException {
@@ -161,8 +161,8 @@ public class ImageFacade {
         }
 
         if (keywords != null && !keywords.isEmpty()) {
-            for (Integer k : keywords) {
-                List<Integer> ks = NodeFactory.getInstance().getChildrensRec(k);
+            for (Long k : keywords) {
+                List<Long> ks = NodeFactory.getInstance().getChildrensRec(k);
                 if (ks.isEmpty()) {
                     continue;
                 }
@@ -189,12 +189,12 @@ public class ImageFacade {
         return result;
     }
 
-    public List<StatisticKeyword> statKeyword(int keywordId, int year) throws ConditionParseException {
+    public List<StatisticKeyword> statKeyword(Long keywordId, int year) throws ConditionParseException {
         Sql sql = new Sql("select count(*) cnt, t.id, t.name from Tags t inner join ImageTags it on t.id = it.tagid inner join ImageInformation ii on it.imageid = ii.imageid");
         sql.addGroupClause("t.name");
         sql.addGroupClause("t.id");
         sql.addOrderClause("t.name");
-        List<Integer> keywords = NodeFactory.getInstance().getChildrensRec(keywordId);
+        List<Long> keywords = NodeFactory.getInstance().getChildrensRec(keywordId);
         sql.addCondition(new InCondition("t.id", keywords));
         Calendar now = Calendar.getInstance();
         now.set(Calendar.YEAR, year);
@@ -218,7 +218,7 @@ public class ImageFacade {
         return result;
     }
 
-    private ImageFull getImageFull(int id) throws NotFoundException {
+    private ImageFull getImageFull(long id) throws NotFoundException {
         TypedQuery<ImageFull> query = getEntityManager().createNamedQuery("ImageFull.findById", ImageFull.class);
         query.setParameter("id", id);
         try {
@@ -281,7 +281,7 @@ public class ImageFacade {
         sql.addCondition(new RangeCondition(columnName, from, to));
     }
 
-    private List<Keyword> getKeywords(int imageId) {
+    private List<Keyword> getKeywords(long imageId) {
         List<Keyword> result = new ArrayList<>();
         for (Integer id : getKeyordIds(imageId)) {
             Keyword k = NodeFactory.getInstance().getKeywordById(id);
@@ -292,7 +292,7 @@ public class ImageFacade {
         return result;
     }
 
-    private List<Integer> getKeyordIds(int imageId) {
+    private List<Integer> getKeyordIds(long imageId) {
         Query query = getEntityManager().createNativeQuery("select tagId from ImageTags where imageid = ?");
         query.setParameter(1, imageId);
         return query.getResultList();

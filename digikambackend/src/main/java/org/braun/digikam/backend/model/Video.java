@@ -100,7 +100,7 @@ public class Video   {
 
   public static final String JSON_PROPERTY_ID = "id";
   @JsonProperty(JSON_PROPERTY_ID)
-  private Integer id;
+  private Long id;
 
   public static final String JSON_PROPERTY_HEIGHT = "height";
   @JsonProperty(JSON_PROPERTY_HEIGHT)
@@ -242,7 +242,7 @@ public class Video   {
     this.width = width;
   }
 
-  public Video id(Integer id) {
+  public Video id(Long id) {
     this.id = id;
     return this;
   }
@@ -254,11 +254,11 @@ public class Video   {
   @JsonProperty(value = "id")
   @ApiModelProperty(value = "unique Id identifying an Image")
   
-  public Integer getId() {
+  public Long getId() {
     return id;
   }
 
-  public void setId(Integer id) {
+  public void setId(Long id) {
     this.id = id;
   }
 

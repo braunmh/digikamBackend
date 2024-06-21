@@ -47,7 +47,7 @@ public class VideoFull implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "id")
-    private int id;
+    private long id;
     @Basic(optional = false)
     @NotNull
     @Lob
@@ -109,11 +109,11 @@ public class VideoFull implements Serializable {
     public VideoFull() {
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

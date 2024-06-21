@@ -52,7 +52,7 @@ public class ImageApiServiceImpl extends ImageApiService {
      * @throws NotFoundException
      */
     @Override
-    public Response findImagesByImageAttributes(List<Integer> keywords, String creator, String makeModel, String lens, 
+    public Response findImagesByImageAttributes(List<Long> keywords, String creator, String makeModel, String lens, 
         String orientation, String dateFrom, String dateTo, Integer ratingFrom, Integer ratingTo, Integer isoFrom, Integer isoTo, 
         Double exposureTimeFrom, Double exposureTimeTo, Double apertureFrom, Double apertureTo, Integer focalLengthFrom, Integer focalLengthTo, 
         SecurityContext securityContext) throws NotFoundException {
@@ -78,7 +78,7 @@ public class ImageApiServiceImpl extends ImageApiService {
      * @throws NotFoundException
      */
     @Override
-    public Response getImage(Integer imageId, SecurityContext securityContext) throws NotFoundException {
+    public Response getImage(Long imageId, SecurityContext securityContext) throws NotFoundException {
         ImageFacade facade = getImageFacade();
         return Response.ok().entity(facade.getImage(imageId)).build();
     }
@@ -91,7 +91,7 @@ public class ImageApiServiceImpl extends ImageApiService {
      * @throws NotFoundException
      */
     @Override
-    public Response getInformationAboutImage(Integer imageId, SecurityContext securityContext) throws NotFoundException {
+    public Response getInformationAboutImage(Long imageId, SecurityContext securityContext) throws NotFoundException {
         ImageFacade facade = getImageFacade();
         Image image = facade.getMetadata(imageId);
         return Response.ok().entity(image).build();
@@ -107,21 +107,21 @@ public class ImageApiServiceImpl extends ImageApiService {
      * @throws NotFoundException
      */
     @Override
-    public Response scalesImage(@NotNull Integer imageId, @NotNull Integer width, @NotNull Integer height, SecurityContext securityContext) throws NotFoundException {
+    public Response scalesImage(@NotNull Long imageId, @NotNull Integer width, @NotNull Integer height, SecurityContext securityContext) throws NotFoundException {
         ImageFacade facade = getImageFacade();
         byte [] result = facade.getScaledImage(imageId,width, height);
         return Response.ok().entity(new ByteArrayInputStream(result)).build();
     }
 
     @Override
-    public Response rateImage(Integer imageId, Integer rating, SecurityContext securityContext) throws NotFoundException {
+    public Response rateImage(Long imageId, Integer rating, SecurityContext securityContext) throws NotFoundException {
         ImageInformationFacade facade = getInformationFacade();
         facade.updateRating(imageId, rating);
         return Response.ok().entity("Okay").build();
     }
 
     @Override
-    public Response statKeyword(Integer keywordId, Integer year, SecurityContext securityContext) throws NotFoundException {
+    public Response statKeyword(Long keywordId, Integer year, SecurityContext securityContext) throws NotFoundException {
         ImageFacade facade = getImageFacade();
         try {
             List<StatisticKeyword> result = facade.statKeyword(keywordId, year);
@@ -154,7 +154,7 @@ public class ImageApiServiceImpl extends ImageApiService {
     public Response imageUpdate(ImageUpdate imageUpdate, SecurityContext securityContext) throws NotFoundException {
         ImagesFacade facade = getImagesFacade();
         List<Tags> tags = new ArrayList<>();
-        for (Integer tagId : imageUpdate.getKeywords()) {
+        for (Long tagId : imageUpdate.getKeywords()) {
             tags.add(new Tags().name(NodeFactory.getInstance().getKeywordById(tagId).getName()).id(tagId));
         }
         facade.update(imageUpdate.getImageId(), imageUpdate.getTitle(), imageUpdate.getDescription(), imageUpdate.getRating()
