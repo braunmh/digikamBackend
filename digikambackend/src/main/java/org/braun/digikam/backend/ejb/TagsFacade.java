@@ -35,7 +35,7 @@ public class TagsFacade extends AbstractFacade<Tags> {
      * @param tags list of tags
      * @return id of last tag
      */
-    public Tags findTagByTree(String... tags) {
+    public Tags findAndInsertTagByTree(String... tags) {
         int current = 0;
         Tags parent = null;
         long parentId = 0;
@@ -65,4 +65,5 @@ public class TagsFacade extends AbstractFacade<Tags> {
         }
         return parent;
     }
+    
 }

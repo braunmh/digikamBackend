@@ -70,6 +70,15 @@ public class NodeFactory {
             WRITE_LOCK.unlock();
         }
     }
+    
+    public List<Node> list() {
+        try {
+            READ_LOCK.lock();
+            return nodes;
+        } finally {
+            READ_LOCK.unlock();
+        }
+    }
 
     private void initFullNames(Node p) {
         p.setFullName("");

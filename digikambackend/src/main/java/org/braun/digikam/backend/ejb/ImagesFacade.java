@@ -8,7 +8,6 @@ import jakarta.persistence.TypedQuery;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.apache.openejb.config.NewLoaderLogic;
 import org.braun.digikam.backend.api.NotFoundException;
 import org.braun.digikam.backend.util.Util;
 
