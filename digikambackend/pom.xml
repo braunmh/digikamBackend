@@ -138,6 +138,18 @@
          <version>8.0.31</version>
          <scope>test</scope>
       </dependency>
+        <dependency>
+            <groupId>org.apache.solr</groupId>
+            <artifactId>solr-solrj</artifactId>
+            <version>9.6.1</version>
+            <!--type>pom.sha512</type -->
+        </dependency>
+        <dependency>
+            <groupId>org.apache.solr</groupId>
+            <artifactId>solr-api</artifactId>
+            <version>9.6.1</version>
+            <!--type>pom.sha512</type -->
+        </dependency>
         <!-- log4j -->
       <dependency>
          <groupId>org.apache.logging.log4j</groupId>
@@ -159,6 +171,12 @@
             <groupId>org.imgscalr</groupId>
             <artifactId>imgscalr-lib</artifactId>
             <version>4.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.locationtech.spatial4j</groupId>
+            <artifactId>spatial4j</artifactId>
+            <version>0.8</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
     <build>

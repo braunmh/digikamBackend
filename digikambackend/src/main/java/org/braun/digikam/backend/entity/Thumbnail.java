@@ -1,12 +1,10 @@
-package org.braun.digikam.backend.api;
+package org.braun.digikam.backend.entity;
 
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
-import jakarta.persistence.NamedQueries;
-import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -22,27 +20,25 @@ import java.util.Date;
 @Entity
 @Table(name = "Thumbnail")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Thumbnail.findAll", query = "SELECT t FROM Thumbnail t"),
-    @NamedQuery(name = "Thumbnail.findByImageid", query = "SELECT t FROM Thumbnail t WHERE t.imageid = :imageid"),
-    @NamedQuery(name = "Thumbnail.findByModificationDate", query = "SELECT t FROM Thumbnail t WHERE t.modificationDate = :modificationDate"),
-    @NamedQuery(name = "Thumbnail.findByOrientation", query = "SELECT t FROM Thumbnail t WHERE t.orientation = :orientation")})
 public class Thumbnail implements Serializable {
-
     private static final long serialVersionUID = 1L;
+    
     @Id
     @Basic(optional = false)
     @NotNull
     @Column(name = "imageid")
     private Long imageid;
-    @Column(name = "modificationDate")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date modificationDate;
-    @Column(name = "orientation")
-    private Integer orientation;
+
     @Lob
     @Column(name = "data")
     private byte[] data;
+
+    @Column(name = "modificationDate")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date modificationDate;
+
+    @Column(name = "orientation")
+    private Integer orientation;
 
     public Thumbnail() {
     }
@@ -75,13 +71,6 @@ public class Thumbnail implements Serializable {
         this.orientation = orientation;
     }
 
-    public byte[] getData() {
-        return data;
-    }
-
-    public void setData(byte[] data) {
-        this.data = data;
-    }
 
     @Override
     public int hashCode() {
@@ -97,15 +86,21 @@ public class Thumbnail implements Serializable {
             return false;
         }
         Thumbnail other = (Thumbnail) object;
-        if ((this.imageid == null && other.imageid != null) || (this.imageid != null && !this.imageid.equals(other.imageid))) {
-            return false;
-        }
-        return true;
+        return !((this.imageid == null && other.imageid != null)
+            || (this.imageid != null && !this.imageid.equals(other.imageid)));
     }
 
     @Override
     public String toString() {
         return "org.braun.digikam.backend.api.Thumbnail[ imageid=" + imageid + " ]";
+    }
+
+    public byte[] getData() {
+        return data;
+    }
+
+    public void setData(byte[] data) {
+        this.data = data;
     }
     
 }

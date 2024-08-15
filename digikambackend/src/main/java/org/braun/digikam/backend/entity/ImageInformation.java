@@ -1,4 +1,4 @@
-package org.braun.digikam.backend.ejb;
+package org.braun.digikam.backend.entity;
 
 import jakarta.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;

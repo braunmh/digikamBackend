@@ -1,5 +1,6 @@
 package org.braun.digikam.backend.ejb;
 
+import org.braun.digikam.backend.entity.Albums;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;

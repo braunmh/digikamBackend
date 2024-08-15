@@ -10,7 +10,7 @@ import org.braun.digikam.backend.NodeFactory;
 import org.braun.digikam.backend.api.*;
 import org.braun.digikam.backend.ejb.ImageInformationFacade;
 import org.braun.digikam.backend.ejb.ImagesFacade;
-import org.braun.digikam.backend.ejb.Tags;
+import org.braun.digikam.backend.entity.Tags;
 import org.braun.digikam.backend.ejb.VideoFacade;
 import org.braun.digikam.backend.model.ImageUpdate;
 import org.braun.digikam.backend.model.Media;

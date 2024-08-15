@@ -1,5 +1,6 @@
 package org.braun.digikam.backend.ejb;
 
+import org.braun.digikam.backend.entity.ImageInformation;
 import jakarta.ejb.Stateless;
 import java.util.List;
 import jakarta.persistence.EntityManager;

@@ -1,5 +1,6 @@
 package org.braun.digikam.backend.ejb;
 
+import org.braun.digikam.backend.entity.Tags;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;

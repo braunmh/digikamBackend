@@ -1,0 +1,52 @@
+package org.braun.digikam.backend.model;
+
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.Date;
+
+/**
+ *
+ * @author mbraun
+ */
+public class AbstractSolr {
+
+    
+    protected double stringToDouble(String value) {
+        if (value == null) {
+            return 0.0;
+        }
+        try {
+            return Double.parseDouble(value);
+        } catch (NumberFormatException e) {
+            return 0.0;
+        }
+    }
+    
+    protected Date localDateTimeToDate(LocalDateTime date) {
+        if (date == null) {
+            return null;
+        }
+        return Date.from(date.atZone(ZoneId.systemDefault()).toInstant());
+    }
+
+    protected LocalDateTime dateToLocalDateTime(Date date) {
+        if (date == null) {
+             return null;
+        }
+        return LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
+    }
+    
+    protected String getGeoLocation(Double latitude, Double longitude) {
+        // Eigentlich > 180 aber Werte > 176 führen zu einen Laufzeitfehler
+        if (latitude == null || longitude == null 
+            || latitude > 176 || latitude < -180 || longitude > 90 || longitude < -90) {
+            return null;
+        }
+        
+        return String.valueOf(latitude) + "," + String.valueOf(longitude);
+    }
+}

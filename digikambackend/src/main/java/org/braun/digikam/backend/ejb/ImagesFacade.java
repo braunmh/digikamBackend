@@ -1,5 +1,10 @@
 package org.braun.digikam.backend.ejb;
 
+import org.braun.digikam.backend.entity.ImageCopyright;
+import org.braun.digikam.backend.entity.Tags;
+import org.braun.digikam.backend.entity.ImageInformation;
+import org.braun.digikam.backend.entity.Images;
+import org.braun.digikam.backend.entity.ImageComments;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;

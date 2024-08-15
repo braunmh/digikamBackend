@@ -1,5 +1,8 @@
 package org.braun.digikam.backend.ejb;
 
+import org.braun.digikam.backend.entity.ImageComments;
+import org.braun.digikam.backend.entity.VideoFull;
+import org.braun.digikam.backend.entity.Thumbnail;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,7 +25,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.braun.digikam.backend.NodeFactory;
 import org.braun.digikam.backend.api.NotFoundException;
-import org.braun.digikam.backend.api.Thumbnail;
 import org.braun.digikam.backend.graphics.ExifUtil;
 import org.braun.digikam.backend.model.Keyword;
 import org.braun.digikam.backend.model.Media;

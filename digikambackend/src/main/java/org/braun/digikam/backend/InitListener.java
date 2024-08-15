@@ -4,11 +4,16 @@ import jakarta.ejb.EJB;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.braun.digikam.backend.ejb.ImageCopyrightFacade;
 import org.braun.digikam.backend.ejb.ImageMetadataFacade;
 import org.braun.digikam.backend.ejb.TagsFacade;
+import org.braun.digikam.backend.util.Configuration;
 import org.braun.digikam.backend.util.Util;
 
 /**
@@ -32,6 +37,15 @@ public class InitListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         LOG.info("Initialize application");
+        String configPath = sce.getServletContext().getInitParameter("org.braun.digikam.configPath");
+        
+        try (InputStream is = getConfiguartion(configPath)) {
+            Configuration.init(is);
+            LOG.info("Configuartion read. solr.clientUrl = {}", Configuration.getInstance().getSolrClientUrl());
+        } catch (IOException e) {
+            LOG.error("Configuration config.xml {} not found.", configPath);
+        }
+        
         if (tagsFacade == null) {
             tagsFacade = Util.EJB.lookup(TagsFacade.class);
         }
@@ -51,4 +65,11 @@ public class InitListener implements ServletContextListener {
     public void contextDestroyed(ServletContextEvent sce) {
     }
     
+    private InputStream getConfiguartion(String configPath) throws IOException {
+        if (configPath == null) {
+            return this.getClass().getClassLoader().getResourceAsStream("/config.xml");
+        } else {
+            return new FileInputStream(configPath);
+        }
+    }
 }

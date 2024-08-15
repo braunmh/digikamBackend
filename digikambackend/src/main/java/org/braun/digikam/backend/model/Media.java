@@ -27,7 +27,8 @@ import jakarta.validation.constraints.*;
   Media.JSON_PROPERTY_ID,
   Media.JSON_PROPERTY_NAME,
   Media.JSON_PROPERTY_CREATION_DATE,
-  Media.JSON_PROPERTY_IMAGE
+  Media.JSON_PROPERTY_IMAGE,
+  Media.JSON_PROPERTY_SCORE
 })
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJerseyServerCodegen", date = "2024-03-20T12:51:17.342362153+01:00[Europe/Berlin]")
 public class Media   {
@@ -46,6 +47,10 @@ public class Media   {
   public static final String JSON_PROPERTY_IMAGE = "image";
   @JsonProperty(JSON_PROPERTY_IMAGE)
   private Boolean image;
+
+  public static final String JSON_PROPERTY_SCORE = "score";
+  @JsonProperty(JSON_PROPERTY_SCORE)
+  private Double score;
 
   public Media id(Long id) {
     this.id = id;
@@ -127,6 +132,26 @@ public class Media   {
     this.image = image;
   }
 
+  public Media score(Double score) {
+    this.score = score;
+    return this;
+  }
+
+  /**
+   * Get image
+   * @return image
+   **/
+  @JsonProperty(value = "score")
+  @ApiModelProperty(required = true, value = "")
+  @NotNull 
+  public Double getScore() {
+    return score;
+  }
+
+  public void setScore(Double score) {
+    this.score = score;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -140,12 +165,13 @@ public class Media   {
     return Objects.equals(this.id, media.id) &&
         Objects.equals(this.name, media.name) &&
         Objects.equals(this.creationDate, media.creationDate) &&
+        Objects.equals(this.score, media.score) &&
         Objects.equals(this.image, media.image);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, creationDate, image);
+    return Objects.hash(id, name, creationDate, score, image);
   }
 
   @Override
@@ -157,6 +183,7 @@ public class Media   {
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    creationDate: ").append(toIndentedString(creationDate)).append("\n");
     sb.append("    image: ").append(toIndentedString(image)).append("\n");
+    sb.append("    score: ").append(toIndentedString(score)).append("\n");
     sb.append("}");
     return sb.toString();
   }

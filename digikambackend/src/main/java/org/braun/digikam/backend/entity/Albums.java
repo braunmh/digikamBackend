@@ -1,4 +1,4 @@
-package org.braun.digikam.backend.ejb;
+package org.braun.digikam.backend.entity;
 
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;

@@ -1,5 +1,7 @@
 package org.braun.digikam.backend.ejb;
 
+import org.braun.digikam.backend.entity.ImageFull;
+import org.braun.digikam.backend.entity.ImageComments;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -62,7 +64,7 @@ public class ImageFacade {
     }
 
     public byte[] getScaledImage(long id, int width, int height) throws NotFoundException {
-        ImageInternal image = getMetadata(id);
+        ImageInternal image = ImageFacade.this.getMetadata(id);
         FileInputStream fis = getImageFile(image.getRoot(), image.getRelativePath(), image.getName());
         ByteArrayOutputStream scaledImage = new ByteArrayOutputStream();
         try {
@@ -77,6 +79,10 @@ public class ImageFacade {
 
     public ImageInternal getMetadata(long id) throws NotFoundException {
         ImageFull res = getImageFull(id);
+        return getMetadata(res);
+    }
+
+    public ImageInternal getMetadata(ImageFull res) {
         ImageInternal image = new ImageInternal()
             .id(res.getId())
             .name(res.getName())
@@ -98,11 +104,11 @@ public class ImageFacade {
             .longitude(res.getLongitudeNumber())
             .exposureTime(res.getExposureTime())
             .rating(res.getRating())
-            .keywords(getKeywords(id))
+            .keywords(getKeywords(res.getId()))
             .orientationTechnical(res.getOrientation());
 
         TypedQuery<ImageComments> qi = getEntityManager().createNamedQuery("ImageComments.findByImageId", ImageComments.class);
-        qi.setParameter("imageId", id);
+        qi.setParameter("imageId", res.getId());
         for (ImageComments ic : qi.getResultList()) {
             if (null == ic.getType()) {
                 continue;
@@ -118,7 +124,7 @@ public class ImageFacade {
         }
         return image;
     }
-
+    
     public List<Media> findImagesByImageAttributes(
         List<Long> keywords, String creator, String make, String model, String lens, String orientation,
         String dateFrom, String dateTo, Integer ratingFrom, Integer ratingTo, Integer isoFrom, Integer isoTo,

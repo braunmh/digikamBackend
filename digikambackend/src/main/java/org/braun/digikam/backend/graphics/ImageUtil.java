@@ -251,7 +251,7 @@ public class ImageUtil {
         try {
             ImageWriteParam imageWriteParam = writer.getDefaultWriteParam();
             imageWriteParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-            imageWriteParam.setCompressionQuality(0.95f);
+            imageWriteParam.setCompressionQuality(0.63f);
 
             writer.setOutput(ImageIO.createImageOutputStream(outputStream));
             writer.write(null, new IIOImage(image, null, null), imageWriteParam);

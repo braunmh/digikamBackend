@@ -10,7 +10,7 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.braun.digikam.backend.ejb.Tags;
+import org.braun.digikam.backend.entity.Tags;
 import org.braun.digikam.backend.model.Keyword;
 
 /**

@@ -15,6 +15,7 @@ public class RestApplication extends Application {
         org.braun.digikam.backend.api.CameraApi.class,
         org.braun.digikam.backend.api.CreatorApi.class,
         org.braun.digikam.backend.api.ImageApi.class,
+        org.braun.digikam.backend.api.HouseKeepingApi.class,
         org.braun.digikam.backend.api.KeywordsApi.class,
         org.braun.digikam.backend.api.LensApi.class,
         org.braun.digikam.backend.api.VideoApi.class);
