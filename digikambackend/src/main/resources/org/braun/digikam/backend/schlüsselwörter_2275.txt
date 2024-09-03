@@ -1,0 +1,2276 @@
+[01 WO]
+	Europa
+		{Europe}
+		Deutschland
+			{Alemania}
+			{Allemagne}
+			{Germany}
+			Baden-Wuerttemberg
+				{Baden-Württemberg}
+				Hohenlohe
+					Schwäbisch Hall
+						Comburg
+				Landkreis Calw
+					Nagold
+						Landesgartenschau
+				Landkreis Freundenstadt
+					Alpirsbach
+				Landkreis Sigmaringen
+					Gammertingen
+					Sigmaringen
+				Oberschwaben
+					Ravensburg
+				Schwaebische Alb
+					{Jura de Suabia}
+					{Swabian Jura}
+				Stuttgart
+					Linden-Museum
+						{Museum für Völkerkunde}
+						{Linden Museum}
+						{Museo Linden}
+					Mercedes-Benz Arena
+						{Fußballstadion}
+						{soccer stadium}
+					Mercedes-Benz Museum
+						{Museo Mercedes-Benz}
+					Schlossplatz
+					Universität
+						{University}
+						{Universidad}
+				Zollernalbkreis
+					{Schwäbische Alb}
+					Albstadt
+						Burgfelden
+						Ebingen
+						Laufen
+						Lautlingen
+							Stauffenberg Schloß
+								{Stauffenberg castle}
+						Margrethausen
+						Onsmettingen
+							Naegelehaus
+							Raichberg
+						Pfeffingen
+						Tailfingen
+						Truchtelfingen
+			Bayern
+				{Bavaria}
+				Allgäu
+					{Algovia}
+					Ostallgäu
+						{Algovia Oriental}
+						Eisenberg
+							Pfeffermühle
+						Ruine Falkenstein
+				Oberbayern
+					{Upper Bavaria}
+					{Alta Baviera}
+					Bayrischzell
+						Sillberghaus
+					Ettal
+						Schloss Linderhof
+							{Linderhof Palace}
+							{Linderhof}
+					Oberammergau
+			Region
+				Schwarzwald
+					{Black Forest}
+					{Selva Negra}
+		Italien
+			{Italy}
+			{Italia}
+			Emilia-Romagna
+				{Emilia-Romaña}
+				Bologna
+					{Bolonia}
+					Asinelli und Garisenda - die zwei schiefen Türme
+						{Le due torri (Garisenda a sinistra e Asinelli a destra)}
+						{Two Towers}
+						{Las dos torres}
+					Piazza Nettuno
+			Lago di Garda
+				{Gardasee}
+				{Lago de Garda}
+				{Lake Garda}
+			Latium
+				Rom
+					{Rome}
+					{Roma}
+					Castel Sant’Angelo
+						{Mausoleo di Adriano}
+						{Engelsburg}
+						{Castle of the Holy Angel}
+						{Mausoleum of Hadrian}
+						{Castillo Sant'Angelo}
+					Città del Vaticano
+						{Vatican City}
+						{Vatikanstadt}
+						{Ciudad del Vaticano}
+						Basilica di San Pietro in Vaticano
+							{St. Peter's Basilica}
+							{Petersdom}
+							{Basílica de San Pedro}
+						Piazza San Pietro
+							{Saint Peter's Square}
+							{Petersplatz}
+							{Plaza de San Pedro}
+						Schweizergarde
+							{Guardia Svizzera Pontificia}
+							{Swiss Guard}
+							{Guardia Suiza Pontificia}
+					Fontana di Trevi
+						{Trevi-Brunnen}
+						{Trevi Fountain}
+						{Fontana de Trevi}
+					Forum Romanum
+						{Roman Forum}
+						{Foro Romano}
+					Kapitolsplatz
+						{Piazza del Campidoglio}
+						{Plaza del Campidoglio}
+					Kolosseum
+						{Colosseo}
+						{Colosseum}
+						{Coliseo de Roma}
+					Konstantinsbogen
+						{Arco di Costantino}
+						{Arch of Constantine}
+						{Arco de Constantino}
+					Monumento Vittorio Emanuele II
+						{Nationaldenkmal für Viktor Emanuel II.}
+						{Altare della Patria}
+						{Monumento a Víctor Manuel II}
+					Palatin
+						{Palatino}
+						{Palatine Hill}
+						{Monte Palatino}
+					Palazzo di Giustizia
+						{Justizpalast}
+						{Palace of Justice}
+					Pantheon
+						{Panteón de Agripa}
+					Piazza Barberini
+						Fontana del tritone
+							{Triton Fountain}
+							{Tritonenbrunnen}
+							{Fuente del Tritón}
+						Fontana delle Api
+							{Bienen-Brunnen}
+							{Fountain of the Bees}
+					Piazza Cavour
+					Piazza del Popolo
+						{People's Square}
+						{Platz des Volkes}
+					Piazza del Quirinale
+					Piazza di Spagna
+						{Spanischer Platz}
+						{Plaza de España}
+					Piazza Navona
+						{Plaza Navona}
+						Vierströmebrunnen
+							{Fontana dei Quattro Fiumi}
+							{Fuente de los Cuatro Ríos}
+					Piazza Venenzia
+					Piazzale Ostiense
+						Piramide Cestia
+							{Cestius-Pyramide}
+							{Pyramid of Cestius}
+							{Pirámide Cestia}
+						Porta San Paolo
+					Ponte Sant'Angelo
+						{Engelsbrücke}
+						{Puente Sant'Angelo}
+					Santa Maria in Aracoeli
+					Santa Maria sopra Minerva
+						{Basilica of Saint Mary Above Minerva}
+					Titusbogen
+						{Arco di Tito}
+						{Arch of Titus}
+						{Arco de Tito}
+					Trajansforum
+						{Trajan's Forum}
+						{Foro de Trajano}
+					Trajanssäule
+						{Colonna Traiana}
+						{Trajan's Column}
+						{Columna de Trajano}
+					Villa Borghese
+						{Park}
+						{gardens}
+						{parque}
+			Lombardei
+				{Lombardy}
+				{Lombardía}
+				{Lombardia}
+				Limone
+					{Limone sul Garda}
+			Trentino
+				{Trentino}
+				{Provincia autónoma de Trento}
+				Nago-Torbole
+					Zollhaus
+						{customs house}
+				Riva del Garda
+					Bastione
+					Chiesa dell'Inviolata
+					Piazza Tre novembre
+					Rocca
+					Torre Apponale
+						{Turm}
+						{tower}
+				Tenno
+					Lagi di Tenno
+						{Tennosee}
+					Ville del Monte
+						Calvola
+						Canale
+			Venezien
+				{Veneto}
+				{Véneto}
+				{Venezien}
+				Malcesine
+					Monte Baldo
+						{Berg}
+						{mountain}
+						{montaña}
+					Skaligerburg
+						{Castello Scaligero}
+						{Burg}
+						{castle}
+						{castillo}
+				Venedig
+					{Venice}
+					{Venecia}
+					Arsenale di Venezia
+						{Arsenal}
+						{Schiffswerft}
+						{Zeughauses}
+						{Flottenbasis}
+						{Venetian Arsenal}
+						{shipyards}
+						{armories}
+						{Arsenal de Venecia}
+						{astillero}
+						{base naval}
+					Bacino Orseolo
+					Basilica di San Marco
+						{Basílica de San Marcos}
+						{Markusdom}
+						{St Mark's Basilica}
+					Biblioteca Marciana
+					Campanile di San Marco
+						{Markusturm}
+						{St Mark's Campanile}
+						{Campanile de San Marcos}
+						{bell tower}
+						{Campanile}
+						{Glockenturm}
+						{Campanario}
+					Canal Grande
+						{Grand Canal}
+						{Gran Canal}
+					Colonne di San Marco
+						{St Marks column}
+						{Markus-Säule}
+					Colonne di San Todaro
+						{Theodorus-Säule}
+						{St Theodore column}
+					Murano
+						{Insel}
+						{island}
+						{isla}
+						Campo Santo Stefano
+					Palazzo Ducale
+						{Dogenpalast}
+						{Doge's Palace}
+						{Palacio Ducal de Venecia}
+					Piazza San Marco
+						{Markusplatz}
+						{St Mark's Square}
+						{Plaza de San Marcos}
+					Piazzetta San Marco
+					Ponte di Rialto
+						{Rialtobrücke}
+						{Rialto Bridge}
+						{Puente de Rialto}
+					San Giacomo de Rialto
+					San Giorgio dei Greci
+					San Giorgio Maggiore
+					San Michele
+					San Pietro di Castello
+						{Kirche}
+						{church}
+						{iglesia}
+					Santa Maria della Salute
+					Seufzerbrücke
+						{Bridge of Sighs}
+						{Puente de los Suspiros}
+						{Ponte dei Sospiri}
+					Torre dell’Orologio
+						{Uhrenturm}
+						{clock tower}
+						{reloj de torre}
+					Via Garibaldi
+				Verona
+					Arena di Verona
+					Casa di Giulietta
+						{Haus der Julia}
+					Castelvecchio
+					Etsch
+						{Adige}
+						{Adigio}
+					La statua di Madonna Verona
+					Piazza delle Erbe
+					Ponte Scaligero
+					Porta dei Borsari
+	Nordamerika
+		{North America}
+		{América del Norte}
+		Mexiko
+			{Mexico}
+			{México}
+			Campeche
+			Chiapas
+			Distrito Federal
+				{Mexiko-Stadt}
+				{Mexico City}
+				{Ciudad de México}
+				La Ciudad de México
+					{Mexico City}
+					{Mexiko-Stadt}
+					Centro Historico
+						{historisches Zentrum}
+						{historical center}
+						Alameda Central
+						Bellas Artes
+							{Palacio de Bellas Artes}
+							{Palast der Schönen Künste}
+							{Palace of Fine Arts}
+						Casa de los Azulejos
+						Hemiciclo a Juárez
+						Palacio de Cultura Banamex
+						Plaza Garibaldi
+						Torre Latinoamericana
+					Coyoacán
+					Pedregal
+						Parroquia La Esperanza de Maria en la Resurrección del Señor
+					Portales
+					Santa Maria La Ribera
+						Mercado del Chopo
+						Museo Universitario del Chopo
+					Tacuba
+					Tlalpan
+					Xochimilco
+			Estado de México
+				Naucalpan
+					Torres de Satelite
+			Guanajuato
+			Guerrero
+			Hidalgo
+			Morelos
+			Oaxaca
+				Mitla
+					{San Pablo Villa de Mitla}
+				Oaxaca de Juárez
+				Santa María Atzompa
+			Puebla
+			Quintana Roo
+				Cancun
+				Playa del Carmen
+				Xcaret
+			Tabasco
+			Veracruz de Ignacio de la Llave
+			Yucatán
+[02 WAS]
+	Architektur
+		Amphitheater
+		Antenne
+			{antenna}
+		Architekturstil
+			Antike
+				{antiquity}
+			Art Deco
+			Asiatisch
+				{Asian}
+			Barock
+				{Baroque}
+			Belle Epoque
+			Rennaisance
+			Romanik
+		Arkade
+			{arcade}
+			{arcada}
+		Balkon
+			{balcony}
+			{balcón}
+		Baustelle
+			{construction site}
+			{obra}
+		Brücke
+			{bridge}
+		Brunnen
+			{fuente}
+			{fountain}
+			{Springbrunnen}
+			{Wasserspiel}
+		Bungalow
+			{bungalow}
+		Burg
+			{castle}
+			{castillo}
+		Denkmal
+			{monument}
+			{memorial}
+			{monumento}
+		Festung
+			{fortaleza}
+			{fortification}
+		Friedhof
+			{cementerio}
+			{cemetery}
+			{graveyard}
+		Gasthaus
+			{Wirtschaft}
+			{inn}
+			{tavern}
+			{restaurante}
+			{fonda}
+		Grabstein
+			{tombstone}
+			{gravestone}
+		Haus
+			{house}
+			{Haeuser}
+			{home}
+			{houses}
+			{residence}
+			{living quarter}
+		Hochhaus
+			{high-rise building}
+		Hütte
+			{hut}
+		Kanal
+			{canal}
+			{aqueduct}
+			{channel}
+		Kathedrale
+			{cathedral}
+		Kiosk
+			{kiosk}
+		Kirche
+			{church}
+		Kloster
+			{monastery}
+			{monasterio}
+		Kraftwerk
+			{power station}
+			{central eléctrica}
+			Wasserkraftwerk
+				{Central hidroeléctrica}
+				{hydroelectric power station}
+		Kulturhaus
+			{Palace of Culture}
+			{Casa de la Cultura}
+		Laden
+			{tienda}
+			{shop}
+			{store}
+		Markt
+			{market}
+			{mercado}
+		Mauer
+			{wall}
+			{pared}
+		Monument
+			{monumento}
+		Museum
+			{museo}
+			{museum}
+		Oper
+			{opera house}
+			{Konzerthaus}
+			{concert hall}
+			{music hall}
+		Pavillion
+			{pavilion}
+			{rotunda}
+			{quiosco}
+			{kiosco}
+		Pfeiler
+			{pillar}
+			{pillars}
+		Pier
+			{pier}
+		Pyramide
+			{pyramid}
+			{pirámide}
+		Rathaus
+			{town hall}
+			{ayuntamiento}
+			{placio municipal}
+		Ruine
+			{ruin}
+			{remains}
+			{ruina}
+		Schloß
+			{castillo}
+			{castle}
+			{palace}
+			{château}
+		Stadion
+			{stadium}
+			{Arena}
+			{sports anrena}
+		Steg
+		Tankstelle
+			{gas station}
+			{gasolinera}
+		Tempel
+			{religioes}
+			{Religion}
+			{temple}
+			{temples}
+			{religious}
+		Terrasse
+			{terrace}
+			{terraza}
+		Theater
+			{theater}
+		Treppe
+			{escalera}
+			{stairs}
+			{Stiege}
+			{Treppenhaus}
+			{Treppenaufgang}
+		Tür
+			{door}
+			{puerta}
+		Turm
+			{tower}
+			Aussichtsturm
+				{Observation tower}
+			Glockenturm
+				{bell tower}
+				{Campanile}
+				{Campanario}
+			Leuchtturm
+				{lighthouse}
+				{faro}
+		Wand
+			{wall}
+		Wolkenkratzer
+			{Hochhaus}
+			{skyscraper}
+			{sky scraper}
+			Muster
+				{pattern}
+				{repeating}
+				{patterns}
+				{symetrical}
+				{symetry}
+			Tattoo
+				{tattoos}
+	Dekoration
+	Demonstration
+		{Demo}
+		{manifestación}
+	Ernaehrung
+		{nutrition}
+		Gericht
+			{dish}
+			{food}
+			{meal}
+			{comida}
+			{Mahlzeit}
+			Carne salada e fasoi
+		Getraenke
+			{beverage}
+			Bier
+				{beer}
+			Kaffee
+				{coffee}
+			Wein
+				{wine}
+				Oelfarben
+				Wasserfarben
+					{watercolors}
+					{water colors}
+		Lebensmittel
+			{food}
+			Backware
+				{pastries}
+				{Gebaeck}
+				{Feingebaeck}
+				Streusel
+			Gemüse
+				{vegetables}
+			Linsen
+			Reis
+				{rice}
+			Spätzle
+			Wurst
+				{sausage}
+				{salchicha}
+				Saitenwurst
+					{Wiener}
+					{Frankfurter}
+		Mahlzeit
+			{meal}
+			Buffet
+				{buffet}
+			Festessen
+				{banquet}
+			Fruehstueck
+				{breakfast]
+			Haeppchen
+			Mittagessen
+				{lunch}
+			Snack
+				{snack}
+				{Imbiss}
+				{Zwischenmahlzeit}
+	Freizeit
+		{leisure}
+		Badeurlaub
+			{Badeferien}
+			{seaside vacation}
+		Basteln
+			{handcraft}
+		Safari
+		Urlaub
+			{holidays}
+	Körper
+		{body}
+		Fuss
+			{Fuß}
+			{foot}
+			{feet}
+		Gesicht
+			{face}
+		Hand
+			{hand}
+			{mano}
+		Lächeln
+			{smile}
+		Nase
+			{nose}
+		Schaedel
+			{Schädel}
+			{skull}
+		Skelett
+			{skeleton}
+			{esqueleto}
+		Zunge
+			{tongue}
+	Kunst
+		Ausstellung
+			{exhibition}
+		Buntglas
+			{stained glass}
+		Gemaelde
+			{painting}
+		Koerpermalerei
+			{body art}
+		Musik
+			{music}
+			Blaskapelle
+			Fanfarenzug
+			Guggamusik
+			Mariachi
+				{mariachi}
+			Rockband
+		Skulptur
+			{sculpture}
+			Fernando Botero
+		Statue
+			{statue}
+			{Standbild}
+			{Plastik}
+		Wandmalerei
+			{mural}
+			{Wandbild}
+	Landschaft
+		{landscape}
+		Gewaesser
+			{water}
+			{Wasser}
+			Fjord
+				{fjord}
+			Fluss
+				{river}
+			Geisir
+				{Springquelle}
+				{geyser}
+			Kanal
+				{canal}
+			Lagune
+				{lagoon}
+			Ozean
+				{ocean}
+				{mar}
+				Atlantik
+					Karibische See
+						{mar caribe}
+						{caribbean sea}
+			Quelle
+				{spring}
+			See
+				{lake}
+			Sumpf
+				{swamp}
+			Teich
+				{pond}
+			Wasserscheide
+				{watershed}
+		Himmel
+			{sky}
+		Naturschutzgebiet
+			{nature reserve}
+		Naturzerstoerung
+			{nature destruction}
+		Topographie
+			{Gelaende}
+			{Landschaftsform}
+			{terrain}
+			{topography}
+			Berg
+				{mountain}
+				Wendelstein
+			Berggrat
+				{Bergruecken}
+				{ridge}
+			Bucht
+				{cove}
+				{bay}
+			Duene
+				{dune}
+			Ebene
+				{Flachland}
+				{plain}
+				Praerie
+					{prairie}
+					{Grasebene}
+				Savanne
+					{savanna}
+				Steppe
+					{steppe}
+				Tundra
+					{tundra}
+					{Kaeltesteppe}
+			Flussdelta
+				{delta}
+			Gebirge
+				{mountains}
+				{Berge}
+			Geroell
+				{Steine}
+				{boulders}
+				{rocks}
+			Gestein
+				{rocks}
+				{Steine}
+			Gletscher
+				{glacier}
+			Halbinsel
+				{peninsula}
+			Hochebene
+				{Plateau}
+			Hoehenzug
+				{ridge}
+			Hoehle
+				{cave}
+			Huegel
+				{hill}
+			Insel
+				{island}
+			Kap
+				{cape}
+				{promontory}
+			Klippe
+				{Steilkueste}
+				{Steilhang}
+				{bluff}
+			Korallenriff
+				{Riff}
+				{coral reef}
+			Krater
+				{crater}
+			Landenge
+				{isthmus}
+			Mulde
+				{dell}
+			Nehrung
+				{spit}
+			Oedland
+				{bad lands}
+			Plateau
+				{plateau}
+				{Hochebene}
+			Riff
+				{reef}
+			Sandbank
+				{sandbar}
+			Schlucht
+				{canyon}
+			Strand
+				{beach}
+				{playa}
+				Sandstrand
+					{sand}
+			Tafelberg
+				{mesa}
+			Tal
+				{valley}
+				{dale}
+			Trockental
+				{arroyo}
+				{Flussbett}
+				{Wasserlauf}
+			unterirdisch
+				{subterranean}
+			Vulkan
+				{volcano}
+			Wacholderheide
+				{juniper}
+				{heathland}
+			Wald
+				{forest}
+			Wiese
+				{meadow}
+				{pasture}
+				{Weide}
+			Wueste
+				{desert}
+	Markt
+		{market}
+		{mercado}
+	[Objekt]
+		{Object}
+		Altar
+		Aufzug
+			{elevator}
+			{ascensor}
+		Besen
+			{broom}
+			{escoba}
+		Besteck
+			{cutlery}
+			{Essbesteck}
+			{flatware}
+		Bett
+			{bed}
+			{cama}
+		Briefkasten
+			{postbox}
+			{letterbox}
+		Brille
+			{glasses}
+			{lentes}
+			Sonnenbrille
+				{gafas de sol}
+				{sunglasses}
+		Crashtest-Dummy
+			{Crash test dummy}
+		Fahne
+			{Flagge}
+			{flag}
+		Flasche
+			{bottle}
+		Geraet
+			{device}
+		Geruest
+			{scaffold}
+		Glocke
+			{bell}
+			{campana}
+			Schiffsglocke
+				{ship's bell}
+		Himmelskörper
+			{orb}
+			Mond
+				{moon}
+				{luna}
+		Hut
+			{hat}
+			{sombrero}
+		Karussell
+			{carousel}
+			{carrusel}
+		Kerze
+			{candle}
+			{vela}
+		Kostüm
+			{traje}
+			{costume}
+		Kran
+			{crane}
+			{grúa}
+		Lampe
+			{lamp}
+			{lámpara}
+		Leuchter
+			{candleholder}
+			{Kerzenleuchter}
+			{Kerze}
+			{candle}
+			{candlestick}
+			{candelabrum}
+			{candelero}
+		Maske
+			{mask}
+		Moebel
+			{furniture}
+		Orgel
+			{organ}
+		Pfütze
+			{Lache}
+			{puddle}
+			{charco}
+		Plakat
+			{cartel anunciador}
+			{billboard}
+		Rohr
+			{tube}
+		Schatten
+			{shadow}
+		Schaufensterpuppe
+			{maniquí}
+			{display dummy}
+			{manikin}
+		Schild
+			{sign}
+		Schneefräse
+			{snow blower}
+		Schuh
+			{shoe}
+			{zapato}
+			High-Heel
+			Sandale
+				{sandal}
+				{huarache}
+		Schwimmbad
+			{swimming pool}
+		Seil
+			{cuerda}
+			{rope}
+		Skulptur
+			{sculpture}
+			{escultura}
+		Statue
+			Virgen de la Guadalupe
+				{Madonna von Guadalupe}
+		Straßenlaterne
+			{street lamp}
+			{alumbrado público}
+		Tasse
+			{cup}
+		Textilie
+			{textile}
+		Tuer
+			{door}
+		Tuerknopf
+		Uhr
+			{clock}
+		Werbung
+			{Plakat}
+			{advertisement}
+			{promoción}
+			{reclamo}
+			{Reklame}
+			{promotion}
+			{poster}
+			{bill}
+			{cartel}
+		Werkzeug
+			{tool}
+		Zaun
+			{fence}
+			{alambrada}
+	Organisation
+		{organización}
+		EZLN
+			{Ejército Zapatista de Liberación Nacional}
+			{Zapatistische Armee der Nationalen Befreiung}
+			{Zapatista Army of National Liberation}
+	Pflanze
+		{plant}
+		{planta}
+		{vegetal}
+		Agave
+			Blaue Agave
+				{agave azul}
+				{agave tequilana}
+		Bluetenpflanze
+			{flowering plant}
+			Lilie
+				{Lilien}
+				{lilly}
+				{lillies}
+			Rose
+				{Rosen}
+				{rose}
+				{roses}
+			Sonnenblume
+				{sunflower}
+				{hirasol}
+			Tagetes
+				{cempasúchil}
+				{Studentenblume}
+				{Sammetblume}
+				{türkische Nelke}
+				{Totenblume}
+			Tulpe
+				{Tulpen}
+				{tulip}
+		Gehoelz
+			{grove}
+			{bosk}
+			{wood}
+			{Holz}
+			{bosque}
+			Laubbaum
+				{árbol frondoso}
+				{broadleaf tree}
+				{tree}
+				{Baum}
+				Ahorn
+				Buche
+					{beech}
+					{haya}
+				Kastanie
+				Linde
+			Mangrove
+				{manglar}
+			Nadelbaum
+				Fichte
+				Koniferen
+					{Pinales}
+					{Pinaceae}
+					Zypressengewaechs
+						{Cupressaceae}
+						Mittelmeer-Zypresse
+							{Cupressus sempervirens}
+						Wacholder
+							{Juniperus}
+							{Juniper}
+			Palme
+				{palmera}
+				{palm tree}
+		Kaktus
+			{cactus}
+	Sport
+		{sports}
+		American Football
+		Baseball
+			Gammertingen Royals
+				{Royals}
+		Basketball
+			{basketball}
+		Fußball
+			{soccer}
+			{football}
+		Schwimmen
+			{swim sports}
+		Wintersport
+			{winter sports}
+			Alpin Ski
+				{alpine skiing}
+			Langlauf
+	Tier
+		{animal}
+		Dinosaurier
+			{dinosaurs}
+			{dinosaur}
+		Insekt
+			Fliege
+			Käfer
+			Spinne
+		Kuh
+			{cow}
+			{vaca}
+		Meerestier
+			{marine life}
+			Fisch
+				{fish}
+				Hai
+					{shark}
+				Manta
+					{stingray}
+			Krustentiere
+				{crustacean}
+				Hummer
+					{lobster}
+				Krebs
+					{crab}
+					{cangrejo}
+			Qualle
+				{jellyfish}
+				{medusa}
+		Pferd
+			{horse}
+			{horses}
+			{equestrian}
+			{equine}
+		Reptil
+			{reptile}
+			Alligator
+				{alligator}
+			Eidechse
+				{lacertidae}
+				{lizard}
+			Krokodil
+				{crocodile}
+			Leguan
+				{iguana}
+		Saeugetier
+			Hund
+				{dog}
+				{perro}
+			Katze
+				{cat}
+		Vogel
+			{aves}
+			{Vögel}
+			Greifvogel
+				Adler
+				Bussard
+				Falke
+			Möwe
+				{gull}
+				{laridae}
+			Singvogel
+				Rotkehlchen
+	Transport
+		Fahrzeug
+			{automotive}
+			Auto
+				{PKW}
+				{Automobil}
+				{car}
+				Bus
+					{bus}
+				Cabrio
+					{convertible}
+				Kombi
+					{station wagon}
+					{familiar}
+				Limousine
+					{sedan}
+				Oldtimer
+					{classic car}
+					{Antique car}
+					{Vehículo histórico}
+					Käfer
+						{vocho}
+				Pickup
+					{pick-up}
+				Rennwagen
+					{Automóvil de carreras}
+					{racing car}
+				Taxi
+				Unimog
+			Baumaschine
+				{máquina de construcción}
+				{construction machine}
+			Fahrrad
+				{bycicle}
+			Lastwagen
+				{LKW}
+				{truck}
+				Müllwagen
+					{garbage collection truck}
+					{camión de la basura}
+				Tankwagen
+					{tank vehicle}
+					{camión cisterna}
+					Wasser
+						{water}
+						{agua}
+			Motorrad
+				{motorcycle}
+			Traktor
+			Verkaufswagen
+				{mobile food unit}
+				{negocio}
+		Luftfahrt
+			Flughafen
+				{airport}
+			Flugzeug
+				{airplane}
+				{aircraft}
+				{plane}
+			Helikopter
+				{Hubschrauber}
+				{helicopter}
+		Oeffentliche Verkehrsmittel
+			{public transportation}
+			Strassenbahn
+				{trolley}
+			U-Bahn
+				{subway}
+		Schienenverkehr
+			{railroad}
+			Bahnhof
+				{train station}
+			Zug
+				{train}
+		Schifffahrt
+			{marine}
+			Boot
+				{boat}
+				{barco}
+			Dock
+				{Hafenanlage}
+				{dock}
+			Floß
+				{balsa}
+				{raft}
+			Gondel
+				{Gondola}
+			Hafen
+				{harbor}
+			Kajak
+				{kayak}
+			Kanu
+				{canoe}
+			Ruderboot
+				{rowing boat}
+				{rowboat}
+			Schiff
+				{Boot}
+				{boat}
+				Kreuzfahrtschiff
+					{cruise ship}
+					{crucero}
+				Segelschiff
+					{sailing ship}
+					{embarcación de vela}
+			Segelboot
+				{sailboat}
+				{varco de vela}
+				{velero}
+			Tretboot
+				{pedal boat}
+			U-Boot
+				{Unterseeboot}
+				{submarine}
+		Verkehr
+			{traffic}
+			Stau
+				{traffic jam}
+			Unfall
+				{accident}
+[03 WER]
+	Alter
+		{age}
+		Baby
+			{Neugeborene}
+			{Kleinkind}
+			{babies}
+			{infants}
+			{new born}
+			{newborn}
+			{infant}
+		Erwachsender
+			{grownup}
+			{grown up}
+			{grownups}
+			{grown ups}
+			{adults}
+		Jugendlicher
+			{Jugendliche}
+			{youth}
+			{juvenile}
+		Kind
+			{jung}
+			{child}
+			{kid}
+			{juvenile}
+			{kids}
+			{younge}
+			{youth}
+		Senior
+			{Senioren}
+			{alt}
+			{reif}
+			{aged}
+			{mature}
+			{old}
+			{seniors}
+		Teenager
+			{teen}
+			{tween}
+			{teen aged}
+	Beruf
+		{professions}
+		{roles}
+		Arbeiter
+			{laborer}
+			{blue-collar worker}
+			{worker}
+		Astronaut
+			{astronaut}
+			{cosmonaut}
+			{spaceman}
+			{space man}
+		Bauarbeiter
+		Bettler
+			{beggar}
+			{panhandler}
+			{vagabond}
+		Clown
+			{clowns}
+			{makeup}
+		Cowboy
+			{cowboy}
+			{vacero}
+		Feuerwehr
+			{firefighter}
+			{bombero}
+		Gondoliere
+			{gondolier}
+			{gondola}
+		Haendler
+			{vendor}
+			{businessperson}
+			{dealer}
+			{hawker}
+			{merchant}
+			{peddler}
+			{street vendor}
+			{broker}
+			{seller}
+			{storekeeper}
+			{trader}
+			{tradesperson}
+		Koch
+			{chef}
+			{sous  chef}
+			{cook}
+		Kuenstler
+			{artist}
+		Maskenbildner
+			{makeup artist}
+			{maquillador}
+		Modell
+			{model}
+		Moench
+			{Moenche}
+			{monk}
+			{monks}
+		Musiker
+			{musician}
+			Gitarrenspieler
+				{guitar player}
+		Politiker
+			{politician}
+			Landrat
+		Polizei
+			{police}
+			{policía}
+		Reporter
+		Saenger
+			{singer}
+		Schauspieler
+			{actor}
+		Skifahrer
+			{skier}
+		Surfer
+			{surfer}
+		Taenzer
+			{Taenzerin}
+			{dancer}
+			Ballet
+			hip hop
+				{hip-hop}
+			Volkstanz
+				{folk}
+		Verkäufer
+			{vendedor}
+			{vendedora}
+			{vendor}
+			{salesperson}
+			{seller}
+		Wachmann
+			{guarda}
+			{security guard}
+		Wissenschaftler
+			{Wissenschaft}
+			{scientist}
+			{science}
+			{educated}
+			{smart}
+		Zauberer
+			{wizard}
+			{astrologer}
+			{augurer}
+			{clairvoyant}
+			{conjurer}
+			{diviner}
+			{enchanter}
+			{fortuneteller}
+			{hypnotist}
+			{magician}
+			{magus}
+			{medium}
+			{necromancer}
+			{occultist}
+			{palmist}
+			{seer}
+			{shaman}
+			{soothsayer}
+			{sorcerer}
+			{thaumaturge}
+			{warlock}
+			{witch}
+			{wizards}
+			{wizzard}
+			{wizzards}
+	FAMILIE
+		A
+			[A]
+			[F]
+			[J]
+			[S]
+		B
+			[E]
+			[Em]
+			[I]
+			[Iv]
+			[P]
+			[R]
+			[Ro]
+			[Y]
+		C
+			[H]
+			[Hi]
+			[I]
+			[P]
+		D
+			[L]
+	Folklore
+		{folclor}
+		torito
+			{toritos de cartón}
+		Voladores
+			Voladores de Papantla
+	FREUNDE
+		[AL]
+		[AM]
+		[Go]
+		L
+			L
+			S
+		R
+			R
+			U
+		S
+		[TK]
+		[TM]
+	Geschlecht
+		{gender}
+		Frau
+			{woman}
+			{female}
+			{females}
+			{women}
+		Junge
+			{boy}
+			{child}
+			{kid}
+			{young}
+			{youth}
+			{male}
+		Maedchen
+			{girl}
+			{female}
+			{females}
+			{woman}
+			{women}
+			{kid}
+			{youth}
+			{young}
+			{child}
+		Maenner
+			{men}
+			{man}
+		maennlich
+			{male}
+			{males}
+			{men}
+			{man}
+		Mann
+			{man}
+			{men}
+			{male}
+			{males}
+		weiblich
+			{female}
+			{females}
+			{girl}
+			{girls}
+			{women}
+			{woman}
+	Gruppen
+		{groups}
+		Familie
+			{family}
+		Gruppe
+			{group}
+		Kinder
+			{kids}
+			{children}
+			{niños}
+		Menge
+			{crowd}
+		Menschen
+			{people}
+			{humans}
+			{folks}
+			{crowd}
+		Paar
+			{couple}
+	Marke
+		{brand}
+		{tradename}
+		Bacardi
+		Coca Cola
+		Corona
+		Groz-Beckert
+		Havanna Club
+		Mercedes-Benz
+		Ravensburger
+		Tecate
+		Volkswagen
+			{VW}
+	Persoenlichkeiten
+		{famous people}
+		{VIP}
+		{beruehmt}
+		Astrid Hadad
+		Gorbatschov
+		Papst
+			{Pope}
+			{Papa}
+		Sting
+	Religion
+		{religión}
+		Engel
+			{angel}
+			{ángel}
+		Madonna
+			{Madona}
+			Virgen de Guadalupe
+				{La Guadalupana}
+				{Nuestra Señora de Guadalupe}
+	Volksgruppe
+		{grupo étnico}
+		{ethnic group}
+		{ethnisch}
+		{folkloristisch}
+		{folkloristic}
+		{folclórico}
+		Maya
+			{Mayas}
+[04 WIE]
+	Aktivität
+		{activity}
+		{hobbies}
+		{hobby}
+		{passtime}
+		Fahrrad fahren
+			{bike ridding}
+			{ride}
+			{ride a bike}
+			{biking}
+		rauchen
+			{smoking}
+		schnorcheln
+			{snorkel}
+			{snorkeling}
+		schwimmen
+			{swimming}
+		tanzen
+			{Tanz}
+			{dancing}
+			{dance}
+		tauchen
+			{diving}
+		wandern
+			{hiking}
+		warten
+			{waiting}
+			{esperar}
+	Farben
+		{colors}
+		aquamarin
+			{aquamarine}
+		azurblau
+			{azure}
+		beige
+		bernsteinfarben
+			{amber}
+		blau
+			{blue}
+		blaugruen
+			{cyan}
+		braun
+			{brown}
+		bunt
+			{colorful}
+		fliederfarben
+			{lilac}
+		gelb
+			{yellow}
+		gold
+			{golden}
+		grau
+			{gray}
+		gruen
+			{green}
+		indigofarben
+			{indigo}
+		kastanienbraun
+			{maroon}
+		kirschrot
+			{cerise}
+		lavendelfarben
+			{lavender}
+		lila
+			{purple}
+		magenta
+		malvefarbig
+			{hellviolett}
+			{mauve}
+		marineblau
+			{navy blue}
+		neongruen
+			{lime}
+		oliv
+			{olive}
+		orange
+			{orange}
+		orange-rot
+			{orange-red}
+		petrol
+			{blaugrün}
+			{teal}
+		pflaume
+			{plum}
+		purpurrot
+			{karminrot}
+			{karmin}
+			{purpur}
+			{crimson}
+		rosa
+			{pink}
+		rot
+			{red}
+		rot-violett
+			{red-violet}
+		rubinrot
+			{red}
+			{rojo}
+		scharlachrot
+			{scarlet}
+		Schattierung
+			{shade}
+			dunkel
+				{dark}
+			hell
+				{light}
+			mittel
+				{medium}
+		schwarz
+			{black}
+		silber
+			{silver}
+		tuerkis
+			{turquoise}
+		violett
+			{violet}
+		weiß
+			{white}
+	Material
+		{material}
+		Glas
+			{glass}
+		Gold
+			{gold}
+			{oro}
+		Holz
+			{wood}
+		Metall
+			{metal}
+			Eisen
+				{iron}
+				{hierro}
+		Pappmaché
+			{cartonería}
+			{papel maché}
+			{papier-mâché}
+		Silber
+			{silver}
+		Stein
+			{stone}
+			{rock}
+			{piedra}
+		Ton
+			{clay}
+		Torf
+			{peat}
+	[Stimmung/Emotion]
+		abenteurlich
+			{riskant}
+			{gefaehrlich}
+			{adventure}
+			{risky}
+			{dangerous}
+		aengstlich
+			{beaengstigend}
+			{erschreckend}
+			{furchteinfloessend}
+			{gruselig}
+			{schaurig}
+			{scary}
+			{frightening}
+			{alarming}
+			{chilling}
+			{creepy}
+			{eerie}
+			{intimidating}
+			{spooky}
+			{unnerving}
+		aggressiv
+			{aggressive}
+			{angriffslustig}
+		aufgeregt
+			{Aufregung}
+			{excited}
+			{nervoes}
+			{nervous}
+			{excitement}
+		bedrohlich
+			{threatening}
+			{amenazante}
+		behuetet
+			{sheltered}
+		bezaubernd
+			{zauberhaft}
+			{anziehend}
+			{charmed}
+			{allure}
+			{appeal}
+			{attractiveness}
+			{captivation}
+			{charisma}
+			{enchantment}
+			{fascination}
+			{glamour}
+			{glamor}
+			{magic}
+			{magnetism}
+			{seductiveness}
+			{witchery}
+			{captivated}
+			{charm}
+		einsam
+			{Einsamkeit}
+			{solitude}
+			{alone}
+			{isolation}
+			{peacefull}
+			{seclusion}
+			{serene}
+			{solitariness}
+			{detachment}
+			{emptiness}
+			{loneliness}
+			{loneness}
+			{lonesomeness}
+			{allein]
+		entspannt
+			{faul}
+			{relaxed}
+			{lazy}
+			{calm}
+			{at ease}
+		extatisch
+			{Extase}
+			{Euphorie}
+			{Rauschzustand}
+			{Hochstimmung}
+			{ecstasy}
+			{elation}
+			{euphoria}
+		extrem
+			{radikal}
+			{extreme}
+			{radical}
+		friedlich
+			{ruhig}
+			{peaceful}
+			{serene}
+			{harmonious}
+			{tranquil}
+		froehlich
+			{happiness}
+			{bliss}
+			{blissful}
+			{blissfulness}
+			{delighted}
+			{euphoric}
+			{felicity}
+			{gladness}
+			{gladsome}
+			{happy}
+			{joy}
+			{joyful}
+			{joyous}
+			{upbeat}
+		glücklich
+			{erfreut}
+			{zufrieden}
+			{fortunate}
+			{happy}
+			{lucky}
+		gruselig
+			{gespenstisch}
+			{spooky}
+			{horripilante}
+			{terrorífico}
+			{creepy}
+			{scary}
+		hoffnungsvoll
+			{Hoffnung}
+			{hope}
+			{hopeful}
+			{promising}
+		kuehl
+			{distanziert}
+			{frostig}
+			{cool}
+			{cold}
+			{detached}
+			{distant}
+			{frosty}
+		langweilig
+			{uninteressant}
+			{disinterested}
+			{dull}
+			{fatigued}
+			{inattentive}
+			{uninterested}
+			{uninsteresting}
+		leidend
+			{Leid}
+			{suffering}
+			{suffer}
+		leidenschaftlich
+			{Leidenschaft}
+			{passion}
+			{emotion}
+			{Verlangen}
+			{Appetit}
+			{verlangend}
+			{desire}
+			{appetite}
+			{craving}
+			{drive}
+			{hankering}
+			{hunger}
+			{itch}
+			{longing}
+			{lust}
+			{pining}
+			{thirst}
+			{urge}
+			{yearning}
+		lustig
+			{funny}
+			{komisch}
+			{laecherlich}
+			{absurd}
+			{amusing}
+			{comical}
+			{humorous}
+			{laughable}
+			{ridiculous}
+		melancholisch
+			{depressiv}
+			{melancholic}
+			{blues}
+			{dejection}
+			{depression}
+		romantisch
+			{romantic}
+		ruhig
+			{friedlich}
+			{quiet}
+			{calm}
+			{peaceful}
+			{restful}
+			{serene}
+			{still}
+			{stilly}
+			{tranquil}
+		schoen
+			{attraktiv}
+			{suess}
+			{huebsch}
+			{beautiful}
+			{attractive}
+			{beauteous}
+			{bonny}
+			{comely}
+			{cute}
+			{fair}
+			{gorgeous}
+			{handsome}
+			{knockout}
+			{lovely}
+			{pretty}
+			{ravishing}
+			{sightly}
+			{stunning}
+			{taking}
+		schuechtern
+			{shy}
+		schuldig
+			{Schuld}
+			{contriteness}
+			{contrition}
+			{penitence}
+			{regret}
+			{remorse}
+			{remorsefulness}
+			{repentance}
+			{rue}
+			{self-reproach}
+			{shame}
+			{guilty}
+		Selbstvertrauen
+			{Zuversicht}
+			{confidence}
+		stolz
+			{Stolz}
+			{pride}
+			{proud}
+			{ego}
+			{pridefulness}
+			{self-esteem}
+		traurig
+			{Kummer}
+			{Trauer}
+			{Gram}
+			{sad}
+			{mournful}
+			{grief}
+			{sorrow}
+		trostlos
+			{verlassen}
+			{desolate}
+		unschuldig
+			{innocent}
+			{innocence}
+			{pure}
+		wuetend
+			{Wut}
+			{Groll}
+			{Aerger}
+			{Verdruss}
+			{aggravation}
+			{angry}
+			{annoyance}
+			{frenzy}
+			{fury}
+			{insult}
+			{irritate}
+	Wetter
+		Blitz
+			{lightning}
+		Duerre
+			{Trockenheit}
+			{Trockenperiode}
+			{drought}
+		Eis
+			{ice}
+			Frost
+				{frost}
+			Graupelschauer
+				{Graupel}
+				{Graupelregen}
+				{sleet}
+			Hagel
+				{hail}
+		Flutwelle
+			{tidal wave}
+			{tsunami}
+		Gewitter
+			{storm}
+			{Sturm}
+			{electrical storm}
+			{thunderstorm}
+		Gezeiten
+			{tides}
+			Ebbe
+				{ebb}
+				{low tide}
+			Flut
+				{tide}
+		Luft
+			{air}
+			Dunst
+				{haze}
+				{mist}
+			Hitzeflimmern
+				{heat haze}
+			Nebel
+				{feucht}
+				{fog}
+				{foggy}
+				{mist}
+				{misty}
+				{moist}
+				{moisture}
+			Verschmutzung
+				{pollution}
+				{smog}
+		Regen
+			{rain}
+			gefrierender Regen
+				{freezing rain}
+			Nieselregen
+				{Sprühregen}
+				{drizzle}
+			Regenguss
+				{Platzregen}
+				{downpour}
+			Regenschauer
+				{shower}
+			Ueberschwemmung
+				{flash flood}
+			Wolkenbruch
+				{cloudburst}
+		Regenbogen
+			{rainbow}
+		Schnee
+			{snow}
+			Pulverschnee
+				{powder}
+			Schneefall
+				{Schneeschauer}
+				{snow shower}
+			Schneegestoeber
+				{Schneetreiben}
+				{snow flurry}
+			Schneeregen
+				{sleet}
+			Schneesturm
+				{blizzard}
+				{snow storm}
+				{ice storm}
+		Sonnenschein
+			{klar}
+			{clear}
+			{sun}
+			{sonnig}
+			{sunny}
+			{sun shine}
+		Sturm
+			{Gewitter}
+			{storm}
+			{squall}
+			{Boe}
+		Tau
+			{dew}
+		wind
+			Hurrikan
+				{hurricane}
+				{Orkan}
+				{Wirbelsturm}
+				{whirlwind}
+			Sandhose
+				{Windhose}
+				{dust devil}
+				{whirlwind}
+			Sandsturm
+				{sandstorm}
+				{sand flood}
+			Taifun
+				{typhoon}
+			Tornado
+				{tornado}
+				{Wirbelsturm}
+				{whirlwind}
+				{twister}
+			Tropensturm
+				{tropical storm}
+			Zyklon
+				{Wirbelsturm}
+				{whirlwind}
+				{cyclone}
+		Wolken
+			{clouds}
+			Altokumulus
+				{altocumulus}
+			Kumuluswolke
+				{Haufenwolke}
+				{cumulus}
+			Stratuswolke
+				{Schichtwolke}
+				{stratus}
+			Zirruswolke
+				{Federwolke}
+				{cirrus}
+	Zustand
+		historisch
+			{historic}
+			{historico}
+		rostig
+			{oxidado}
+			{oxidada}
+			{rusty}
+		Ruine
+			{ruin}
+			{remains}
+			{ruina}
+		Schrott
+			{scrap}
+			{chatarra}
+		unscharf
+			{blurred}
+			{desenfocado}
+[05 WANN]
+	Event
+		Einbürgerungsfeier
+			{Neubürger-Empfang}
+		Erstkommunion
+		Familienfeier
+			{family party}
+			{reunon familiar}
+		Geburtstag
+			{birthday}
+		Historisch
+			re-enactment
+			Ritterspiele
+		Hochzeit
+			{wedding}
+			{marriage}
+			Braeutigam
+				{groom}
+			Braut
+				{bride}
+			Goldene Hochzeit
+				{bodas de oro}
+				{golden wedding anniversary}
+		Karneval
+			{Fasnet}
+			{Fasnacht}
+			{carnival}
+		Landesgartenschau
+			{garden show}
+		Richtfest
+			{roofing ceremony}
+			{fiesta de cubrir aguas}
+		Taufe
+			{baptism}
+		Tradition
+			Tag der Toten
+				{day of the deads}
+				{dia de los muertos}
+			Tlachco Dinner Show
+	Feiertag
+		{holidays}
+		Christi Himmelfahrt
+		Día de los Muertos
+			{Tag der Toten}
+			{Allerheiligen}
+			{Allerseelen}
+			{Day of the Dead}
+		Ostern
+			{Easter}
+		Weihnachten
+			{christmas}
+	[Zeit]
+		Blaue Stunde
+			{twilight hour}
+			{Daemmerung}
+		Daemmerung
+			{crepuscule}
+			{twilight}
+		Jahreszeit
+			{season}
+			{time of the year}
+			Fruehling
+				{spring}
+			Herbst
+				{autumn}
+			Sommer
+				{summer}
+			Winter
+				{winter}
+		Monsun
+			{monsoon}
+		Morgengrauen
+			{crack of dawn}
+			{daybreak}
+			{dawn}
+		Nacht
+			{night}
+		Regenzeit
+			{rainy season}
+			{rain period}
+		Sonnenaufgang
+			{sunrise}
+			{sun-up}
+			{sunup}
+		Sonnenuntergang
+			{sundown}
+			{sunset}
+[06 WELCHER BILD TYP]
+	Gegenlicht
+		{Contre-jour}
+		{against daylight}
+	hdr
+		{high dynamic range}
+	iPhoneography
+		{iPhone}
+	Langzeitbelichtung
+		{bulb exposure}
+	Luftbild
+		{aerial}
+	Makro
+		{macro}
+		{macro photography}
+	Mehrfachbelichtung
+		{multiple exposure}
+		{exosure fusion}
+	Nachtaufnahme
+		{night shot}
+	Panorama
+	Portrait
+		{Gesicht}
+		{face}
+	schwarzweiss
+		{bnw}
+		{b & w}
+		{b&w}
+		{black and white}
+	Silhouette
+		{Schattenbild}
+	Spiegelung
+		{Reflexion}
+		{reflection}
+		{mirrored}
+	street photography
+		{straßenszene}
+		{urban}
+		{stadt}
+		{ciudad}
+	Textur
+		{Oberflaeche}
+		{texture}
+		{textured}
+FUJI X100
+Nikon D2x
