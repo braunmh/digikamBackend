@@ -1,4 +1,6 @@
-package org.braun.digikam.backend.search;
+package org.braun.digikam.backend.search.sql;
+
+import org.braun.digikam.backend.search.ConditionParseException;
 
 /**
  *

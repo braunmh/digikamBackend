@@ -31,6 +31,7 @@ public class ImageApiServiceImpl extends ImageApiService {
     /**
      *
      * @param keywords
+     * @param keywordsOr 
      * @param creator
      * @param makeModel
      * @param lens
@@ -52,7 +53,7 @@ public class ImageApiServiceImpl extends ImageApiService {
      * @throws NotFoundException
      */
     @Override
-    public Response findImagesByImageAttributes(List<Long> keywords, String creator, String makeModel, String lens, 
+    public Response findImagesByImageAttributes(List<Long> keywords, Boolean keywordsOr, String creator, String makeModel, String lens, 
         String orientation, String dateFrom, String dateTo, Integer ratingFrom, Integer ratingTo, Integer isoFrom, Integer isoTo, 
         Double exposureTimeFrom, Double exposureTimeTo, Double apertureFrom, Double apertureTo, Integer focalLengthFrom, Integer focalLengthTo, 
         SecurityContext securityContext) throws NotFoundException {
@@ -60,8 +61,8 @@ public class ImageApiServiceImpl extends ImageApiService {
         
         ImageFacade facade = getImageFacade();
         try {
-            List<Media> result = facade.findImagesByImageAttributes(
-                keywords, creator, camera.getMake(), camera.getModel(), lens, orientation, 
+            List<Media> result = facade.findImagesByImageAttributesSolr(
+                keywords, keywordsOr, creator, camera.getMake(), camera.getModel(), lens, orientation, 
                 dateFrom, dateTo, ratingFrom, ratingTo, isoFrom, isoTo, exposureTimeFrom, exposureTimeTo, 
                 apertureFrom, apertureTo, focalLengthFrom, focalLengthTo);
             return Response.ok().entity(result).build();

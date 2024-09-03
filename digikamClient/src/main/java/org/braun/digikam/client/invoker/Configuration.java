@@ -13,7 +13,7 @@
 
 package org.braun.digikam.client.invoker;
 
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-05-05T16:52:31.595785912+02:00[Europe/Berlin]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-12-21T15:48:50.606937714+01:00[Europe/Berlin]")
 public class Configuration {
     private static ApiClient defaultApiClient = new ApiClient();
 

@@ -8,7 +8,7 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
 import jakarta.validation.constraints.*;
 public abstract class ImageApiService {
-    public abstract Response findImagesByImageAttributes(List<Long> keywords,String creator,String makeModel,String lens,String orientation,String dateFrom,String dateTo,Integer ratingFrom,Integer ratingTo,Integer isoFrom,Integer isoTo,Double exposureTimeFrom,Double exposureTimeTo,Double apertureFrom,Double apertureTo,Integer focalLengthFrom,Integer focalLengthTo,SecurityContext securityContext) throws NotFoundException;
+    public abstract Response findImagesByImageAttributes(List<Long> keywords,Boolean keywordsOr,String creator,String makeModel,String lens,String orientation,String dateFrom,String dateTo,Integer ratingFrom,Integer ratingTo,Integer isoFrom,Integer isoTo,Double exposureTimeFrom,Double exposureTimeTo,Double apertureFrom,Double apertureTo,Integer focalLengthFrom,Integer focalLengthTo,SecurityContext securityContext) throws NotFoundException;
     public abstract Response getImage(Long imageId,SecurityContext securityContext) throws NotFoundException;
     public abstract Response getInformationAboutImage(Long imageId,SecurityContext securityContext) throws NotFoundException;
     public abstract Response imageStatus(SecurityContext securityContext) throws NotFoundException;

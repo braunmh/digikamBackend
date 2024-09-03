@@ -21,7 +21,10 @@ import org.braun.digikam.client.model.*;
 import org.braun.digikam.client.invoker.Pair;
 
 import org.braun.digikam.client.model.Image;
+import org.braun.digikam.client.model.ImageUpdate;
 import org.braun.digikam.client.model.ImagesInner;
+import org.braun.digikam.client.model.StatisticKeyword;
+import org.braun.digikam.client.model.StatisticMonth;
 
 
 import java.util.ArrayList;
@@ -31,7 +34,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
 
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-05-05T16:52:31.595785912+02:00[Europe/Berlin]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-12-21T15:48:50.606937714+01:00[Europe/Berlin]")
 public class ImageApi {
 
 
@@ -76,7 +79,7 @@ public class ImageApi {
    * @return List&lt;ImagesInner&gt;
    * @throws ApiException if fails to make API call
    */
-  public List<ImagesInner> findImagesByImageAttributes(List<Integer> keywords, String creator, String makeModel, String lens, String orientation, String dateFrom, String dateTo, Integer ratingFrom, Integer ratingTo, Integer isoFrom, Integer isoTo, Double exposureTimeFrom, Double exposureTimeTo, Double apertureFrom, Double apertureTo, Double focalLengthFrom, Double focalLengthTo) throws ApiException {
+  public List<ImagesInner> findImagesByImageAttributes(List<Integer> keywords, String creator, String makeModel, String lens, String orientation, String dateFrom, String dateTo, Integer ratingFrom, Integer ratingTo, Integer isoFrom, Integer isoTo, Double exposureTimeFrom, Double exposureTimeTo, Double apertureFrom, Double apertureTo, Integer focalLengthFrom, Integer focalLengthTo) throws ApiException {
     return this.findImagesByImageAttributes(keywords, creator, makeModel, lens, orientation, dateFrom, dateTo, ratingFrom, ratingTo, isoFrom, isoTo, exposureTimeFrom, exposureTimeTo, apertureFrom, apertureTo, focalLengthFrom, focalLengthTo, Collections.emptyMap());
   }
 
@@ -105,7 +108,7 @@ public class ImageApi {
    * @return List&lt;ImagesInner&gt;
    * @throws ApiException if fails to make API call
    */
-  public List<ImagesInner> findImagesByImageAttributes(List<Integer> keywords, String creator, String makeModel, String lens, String orientation, String dateFrom, String dateTo, Integer ratingFrom, Integer ratingTo, Integer isoFrom, Integer isoTo, Double exposureTimeFrom, Double exposureTimeTo, Double apertureFrom, Double apertureTo, Double focalLengthFrom, Double focalLengthTo, Map<String, String> additionalHeaders) throws ApiException {
+  public List<ImagesInner> findImagesByImageAttributes(List<Integer> keywords, String creator, String makeModel, String lens, String orientation, String dateFrom, String dateTo, Integer ratingFrom, Integer ratingTo, Integer isoFrom, Integer isoTo, Double exposureTimeFrom, Double exposureTimeTo, Double apertureFrom, Double apertureTo, Integer focalLengthFrom, Integer focalLengthTo, Map<String, String> additionalHeaders) throws ApiException {
     Object localVarPostBody = null;
     
     // create path and map variables
@@ -319,6 +322,224 @@ public class ImageApi {
   /**
    * 
    * 
+   * @throws ApiException if fails to make API call
+   */
+  public void imageStatus() throws ApiException {
+    this.imageStatus(Collections.emptyMap());
+  }
+
+
+  /**
+   * 
+   * 
+   * @param additionalHeaders additionalHeaders for this call
+   * @throws ApiException if fails to make API call
+   */
+  public void imageStatus(Map<String, String> additionalHeaders) throws ApiException {
+    Object localVarPostBody = null;
+    
+    // create path and map variables
+    String localVarPath = "/image/status";
+
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    List<Pair> localVarQueryParams = new ArrayList<Pair>();
+    List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+    Map<String, String> localVarCookieParams = new HashMap<String, String>();
+    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+    
+    localVarHeaderParams.putAll(additionalHeaders);
+
+    
+    
+    final String[] localVarAccepts = {
+      
+    };
+    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+
+    final String[] localVarContentTypes = {
+      
+    };
+    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+
+    String[] localVarAuthNames = new String[] {  };
+
+    apiClient.invokeAPI(
+        localVarPath,
+        "GET",
+        localVarQueryParams,
+        localVarCollectionQueryParams,
+        localVarQueryStringJoiner.toString(),
+        localVarPostBody,
+        localVarHeaderParams,
+        localVarCookieParams,
+        localVarFormParams,
+        localVarAccept,
+        localVarContentType,
+        localVarAuthNames,
+        null
+    );
+  }
+
+  /**
+   * 
+   * 
+   * @param imageUpdate one parameter must be provided (required)
+   * @throws ApiException if fails to make API call
+   */
+  public void imageUpdate(ImageUpdate imageUpdate) throws ApiException {
+    this.imageUpdate(imageUpdate, Collections.emptyMap());
+  }
+
+
+  /**
+   * 
+   * 
+   * @param imageUpdate one parameter must be provided (required)
+   * @param additionalHeaders additionalHeaders for this call
+   * @throws ApiException if fails to make API call
+   */
+  public void imageUpdate(ImageUpdate imageUpdate, Map<String, String> additionalHeaders) throws ApiException {
+    Object localVarPostBody = imageUpdate;
+    
+    // verify the required parameter 'imageUpdate' is set
+    if (imageUpdate == null) {
+      throw new ApiException(400, "Missing the required parameter 'imageUpdate' when calling imageUpdate");
+    }
+    
+    // create path and map variables
+    String localVarPath = "/image/update";
+
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    List<Pair> localVarQueryParams = new ArrayList<Pair>();
+    List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+    Map<String, String> localVarCookieParams = new HashMap<String, String>();
+    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+    
+    localVarHeaderParams.putAll(additionalHeaders);
+
+    
+    
+    final String[] localVarAccepts = {
+      
+    };
+    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+
+    final String[] localVarContentTypes = {
+      "application/json"
+    };
+    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+
+    String[] localVarAuthNames = new String[] {  };
+
+    apiClient.invokeAPI(
+        localVarPath,
+        "POST",
+        localVarQueryParams,
+        localVarCollectionQueryParams,
+        localVarQueryStringJoiner.toString(),
+        localVarPostBody,
+        localVarHeaderParams,
+        localVarCookieParams,
+        localVarFormParams,
+        localVarAccept,
+        localVarContentType,
+        localVarAuthNames,
+        null
+    );
+  }
+
+  /**
+   * 
+   * 
+   * @param imageId Id of image to rate (required)
+   * @param rating The new rating (required)
+   * @return byte[]
+   * @throws ApiException if fails to make API call
+   */
+  public byte[] rateImage(Integer imageId, Integer rating) throws ApiException {
+    return this.rateImage(imageId, rating, Collections.emptyMap());
+  }
+
+
+  /**
+   * 
+   * 
+   * @param imageId Id of image to rate (required)
+   * @param rating The new rating (required)
+   * @param additionalHeaders additionalHeaders for this call
+   * @return byte[]
+   * @throws ApiException if fails to make API call
+   */
+  public byte[] rateImage(Integer imageId, Integer rating, Map<String, String> additionalHeaders) throws ApiException {
+    Object localVarPostBody = null;
+    
+    // verify the required parameter 'imageId' is set
+    if (imageId == null) {
+      throw new ApiException(400, "Missing the required parameter 'imageId' when calling rateImage");
+    }
+    
+    // verify the required parameter 'rating' is set
+    if (rating == null) {
+      throw new ApiException(400, "Missing the required parameter 'rating' when calling rateImage");
+    }
+    
+    // create path and map variables
+    String localVarPath = "/image/rate";
+
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    List<Pair> localVarQueryParams = new ArrayList<Pair>();
+    List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+    Map<String, String> localVarCookieParams = new HashMap<String, String>();
+    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+    localVarQueryParams.addAll(apiClient.parameterToPair("imageId", imageId));
+    localVarQueryParams.addAll(apiClient.parameterToPair("rating", rating));
+    
+    localVarHeaderParams.putAll(additionalHeaders);
+
+    
+    
+    final String[] localVarAccepts = {
+      "image/jpeg"
+    };
+    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+
+    final String[] localVarContentTypes = {
+      
+    };
+    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+
+    String[] localVarAuthNames = new String[] {  };
+
+    TypeReference<byte[]> localVarReturnType = new TypeReference<byte[]>() {};
+    return apiClient.invokeAPI(
+        localVarPath,
+        "GET",
+        localVarQueryParams,
+        localVarCollectionQueryParams,
+        localVarQueryStringJoiner.toString(),
+        localVarPostBody,
+        localVarHeaderParams,
+        localVarCookieParams,
+        localVarFormParams,
+        localVarAccept,
+        localVarContentType,
+        localVarAuthNames,
+        localVarReturnType
+    );
+  }
+
+  /**
+   * 
+   * 
    * @param imageId Id of Image to scale (required)
    * @param width new width of scaled Image (required)
    * @param height new height of scaled Image (required)
@@ -390,6 +611,159 @@ public class ImageApi {
     String[] localVarAuthNames = new String[] {  };
 
     TypeReference<byte[]> localVarReturnType = new TypeReference<byte[]>() {};
+    return apiClient.invokeAPI(
+        localVarPath,
+        "GET",
+        localVarQueryParams,
+        localVarCollectionQueryParams,
+        localVarQueryStringJoiner.toString(),
+        localVarPostBody,
+        localVarHeaderParams,
+        localVarCookieParams,
+        localVarFormParams,
+        localVarAccept,
+        localVarContentType,
+        localVarAuthNames,
+        localVarReturnType
+    );
+  }
+
+  /**
+   * 
+   * 
+   * @param keywordId Id of Keyord (required)
+   * @param year Year (required)
+   * @return List&lt;StatisticKeyword&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public List<StatisticKeyword> statKeyword(Integer keywordId, Integer year) throws ApiException {
+    return this.statKeyword(keywordId, year, Collections.emptyMap());
+  }
+
+
+  /**
+   * 
+   * 
+   * @param keywordId Id of Keyord (required)
+   * @param year Year (required)
+   * @param additionalHeaders additionalHeaders for this call
+   * @return List&lt;StatisticKeyword&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public List<StatisticKeyword> statKeyword(Integer keywordId, Integer year, Map<String, String> additionalHeaders) throws ApiException {
+    Object localVarPostBody = null;
+    
+    // verify the required parameter 'keywordId' is set
+    if (keywordId == null) {
+      throw new ApiException(400, "Missing the required parameter 'keywordId' when calling statKeyword");
+    }
+    
+    // verify the required parameter 'year' is set
+    if (year == null) {
+      throw new ApiException(400, "Missing the required parameter 'year' when calling statKeyword");
+    }
+    
+    // create path and map variables
+    String localVarPath = "/image/statKeyword";
+
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    List<Pair> localVarQueryParams = new ArrayList<Pair>();
+    List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+    Map<String, String> localVarCookieParams = new HashMap<String, String>();
+    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+    localVarQueryParams.addAll(apiClient.parameterToPair("keywordId", keywordId));
+    localVarQueryParams.addAll(apiClient.parameterToPair("year", year));
+    
+    localVarHeaderParams.putAll(additionalHeaders);
+
+    
+    
+    final String[] localVarAccepts = {
+      "application/json"
+    };
+    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+
+    final String[] localVarContentTypes = {
+      
+    };
+    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+
+    String[] localVarAuthNames = new String[] {  };
+
+    TypeReference<List<StatisticKeyword>> localVarReturnType = new TypeReference<List<StatisticKeyword>>() {};
+    return apiClient.invokeAPI(
+        localVarPath,
+        "GET",
+        localVarQueryParams,
+        localVarCollectionQueryParams,
+        localVarQueryStringJoiner.toString(),
+        localVarPostBody,
+        localVarHeaderParams,
+        localVarCookieParams,
+        localVarFormParams,
+        localVarAccept,
+        localVarContentType,
+        localVarAuthNames,
+        localVarReturnType
+    );
+  }
+
+  /**
+   * 
+   * 
+   * @param year Year for which the Statistic should be calculated. If left an overall Statistic will be calculated. (optional)
+   * @return List&lt;StatisticMonth&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public List<StatisticMonth> statMonth(Integer year) throws ApiException {
+    return this.statMonth(year, Collections.emptyMap());
+  }
+
+
+  /**
+   * 
+   * 
+   * @param year Year for which the Statistic should be calculated. If left an overall Statistic will be calculated. (optional)
+   * @param additionalHeaders additionalHeaders for this call
+   * @return List&lt;StatisticMonth&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public List<StatisticMonth> statMonth(Integer year, Map<String, String> additionalHeaders) throws ApiException {
+    Object localVarPostBody = null;
+    
+    // create path and map variables
+    String localVarPath = "/image/statMonth";
+
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    List<Pair> localVarQueryParams = new ArrayList<Pair>();
+    List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+    Map<String, String> localVarCookieParams = new HashMap<String, String>();
+    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+    localVarQueryParams.addAll(apiClient.parameterToPair("year", year));
+    
+    localVarHeaderParams.putAll(additionalHeaders);
+
+    
+    
+    final String[] localVarAccepts = {
+      "application/json"
+    };
+    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+
+    final String[] localVarContentTypes = {
+      
+    };
+    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+
+    String[] localVarAuthNames = new String[] {  };
+
+    TypeReference<List<StatisticMonth>> localVarReturnType = new TypeReference<List<StatisticMonth>>() {};
     return apiClient.invokeAPI(
         localVarPath,
         "GET",

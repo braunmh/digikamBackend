@@ -1,5 +1,6 @@
-package org.braun.digikam.backend.search;
+package org.braun.digikam.backend.search.sql;
 
+import org.braun.digikam.backend.search.ConditionParseException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;

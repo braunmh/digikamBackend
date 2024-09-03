@@ -1,4 +1,4 @@
-package org.braun.digikam.backend.search;
+package org.braun.digikam.backend.search.sql;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,34 +8,16 @@ import jakarta.persistence.Query;
  *
  * @author mbraun
  */
-public class CompoundCondition implements ICondition {
-    
+public class ExistsCondition implements ICondition {
+
+    private final boolean isNot;
+    private final String sql;
     private final List<ICondition> conditions;
-    private final Operator operator;
 
-    public CompoundCondition() {
-        this(Operator.or);
-    }
-    
-    public CompoundCondition(Operator operator) {
-        this.conditions = new ArrayList<>();
-        this.operator = operator;
-    }
-
-    public CompoundCondition(ICondition... conditions) {
-        this(Operator.or, conditions);
-    }
-    public CompoundCondition(Operator operator, ICondition... conditions) {
-        this(operator);
-        for (ICondition c : conditions) {
-            addCondition(c);
-        }
-    }
-
-    public final void addCondition(ICondition condition) {
-        if (!condition.isEmpty()) {
-            conditions.add(condition);
-        }
+    public ExistsCondition(boolean isNot, String sql) {
+        this.isNot = isNot;
+        this.sql = sql;
+        conditions = new ArrayList<>();
     }
     
     @Override
@@ -43,8 +25,10 @@ public class CompoundCondition implements ICondition {
         if (isEmpty()) {
             return "";
         }
-        
-        StringBuilder builder = new StringBuilder(" (");
+        StringBuilder builder = new StringBuilder();
+        builder.append((isNot) ? " NOT EXISTS (" : " EXISTS (");
+        builder.append(sql);
+        builder.append(" WHERE");
         boolean isFirst = true;
         for (ICondition condition : conditions) {
             if (condition.isEmpty()) {
@@ -53,13 +37,19 @@ public class CompoundCondition implements ICondition {
             if (isFirst) {
                 isFirst = false;
             } else {
-                builder.append(operator.getAsString());
+                builder.append(Operator.and.getAsString());
             }
             builder.append(" ").append(condition.getCondition());
         }
         return builder.append(")").toString();
     }
 
+    public final void addCondition(ICondition condition) {
+        if (!condition.isEmpty()) {
+            conditions.add(condition);
+        }
+    }
+    
     @Override
     public int setParameter(Query query, int position) {
         for (ICondition condition : conditions) {
@@ -70,10 +60,7 @@ public class CompoundCondition implements ICondition {
 
     @Override
     public boolean isEmpty() {
-        if (!conditions.stream().noneMatch(c -> !c.isEmpty())) {
-            return false;
-        }
-        return true;
+        return conditions.isEmpty();
     }
 
     @Override

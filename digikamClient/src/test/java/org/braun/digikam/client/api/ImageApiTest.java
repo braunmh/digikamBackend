@@ -25,6 +25,7 @@ import java.util.List;
 import org.braun.digikam.client.invoker.ApiClient;
 import org.braun.digikam.client.invoker.ApiException;
 import org.braun.digikam.client.model.Image;
+import org.braun.digikam.client.model.ImageUpdate;
 import org.braun.digikam.client.model.ImagesInner;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -37,11 +38,11 @@ public class ImageApiTest {
     private final ImageApi api = new ImageApi();
 
     /**
+     * @throws JsonProcessingException
      * @throws ApiException
      *          if the Api call fails
      */
-    boolean finished = true;
-    @Test
+    //@Test
     public void findImagesByImageAttributesTest() throws ApiException, JsonProcessingException {
 
         List<Integer> keywords = null;
@@ -59,8 +60,8 @@ public class ImageApiTest {
         Double exposureTimeTo = null;
         Double apertureFrom = null;
         Double apertureTo = null;
-        Double focalLengthFrom = null;
-        Double focalLengthTo = null;
+        Integer focalLengthFrom = null;
+        Integer focalLengthTo = null;
 
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
@@ -73,24 +74,56 @@ public class ImageApiTest {
         objectMapper.setDateFormat(ApiClient.buildDefaultDateFormat());
 
 //        if (finished) return;        
-        List<ImagesInner> response = api.findImagesByImageAttributes(keywords, creator, makeModel, lens, orientation, dateFrom, dateTo, ratingFrom, ratingTo, isoFrom, isoTo, exposureTimeFrom, exposureTimeTo, apertureFrom, apertureTo, focalLengthFrom, focalLengthTo);
-        System.out.println("Number of Images found: " + response.size());
+        List<ImagesInner> response = api.findImagesByImageAttributes(keywords, 
+                creator, 
+                makeModel, 
+                lens, 
+                orientation, 
+                dateFrom, dateTo, 
+                ratingFrom, 
+                ratingTo, 
+                isoFrom, 
+                isoTo, 
+                exposureTimeFrom, 
+                exposureTimeTo, 
+                apertureFrom, 
+                apertureTo, 
+                focalLengthFrom, 
+                focalLengthTo);
+        System.out.println(""
+                + "Number of Images found: " + response.size());
         for (ImagesInner im : response) {
             System.out.println(String.format("id=%s, date=%s", im.getImageId(), im.getCreationDate()));
         }
         // TODO: test validations
     }
     
-    //@Test
+    @Test
     public void getInformationAboutImageTest() throws ApiException {
-        Image image = api.getInformationAboutImage(112278);
-        System.out.println(image);
+        
+        int imageId = 112278;
+        
+//        Image image = api.getInformationAboutImage(imageId);
+//        System.out.println(image);
+        ImageUpdate iu = new ImageUpdate();
+        iu.setImageId(imageId);
+        iu.setRating(2);
+        iu.addKeywordsItem(28); // Natur
+        iu.addKeywordsItem(87); // /Land/Deutschland/Hessen/RB Darmstadt/Friedrichsdorf
+        iu.addKeywordsItem(364); // /Freizeit/Wanderung
+        iu.addKeywordsItem(564); // /Natur/Wald
+        iu.addKeywordsItem(1863); // /Natur/Pflanzen/Pilze
+        iu.setTitle("Fuchslöcherweg");
+        iu.setDescription("Auf der Suche nach Pilzen");
+        api.imageUpdate(iu);
+//        image = api.getInformationAboutImage(imageId);
+//        System.out.println(image);
     }
     /**
      * @throws ApiException
      *          if the Api call fails
      */
-    @Test
+    //@Test
     public void scalesImageTest() throws ApiException, IOException {
         Integer imageId = 112278;
         Integer width = 1080;

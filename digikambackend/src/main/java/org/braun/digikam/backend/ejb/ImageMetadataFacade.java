@@ -8,10 +8,10 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import org.apache.commons.lang3.StringUtils;
 import org.braun.digikam.backend.CameraFactory;
-import org.braun.digikam.backend.search.EmptyCondition;
-import org.braun.digikam.backend.search.Operator;
-import org.braun.digikam.backend.search.SimpleCondition;
-import org.braun.digikam.backend.search.Sql;
+import org.braun.digikam.backend.search.sql.EmptyCondition;
+import org.braun.digikam.backend.search.sql.Operator;
+import org.braun.digikam.backend.search.sql.SimpleCondition;
+import org.braun.digikam.backend.search.sql.Sql;
 
 /**
  *

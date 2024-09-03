@@ -83,6 +83,7 @@ public class HouseKeepingFacade {
             userTransaction.begin();
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             for (ThumbnailToGenerate thumbToGenerate : result) {
+                LOG.info(thumbToGenerate);
                 Thumbnail thumbnail = thumbToGenerate.getThumbnail();
                 File imageFile = new File(thumbToGenerate.getPath());
                 if (!imageFile.exists()) {
@@ -118,7 +119,7 @@ public class HouseKeepingFacade {
                 ImageSolr image = new ImageSolr(imageFacade.getMetadata(thumbToGenerate.getId()));
                 final UpdateResponse response = client.addBean(solrCollection, image);
                 generated++;
-                if (generated % 100 == 0) {
+                if (generated % 5 == 0) {
                     userTransaction.commit();
                     client.commit(solrCollection);
                     userTransaction.begin();

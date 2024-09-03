@@ -1,4 +1,4 @@
-package org.braun.digikam.backend.search;
+package org.braun.digikam.backend.search.sql;
 
 import java.io.Serializable;
 import java.util.List;

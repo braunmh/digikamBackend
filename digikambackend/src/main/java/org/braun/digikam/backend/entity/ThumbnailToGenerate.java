@@ -154,7 +154,7 @@ public class ThumbnailToGenerate implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("Entity ThumbnailToGenerate[%s, %s]", name, relativePath);
+        return String.format("Entity ThumbnailToGenerate[%s, %s, %s]",id, name, relativePath);
     }
 
     public Thumbnail getThumbnail() {

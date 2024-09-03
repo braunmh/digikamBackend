@@ -35,7 +35,7 @@ import java.util.StringJoiner;
   ImagesInner.JSON_PROPERTY_CREATION_DATE
 })
 @JsonTypeName("Images_inner")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-05-08T15:27:22.505089242+02:00[Europe/Berlin]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-12-21T15:48:50.606937714+01:00[Europe/Berlin]")
 public class ImagesInner {
   public static final String JSON_PROPERTY_IMAGE_ID = "imageId";
   private Integer imageId;

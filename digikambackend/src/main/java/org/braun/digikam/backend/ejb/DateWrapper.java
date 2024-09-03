@@ -1,5 +1,8 @@
 package org.braun.digikam.backend.ejb;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import org.braun.digikam.backend.BadRequestException;
@@ -98,6 +101,19 @@ public class DateWrapper {
         return temp.getTime();
     }
 
+    public String getUpperBoundZdtFormatted() {
+        return dateToZdtFormatted(getUpperBound());
+    }
+    
+    public String getLowerBoundZdtFormatted() {
+        return dateToZdtFormatted(getLowerBound());
+    }
+    
+    private String dateToZdtFormatted(Date date) {
+        ZonedDateTime zdt = ZonedDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
+        return zdt.format(DateTimeFormatter.ISO_INSTANT);
+    }
+    
     private boolean isEmpty(Integer i) {
         return i == null || i == 0;
     }

@@ -1,4 +1,4 @@
-package org.braun.digikam.backend.search;
+package org.braun.digikam.backend.search.sql;
 
 import java.util.ArrayList;
 import jakarta.persistence.Query;

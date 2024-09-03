@@ -1,4 +1,4 @@
-package org.braun.digikam.backend.search;
+package org.braun.digikam.backend.search.sql;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,40 +8,28 @@ import jakarta.persistence.Query;
  *
  * @author mbraun
  */
-public class ExistsCondition implements ICondition {
-
-    private final boolean isNot;
-    private final String sql;
+public class CompoundCondition implements ICondition {
+    
     private final List<ICondition> conditions;
+    private final Operator operator;
 
-    public ExistsCondition(boolean isNot, String sql) {
-        this.isNot = isNot;
-        this.sql = sql;
-        conditions = new ArrayList<>();
+    public CompoundCondition() {
+        this(Operator.or);
     }
     
-    @Override
-    public String getCondition() {
-        if (isEmpty()) {
-            return "";
+    public CompoundCondition(Operator operator) {
+        this.conditions = new ArrayList<>();
+        this.operator = operator;
+    }
+
+    public CompoundCondition(ICondition... conditions) {
+        this(Operator.or, conditions);
+    }
+    public CompoundCondition(Operator operator, ICondition... conditions) {
+        this(operator);
+        for (ICondition c : conditions) {
+            addCondition(c);
         }
-        StringBuilder builder = new StringBuilder();
-        builder.append((isNot) ? " NOT EXISTS (" : " EXISTS (");
-        builder.append(sql);
-        builder.append(" WHERE");
-        boolean isFirst = true;
-        for (ICondition condition : conditions) {
-            if (condition.isEmpty()) {
-                continue;
-            }
-            if (isFirst) {
-                isFirst = false;
-            } else {
-                builder.append(Operator.and.getAsString());
-            }
-            builder.append(" ").append(condition.getCondition());
-        }
-        return builder.append(")").toString();
     }
 
     public final void addCondition(ICondition condition) {
@@ -50,6 +38,28 @@ public class ExistsCondition implements ICondition {
         }
     }
     
+    @Override
+    public String getCondition() {
+        if (isEmpty()) {
+            return "";
+        }
+        
+        StringBuilder builder = new StringBuilder(" (");
+        boolean isFirst = true;
+        for (ICondition condition : conditions) {
+            if (condition.isEmpty()) {
+                continue;
+            }
+            if (isFirst) {
+                isFirst = false;
+            } else {
+                builder.append(operator.getAsString());
+            }
+            builder.append(" ").append(condition.getCondition());
+        }
+        return builder.append(")").toString();
+    }
+
     @Override
     public int setParameter(Query query, int position) {
         for (ICondition condition : conditions) {
@@ -60,7 +70,10 @@ public class ExistsCondition implements ICondition {
 
     @Override
     public boolean isEmpty() {
-        return conditions.isEmpty();
+        if (!conditions.stream().noneMatch(c -> !c.isEmpty())) {
+            return false;
+        }
+        return true;
     }
 
     @Override

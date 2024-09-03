@@ -18,9 +18,15 @@ import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.impl.Http2SolrClient;
+import org.apache.solr.client.solrj.response.QueryResponse;
 import org.braun.digikam.backend.NodeFactory;
 import org.braun.digikam.backend.api.NotFoundException;
 import org.braun.digikam.backend.graphics.ExifUtil;
@@ -28,17 +34,20 @@ import org.braun.digikam.backend.graphics.ImageUtil;
 import org.braun.digikam.backend.model.ImageInternal;
 import org.braun.digikam.backend.model.Keyword;
 import org.braun.digikam.backend.model.Media;
+import org.braun.digikam.backend.model.MediaSolr;
 import org.braun.digikam.backend.model.StatisticKeyword;
 import org.braun.digikam.backend.model.StatisticMonth;
 import org.braun.digikam.backend.search.ConditionParseException;
-import org.braun.digikam.backend.search.ExistsCondition;
-import org.braun.digikam.backend.search.InCondition;
-import org.braun.digikam.backend.search.JoinCondition;
-import org.braun.digikam.backend.search.Operator;
-import org.braun.digikam.backend.search.RangeCondition;
-import org.braun.digikam.backend.search.SimpleCondition;
-import org.braun.digikam.backend.search.SortOrder;
-import org.braun.digikam.backend.search.Sql;
+import org.braun.digikam.backend.search.solr.SolrQueryBuilder;
+import org.braun.digikam.backend.search.sql.ExistsCondition;
+import org.braun.digikam.backend.search.sql.InCondition;
+import org.braun.digikam.backend.search.sql.JoinCondition;
+import org.braun.digikam.backend.search.sql.Operator;
+import org.braun.digikam.backend.search.sql.RangeCondition;
+import org.braun.digikam.backend.search.sql.SimpleCondition;
+import org.braun.digikam.backend.search.sql.SortOrder;
+import org.braun.digikam.backend.search.sql.Sql;
+import org.braun.digikam.backend.util.Configuration;
 import org.braun.digikam.backend.util.Util;
 
 /**
@@ -125,8 +134,56 @@ public class ImageFacade {
         return image;
     }
     
+    public List<Media> findImagesByImageAttributesSolr(
+        List<Long> keywords, Boolean keywordsOr, String creator, String make, String model, String lens, String orientation,
+        String dateFrom, String dateTo, Integer ratingFrom, Integer ratingTo, Integer isoFrom, Integer isoTo,
+        Double exposureTimeFrom, Double exposureTimeTo, Double apertureFrom, Double apertureTo,
+        Integer focalLengthFrom, Integer focalLengthTo) throws ConditionParseException {
+        try (SolrClient client = getSolrClient()) {
+           final String solrCollection = Configuration.getInstance().getSolrCollection(); 
+            SolrQuery query = new SolrQueryBuilder()
+                .addField("id")
+                .addField("name")
+                .addField("creationDate")
+                .addField("type")
+                .addField("score")
+                .addQuery("creationDate", new DateWrapper("202407--"))
+//                .addQuery("creator", "Michael Braun")
+                .addQuery("keywordIds", keywords, keywordsOr)
+                .addQuery("creator", creator)
+                .addQuery("make", make)
+                .addQuery("model", model)
+                .addQuery("lens", lens)
+                .addQuery("creator", creator)
+                .addQuery("rating", ratingFrom, ratingTo)
+                .addQuery("iso", isoFrom, isoTo)
+                .addQuery("exposureTime", exposureTimeFrom, exposureTimeTo)
+                .addQuery("focalLength", focalLengthFrom, focalLengthTo)
+                .addQuery("aperture", apertureFrom, apertureTo)
+                .addQuery("creationDate", new DateWrapper(dateFrom), new DateWrapper(dateTo))
+                .build();
+            QueryResponse response = client.query(solrCollection, query);
+            LOG.info("Number of Documents found: " + response.getResults().getNumFound());
+            List<MediaSolr> result = response.getBeans(MediaSolr.class);
+            List<Media> res = new ArrayList<>(result.size());
+            for (MediaSolr is : result) {
+                Media media = is.toMedia();
+                res.add(media);
+            }
+            return res;
+        } catch (IOException | SolrServerException e) {
+            LOG.debug(e.getMessage(), e);
+            throw new ConditionParseException(e.getMessage());
+        }
+    }
+    
+    private SolrClient getSolrClient() {
+        final String solrUrl = Configuration.getInstance().getSolrClientUrl();
+        return new Http2SolrClient.Builder(solrUrl).build();
+    }
+    
     public List<Media> findImagesByImageAttributes(
-        List<Long> keywords, String creator, String make, String model, String lens, String orientation,
+        List<Long> keywords, Boolean keyordsOr, String creator, String make, String model, String lens, String orientation,
         String dateFrom, String dateTo, Integer ratingFrom, Integer ratingTo, Integer isoFrom, Integer isoTo,
         Double exposureTimeFrom, Double exposureTimeTo, Double apertureFrom, Double apertureTo,
         Integer focalLengthFrom, Integer focalLengthTo) throws ConditionParseException {
