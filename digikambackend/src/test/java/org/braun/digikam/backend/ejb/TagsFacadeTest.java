@@ -88,7 +88,7 @@ public class TagsFacadeTest {
         List<PhotilsTag> result = new ArrayList<>();
         NodeFactory.getInstance().refresh(tagsFacade.findAll());
         List<Node> nodes = NodeFactory.getInstance().list();
-        try (InputStream is = new FileInputStream("/home/mbraun/.local/share/photils/override_labels.json");
+        try (InputStream is = this.getClass().getClassLoader().getResourceAsStream("org/braun/digikam/backend/override_labels.json");
             JsonReader reader = Json.createReader(is);) {
             JsonObject jObject = reader.readObject();
             for (String key : jObject.keySet()) {

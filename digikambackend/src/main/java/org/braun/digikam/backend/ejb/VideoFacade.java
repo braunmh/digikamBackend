@@ -67,8 +67,7 @@ public class VideoFacade {
         Thumbnail thumbnail = getEntityManager().find(Thumbnail.class, id);
         if (thumbnail == null) {
             VideoFull videoFull = getVideoFull(id);
-            FFmpegFrameGrabber grabber = new FFmpegFrameGrabber(getImageFile(videoFull.getRoot(), videoFull.getRelativePath(), videoFull.getName()));
-            try {
+            try (FFmpegFrameGrabber grabber = new FFmpegFrameGrabber(getImageFile(videoFull.getRoot(), videoFull.getRelativePath(), videoFull.getName()));) {
                 grabber.start();
                 Java2DFrameConverter java2DConverter = new Java2DFrameConverter();
                 BufferedImage image = null;

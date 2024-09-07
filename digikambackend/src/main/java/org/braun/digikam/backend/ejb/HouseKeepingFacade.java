@@ -10,6 +10,10 @@ import jakarta.ejb.Stateless;
 import jakarta.ejb.TransactionManagement;
 import jakarta.ejb.TransactionManagementType;
 import jakarta.inject.Inject;
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonReader;
+import jakarta.json.JsonValue;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
@@ -25,7 +29,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.Future;
 import org.apache.logging.log4j.LogManager;
@@ -79,7 +85,13 @@ public class HouseKeepingFacade {
         List<Node> nodes = NodeFactory.getInstance().list();
         UserTransaction userTransaction = context.getUserTransaction();
         final String solrCollection = Configuration.getInstance().getSolrCollection();
-        try (SolrClient client = getSolrClient();) {
+        try (SolrClient client = getSolrClient();
+            JsonReader reader = Json.createReader(this.getClass().getClassLoader().getResourceAsStream("org/braun/digikam/backend/override_labels.json"));) {
+            Map<String, String> autoKeywords = new HashMap<>();
+            JsonObject jo = reader.readObject();
+            for (Map.Entry<String, JsonValue> entry : jo.entrySet()) {
+                autoKeywords.put(entry.getKey(), entry.getValue().toString());
+            }
             userTransaction.begin();
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             for (ThumbnailToGenerate thumbToGenerate : result) {
@@ -103,7 +115,7 @@ public class HouseKeepingFacade {
                 } catch (IOException e) {
                     LOG.info("Thumbnail-Generation for image {} skipped", thumbToGenerate.getId());
                 }
-                List<String> autoTags = getTags(imageFile);
+                List<String> autoTags = getTags(imageFile, autoKeywords);
                 if (!autoTags.isEmpty()) {
                     Images image = imagesFacade.find(thumbToGenerate.getId());
                     List<Tags> tags = new ArrayList<>();
@@ -174,7 +186,7 @@ public class HouseKeepingFacade {
         return t;
     }
 
-    private List<String> getTags(File image) throws IOException {
+    private List<String> getTags(File image, Map<String, String> translatedKeywords) throws IOException {
         ProcessBuilder pb = new ProcessBuilder(
             "/opt/photils-cli-0.4.1-linux-x86_64.AppImage",
             "--image",
@@ -182,10 +194,10 @@ public class HouseKeepingFacade {
             "--with_confidence"
         );
         Process process = pb.start();
-        return watch(process);
+        return watch(process, translatedKeywords);
     }
 
-    private synchronized List<String> watch(Process process) {
+    private synchronized List<String> watch(Process process, Map<String, String> translatedKeywords) {
         List<String> tags = new ArrayList<>();
         new Thread() {
             @Override
@@ -196,7 +208,7 @@ public class HouseKeepingFacade {
                         if (line.contains("Örtlichkeit")) {
                             continue;
                         }
-                        TagWeighted tw = TagWeighted.parse(line);
+                        TagWeighted tw = TagWeighted.parse(line, translatedKeywords);
                         if (tw.weight >= 0.99 && !"Örtlichkeit".equals(tw.name)) {
                             tags.add("auto|" + tw.name);
                         }
@@ -219,10 +231,10 @@ public class HouseKeepingFacade {
         String name;
         double weight;
 
-        public static TagWeighted parse(String line) {
+        public static TagWeighted parse(String line, Map<String, String> translatedKeywords) {
             String[] parts = line.split(":");
             TagWeighted tw = new TagWeighted();
-            tw.name = parts[0];
+            tw.name = translatedKeywords.getOrDefault(parts[0], parts[0]);
             if (parts.length >= 1) {
                 try {
                     tw.weight = Double.parseDouble(parts[1]);

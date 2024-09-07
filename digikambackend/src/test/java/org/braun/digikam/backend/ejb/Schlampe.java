@@ -38,7 +38,7 @@ public class Schlampe {
         System.out.println(signature);
     }
 
-    @Test
+//    @Test
     public void getPath() {
         List<Long> ids = Arrays.asList(10112l, 10204l, 10261l, 10652l);
         List<String> values = ids.stream().map(i -> String.valueOf(i)).toList();
@@ -66,15 +66,15 @@ public class Schlampe {
         Duration duration = Duration.ofMillis(4882000l);
         System.out.println(duration);
     }
-//    @Test
+    @Test
     public void readKeywords() {
         try {
-            JsonReader reader = Json.createReader(new FileReader("/home/mbraun/.local/share/photils/override_labels.json"));
+            JsonReader reader = Json.createReader(this.getClass().getClassLoader().getResourceAsStream("org/braun/digikam/backend/override_labels.json"));
             JsonObject jo = reader.readObject();
             for (Map.Entry<String, JsonValue> entry : jo.entrySet()) {
                 System.out.println(entry.getKey() + ": " + entry.getValue().toString());
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace(System.out);
         }
     }
