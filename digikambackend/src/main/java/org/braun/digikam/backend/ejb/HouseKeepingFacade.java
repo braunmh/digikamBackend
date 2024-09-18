@@ -81,6 +81,9 @@ public class HouseKeepingFacade {
     public Future<Integer> generateTumbnailsTagImages() {
         long startTst = System.currentTimeMillis();
         List<ThumbnailToGenerate> result = findImages();
+        if (result.isEmpty()) {
+            return new AsyncResult<>(0);
+        }
         int generated = 0;
         List<Node> nodes = NodeFactory.getInstance().list();
         UserTransaction userTransaction = context.getUserTransaction();
@@ -145,6 +148,7 @@ public class HouseKeepingFacade {
         } catch (Exception e) {
             LOG.error("Thumbnail-Generation and tagging failed", e);
         }
+        NodeFactory.getInstance().refresh(tagsFacade.findAll());
         LOG.info("Thumbnail-Generation and tagging {} Images took {} seconds",
             generated, (System.currentTimeMillis() - startTst) / 1000);
         StatusFactory.getInstance().aquireTumbnailGenerationStatusDone();
@@ -173,15 +177,17 @@ public class HouseKeepingFacade {
     }
 
     private Tags lookupTag(List<Node> nodes, String tagTree) {
-        Optional<Node> tag = nodes.stream().filter(n -> tagTree.equals(n.getFullName())).findFirst();
+        String[] tagsHierachy = tagTree.split("\\|");
+        String fullName = getFullName(tagsHierachy);
+        Optional<Node> tag = nodes.stream().filter(n -> fullName.equals(n.getFullName())).findFirst();
         if (tag.isPresent()) {
             Tags tags = new Tags();
             tags.setId(tag.get().getId());
             return tags;
         }
-        Tags t = tagsFacade.findAndInsertTagByTree(tagTree.split("\\|"));
+        Tags t = tagsFacade.findAndInsertTagByTree(tagsHierachy);
         Node n = new Node(t.getId(), t.getName());
-        n.setFullName(tagTree);
+        n.setFullName(fullName);
         nodes.add(n);
         return t;
     }
@@ -226,6 +232,19 @@ public class HouseKeepingFacade {
         return tags;
     }
 
+    private String getFullName(String... names) {
+        if (names == null || names.length == 0) {
+            return "";
+        }
+        StringBuilder name = new StringBuilder();
+        for (String n : names) {
+            name.append("/").append(n);
+        }
+        return name.toString();
+    }
+    
+
+    
     public static class TagWeighted {
 
         String name;
