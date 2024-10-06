@@ -42,6 +42,9 @@ public class ImageUtil {
 
     public static void getImage(File imageFile, OutputStream outputStream, int widthNew, int heightNew, Orientation orientation) throws IOException {
         BufferedImage image = readImage(imageFile, orientation);
+        if (image == null) {
+            return;
+        }
 
         int width = image.getWidth();
         int height = image.getHeight();

@@ -317,4 +317,25 @@ public class ImageFull implements Serializable {
         this.longitudeNumber = longitudeNumber;
     }
     
+    public String getRootNormed() {
+        String value;
+        int begin = root.indexOf('?');
+        if (begin > 0) {
+            int end = root.indexOf('&', begin);
+            if (end > 0) {
+                value = root.substring(begin + 6, end);
+            } else {
+                value = root.substring(begin);
+            }
+        } else {
+            int end = root.indexOf('&', begin);
+            if (end > 0) {
+                value = root.substring(0, end);
+            } else {
+                value = root;
+            }
+        }
+        return value;
+    }
+
 }

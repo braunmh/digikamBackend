@@ -19,17 +19,26 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashSet;
+import java.util.Set;
 import javax.imageio.ImageIO;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.impl.Http2SolrClient;
+import org.apache.solr.client.solrj.response.QueryResponse;
 import org.braun.digikam.backend.NodeFactory;
 import org.braun.digikam.backend.api.NotFoundException;
 import org.braun.digikam.backend.graphics.ExifUtil;
 import org.braun.digikam.backend.model.Keyword;
 import org.braun.digikam.backend.model.Media;
+import org.braun.digikam.backend.model.MediaSolr;
 import org.braun.digikam.backend.model.VideoInternal;
 import org.braun.digikam.backend.search.ConditionParseException;
+import org.braun.digikam.backend.search.solr.SolrQueryBuilder;
 import org.braun.digikam.backend.search.sql.ExistsCondition;
 import org.braun.digikam.backend.search.sql.InCondition;
 import org.braun.digikam.backend.search.sql.JoinCondition;
@@ -37,6 +46,7 @@ import org.braun.digikam.backend.search.sql.Operator;
 import org.braun.digikam.backend.search.sql.RangeCondition;
 import org.braun.digikam.backend.search.sql.SimpleCondition;
 import org.braun.digikam.backend.search.sql.Sql;
+import org.braun.digikam.backend.util.Configuration;
 import org.braun.digikam.backend.util.Util;
 import org.bytedeco.javacv.FFmpegFrameGrabber;
 import org.bytedeco.javacv.Java2DFrameConverter;
@@ -71,8 +81,12 @@ public class VideoFacade {
                 grabber.start();
                 Java2DFrameConverter java2DConverter = new Java2DFrameConverter();
                 BufferedImage image = null;
+                int trys = 0;
                 while (image == null) {
                     image = java2DConverter.getBufferedImage(grabber.grabImage());
+                    if (trys++ == 50) {
+                        throw new NotFoundException(404, "Can not extracted Image in reasonable time.");
+                    }
                 }
 
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -88,12 +102,62 @@ public class VideoFacade {
                 return baos.toByteArray();
             } catch(IOException e) {
                 throw new NotFoundException(404, "No Thumbnail for Video with id=" + id);
+            } catch (Exception e) {
+                LOG.error("Generating Thumbnail for video id = {}. Msg: {}", id, e.getMessage());
+                throw new NotFoundException(404, "No Thumbnail for Video with id=" + id);
             }
         } else {
             return thumbnail.getData();
         }
     }
     
+    public List<Media> findByVideosAttributesSolr(
+            List<Long> keywords, Boolean keywordsOr, String creator, String orientation,
+        String dateFrom, String dateTo, Integer ratingFrom, Integer ratingTo) throws ConditionParseException {
+        try (SolrClient client = getSolrClient()) {
+            final String solrCollection = Configuration.getInstance().getSolrCollection();
+            SolrQueryBuilder builder = new SolrQueryBuilder()
+                    .addField("id")
+                    .addField("name")
+                    .addField("creationDate")
+                    .addField("type")
+                    .addField("score")
+                    .addQuery("type", 2) // for images
+                    .addQuery("creator", creator)
+                    .addQuery("creationDate", new DateWrapper(dateFrom), new DateWrapper(dateTo));
+            if (keywordsOr != null && keywordsOr) {
+                Set<Long> kr = new HashSet<>();
+                for (Long k : keywords) {
+                    kr.addAll(NodeFactory.getInstance().getChildrensRec(k));
+                }
+                builder.addQuery("keywordIds", kr);
+            } else {
+                for (Long k : keywords) {
+                    List<Long> kr = (NodeFactory.getInstance().getChildrensRec(k));
+                    builder.addQuery("keywordIds", kr);
+                }
+            }
+            SolrQuery query = builder.build();
+            QueryResponse response = client.query(solrCollection, query);
+            LOG.info("Number of Documents found: " + response.getResults().getNumFound());
+            List<MediaSolr> result = response.getBeans(MediaSolr.class);
+            List<Media> res = new ArrayList<>(result.size());
+            for (MediaSolr is : result) {
+                Media media = is.toMedia();
+                res.add(media);
+            }
+            return res;
+        } catch (IOException | SolrServerException e) {
+            LOG.debug(e.getMessage(), e);
+            throw new ConditionParseException(e.getMessage());
+        }
+    }
+
+    private SolrClient getSolrClient() {
+        final String solrUrl = Configuration.getInstance().getSolrClientUrl();
+        return new Http2SolrClient.Builder(solrUrl).build();
+    }
+
     public List<Media> findVideosByAttributes(
         List<Long> keywords, String creator, String orientation,
         String dateFrom, String dateTo, Integer ratingFrom, Integer ratingTo) throws ConditionParseException {
@@ -148,7 +212,9 @@ public class VideoFacade {
             result.add(new Media().id(i.getId())
                 .creationDate(Util.convert(i.getCreationDate()))
                 .image(false)
-                .name(i.getName()));
+                .name(i.getName())
+                .score(1.0)
+            );
         }
         return result;
     }
@@ -232,7 +298,7 @@ public class VideoFacade {
 
     private List<Keyword> getKeywords(Long imageId) {
         List<Keyword> result = new ArrayList<>();
-        for (Long id : getKeyordIds(imageId)) {
+        for (Integer id : getKeyordIds(imageId)) {
             Keyword k = NodeFactory.getInstance().getKeywordById(id);
             if (k != null) {
                 result.add(k);
@@ -241,7 +307,7 @@ public class VideoFacade {
         return result;
     }
 
-    private List<Long> getKeyordIds(Long imageId) {
+    private List<Integer> getKeyordIds(Long imageId) {
         Query query = getEntityManager().createNativeQuery("select tagId from ImageTags where imageid = ?");
         query.setParameter(1, imageId);
         return query.getResultList();

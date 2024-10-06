@@ -18,7 +18,8 @@ import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -59,16 +60,16 @@ public class ImageFacade {
 
     private static final Logger LOG = LogManager.getLogger();
     private static final String FIND_BY_ATTRIBUTES
-        = "SELECT i.id, i.name, i.root, i.relativePath, i.fileSize, i.rating, i.creationDate, i.orientation, i.width, i.height, i.make, i.model, "
-        + "i.lens, i.aperture, i.focalLength, i.focalLength35, i.exposureTime, i.sensitivity, i.creator, i.latitudeNumber, i.longitudeNumber "
-        + "FROM ImageFull i";
+            = "SELECT i.id, i.name, i.root, i.relativePath, i.fileSize, i.rating, i.creationDate, i.orientation, i.width, i.height, i.make, i.model, "
+            + "i.lens, i.aperture, i.focalLength, i.focalLength35, i.exposureTime, i.sensitivity, i.creator, i.latitudeNumber, i.longitudeNumber "
+            + "FROM ImageFull i";
 
     @PersistenceContext(unitName = "digikam")
     private EntityManager em;
 
     public InputStream getImage(long id) throws NotFoundException {
         ImageFull image = getImageFull(id);
-        FileInputStream imageStream = getImageFile(image.getRoot(), image.getRelativePath(), image.getName());
+        FileInputStream imageStream = getImageFile(image.getRootNormed(), image.getRelativePath(), image.getName());
         return imageStream;
     }
 
@@ -93,28 +94,28 @@ public class ImageFacade {
 
     public ImageInternal getMetadata(ImageFull res) {
         ImageInternal image = new ImageInternal()
-            .id(res.getId())
-            .name(res.getName())
-            .root(normAlbumPath(res.getRoot()))
-            .relativePath(res.getRelativePath())
-            .aperture(res.getAperture())
-            .creationDate(Util.convert(res.getCreationDate()))
-            .creator(res.getCreator())
-            .exposureTime(res.getExposureTime())
-            .focalLength35(res.getFocalLength35())
-            .focalLength(res.getFocalLength())
-            .height(res.getHeight())
-            .width(res.getWidth())
-            .iso(res.getSensitivity())
-            .make(res.getMake())
-            .model(res.getModel())
-            .lens(res.getLens())
-            .latitude(res.getLatitudeNumber())
-            .longitude(res.getLongitudeNumber())
-            .exposureTime(res.getExposureTime())
-            .rating(res.getRating())
-            .keywords(getKeywords(res.getId()))
-            .orientationTechnical(res.getOrientation());
+                .id(res.getId())
+                .name(res.getName())
+                .root(normAlbumPath(res.getRootNormed()))
+                .relativePath(res.getRelativePath())
+                .aperture(res.getAperture())
+                .creationDate(Util.convert(res.getCreationDate()))
+                .creator(res.getCreator())
+                .exposureTime(res.getExposureTime())
+                .focalLength35(res.getFocalLength35())
+                .focalLength(res.getFocalLength())
+                .height(res.getHeight())
+                .width(res.getWidth())
+                .iso(res.getSensitivity())
+                .make(res.getMake())
+                .model(res.getModel())
+                .lens(res.getLens())
+                .latitude(res.getLatitudeNumber())
+                .longitude(res.getLongitudeNumber())
+                .exposureTime(res.getExposureTime())
+                .rating(res.getRating())
+                .keywords(getKeywords(res.getId()))
+                .orientationTechnical(res.getOrientation());
 
         TypedQuery<ImageComments> qi = getEntityManager().createNamedQuery("ImageComments.findByImageId", ImageComments.class);
         qi.setParameter("imageId", res.getId());
@@ -133,35 +134,44 @@ public class ImageFacade {
         }
         return image;
     }
-    
+
     public List<Media> findImagesByImageAttributesSolr(
-        List<Long> keywords, Boolean keywordsOr, String creator, String make, String model, String lens, String orientation,
-        String dateFrom, String dateTo, Integer ratingFrom, Integer ratingTo, Integer isoFrom, Integer isoTo,
-        Double exposureTimeFrom, Double exposureTimeTo, Double apertureFrom, Double apertureTo,
-        Integer focalLengthFrom, Integer focalLengthTo) throws ConditionParseException {
+            List<Long> keywords, Boolean keywordsOr, String creator, String make, String model, String lens, String orientation,
+            String dateFrom, String dateTo, Integer ratingFrom, Integer ratingTo, Integer isoFrom, Integer isoTo,
+            Double exposureTimeFrom, Double exposureTimeTo, Double apertureFrom, Double apertureTo,
+            Integer focalLengthFrom, Integer focalLengthTo) throws ConditionParseException {
         try (SolrClient client = getSolrClient()) {
-           final String solrCollection = Configuration.getInstance().getSolrCollection(); 
-            SolrQuery query = new SolrQueryBuilder()
-                .addField("id")
-                .addField("name")
-                .addField("creationDate")
-                .addField("type")
-                .addField("score")
-                .addQuery("creationDate", new DateWrapper("202407--"))
-//                .addQuery("creator", "Michael Braun")
-                .addQuery("keywordIds", keywords, keywordsOr)
-                .addQuery("creator", creator)
-                .addQuery("make", make)
-                .addQuery("model", model)
-                .addQuery("lens", lens)
-                .addQuery("creator", creator)
-                .addQuery("rating", ratingFrom, ratingTo)
-                .addQuery("iso", isoFrom, isoTo)
-                .addQuery("exposureTime", exposureTimeFrom, exposureTimeTo)
-                .addQuery("focalLength", focalLengthFrom, focalLengthTo)
-                .addQuery("aperture", apertureFrom, apertureTo)
-                .addQuery("creationDate", new DateWrapper(dateFrom), new DateWrapper(dateTo))
-                .build();
+            final String solrCollection = Configuration.getInstance().getSolrCollection();
+            SolrQueryBuilder builder = new SolrQueryBuilder()
+                    .addField("id")
+                    .addField("name")
+                    .addField("creationDate")
+                    .addField("type")
+                    .addField("score")
+                    .addQuery("type", 1) // for images
+                    .addQuery("creator", creator)
+                    .addQuery("make", make)
+                    .addQuery("model", model)
+                    .addQuery("lens", lens)
+                    .addQuery("rating", ratingFrom, ratingTo)
+                    .addQuery("iso", isoFrom, isoTo)
+                    .addQuery("exposureTime", exposureTimeFrom, exposureTimeTo)
+                    .addQuery("focalLength", focalLengthFrom, focalLengthTo)
+                    .addQuery("aperture", apertureFrom, apertureTo)
+                    .addQuery("creationDate", new DateWrapper(dateFrom), new DateWrapper(dateTo));
+            if (keywordsOr != null && keywordsOr) {
+                Set<Long> kr = new HashSet<>();
+                for (Long k : keywords) {
+                    kr.addAll(NodeFactory.getInstance().getChildrensRec(k));
+                }
+                builder.addQuery("keywordIds", kr);
+            } else {
+                for (Long k : keywords) {
+                    List<Long> kr = (NodeFactory.getInstance().getChildrensRec(k));
+                    builder.addQuery("keywordIds", kr);
+                }
+            }
+            SolrQuery query = builder.build();
             QueryResponse response = client.query(solrCollection, query);
             LOG.info("Number of Documents found: " + response.getResults().getNumFound());
             List<MediaSolr> result = response.getBeans(MediaSolr.class);
@@ -176,17 +186,17 @@ public class ImageFacade {
             throw new ConditionParseException(e.getMessage());
         }
     }
-    
+
     private SolrClient getSolrClient() {
         final String solrUrl = Configuration.getInstance().getSolrClientUrl();
         return new Http2SolrClient.Builder(solrUrl).build();
     }
-    
+
     public List<Media> findImagesByImageAttributes(
-        List<Long> keywords, Boolean keyordsOr, String creator, String make, String model, String lens, String orientation,
-        String dateFrom, String dateTo, Integer ratingFrom, Integer ratingTo, Integer isoFrom, Integer isoTo,
-        Double exposureTimeFrom, Double exposureTimeTo, Double apertureFrom, Double apertureTo,
-        Integer focalLengthFrom, Integer focalLengthTo) throws ConditionParseException {
+            List<Long> keywords, Boolean keyordsOr, String creator, String make, String model, String lens, String orientation,
+            String dateFrom, String dateTo, Integer ratingFrom, Integer ratingTo, Integer isoFrom, Integer isoTo,
+            Double exposureTimeFrom, Double exposureTimeTo, Double apertureFrom, Double apertureTo,
+            Integer focalLengthFrom, Integer focalLengthTo) throws ConditionParseException {
         Sql sql = new Sql(FIND_BY_ATTRIBUTES);
         addCondition(sql, "i.creator", creator);
         addCondition(sql, "i.make", make);
@@ -244,9 +254,10 @@ public class ImageFacade {
         List<Media> result = new ArrayList<>();
         for (ImageFull i : res) {
             result.add(new Media().id(i.getId())
-                .creationDate(Util.convert(i.getCreationDate()))
-                .image(true)
-                .name(i.getName())
+                    .creationDate(Util.convert(i.getCreationDate()))
+                    .image(true)
+                    .name(i.getName())
+                    .score(1.0)
             );
         }
         return result;
@@ -308,9 +319,9 @@ public class ImageFacade {
         List<StatisticMonth> result = new ArrayList<>();
         for (StatistikMonthEntity e : temp) {
             result.add(new StatisticMonth()
-                .month(e.getKey().getMonth())
-                .year(e.getKey().getYear())
-                .cnt(e.getCount())
+                    .month(e.getKey().getMonth())
+                    .year(e.getKey().getYear())
+                    .cnt(e.getCount())
             );
         }
         return result;
@@ -329,7 +340,7 @@ public class ImageFacade {
             throw new NotFoundException(404, "File +" + path + "/" + name + " existiert nicht");
         }
     }
-    
+
     private void addCondition(Sql sql, String columnName, String value) {
         if (StringUtils.isNotEmpty(value)) {
             sql.addCondition(new SimpleCondition(columnName, value));

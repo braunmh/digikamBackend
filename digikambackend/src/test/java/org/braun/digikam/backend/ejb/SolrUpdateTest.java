@@ -114,7 +114,7 @@ public class SolrUpdateTest {
                 .addField("score")
                 .addQuery("creationDate", new DateWrapper("202407--"))
 //                .addQuery("creator", "Michael Braun")
-                .addQuery("keywordIds", Arrays.asList(8724L), false)
+                .addQuery("keywordIds", Arrays.asList(8724L))
                 .build();
             QueryResponse response = client.query("digikam", query);
             System.out.println("Number of Documents found: " + response.getResults().getNumFound());

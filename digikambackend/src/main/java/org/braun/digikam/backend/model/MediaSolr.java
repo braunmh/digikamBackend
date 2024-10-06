@@ -29,6 +29,7 @@ public class MediaSolr extends AbstractSolr {
             .id(Long.valueOf(id))
             .image(type == 1)
             .creationDate(dateToLocalDateTime(creationDate))
+            .name(name)
             .score(score);
     }
     

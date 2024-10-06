@@ -1,21 +1,19 @@
 package org.braun.digikam.backend.ejb;
 
 import jakarta.json.Json;
-import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonReader;
 import jakarta.json.JsonValue;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.Base64;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
 import org.bytedeco.javacv.*;
 import org.junit.jupiter.api.Test;
@@ -41,7 +39,7 @@ public class Schlampe {
 //    @Test
     public void getPath() {
         List<Long> ids = Arrays.asList(10112l, 10204l, 10261l, 10652l);
-        List<String> values = ids.stream().map(i -> String.valueOf(i)).toList();
+        List<String> values = ids.stream().map(i -> String.valueOf(i)).collect(Collectors.toList());
         System.out.println(String.join(" ", values));
         String root = "/data/pictures&fileuuid=73f31a67-17ee-48da-85c5-0fef54129c50";
         String name = "20240623111239sonyilce-7rm50037.jpg";
@@ -61,12 +59,21 @@ public class Schlampe {
         System.out.println("root: " + root + ", relativePath: " + relativePath + ", name: " + name);
     }
     
-    //@Test
-    public void testDuration() {
-        Duration duration = Duration.ofMillis(4882000l);
-        System.out.println(duration);
-    }
     @Test
+    public void testAblumRoots() {
+        String root = "volumeid:?path=/data/pictures&fileuuid=73f31a67-17ee-48da-85c5-0fef54129c50";
+        int begin = root.indexOf('?');
+        if (begin > 0) {
+            int end = root.indexOf('&', begin);
+            if (end > 0) {
+                root = root.substring(begin, end);
+            } else {
+                root = root.substring(begin);
+            }
+        }
+        System.out.println(root);
+    }
+    //@Test
     public void readKeywords() {
         try {
             JsonReader reader = Json.createReader(this.getClass().getClassLoader().getResourceAsStream("org/braun/digikam/backend/override_labels.json"));

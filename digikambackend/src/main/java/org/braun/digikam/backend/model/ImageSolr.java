@@ -107,11 +107,32 @@ public class ImageSolr extends AbstractSolr {
         make = image.getMake();
         model = image.getModel();
         orientation = (image.getOrientationTechnical() == null) ? 0 : image.getOrientationTechnical().getAngle();
-        path = getPathFromImage(image);
+        path = getPathFromImage(image.getRoot(), image.getRelativePath(), image.getName());
         rating = image.getRating();
         title = image.getTitle();
         type = 1;
         width = image.getWidth();
+    }
+
+    public ImageSolr(VideoInternal video) {
+        creationDate = (video.getCreationDate() == null) 
+            ? null
+            : localDateTimeToDate(video.getCreationDate());
+        creator = video.getCreator();
+        description = video.getDescription();
+        height = video.getHeight();
+        id = String.valueOf(video.getId());
+        keywordIds = (video.getKeywords() == null || video.getKeywords().isEmpty()) 
+            ? keywordIds = Collections.emptyList()
+            : video.getKeywords().stream().map(Keyword::getId).collect(Collectors.toList());
+        location = getGeoLocation(video.getLatitude(), video.getLongitude());
+        name = video.getName();
+        orientation = (video.getOrientationTechnical() == null) ? 0 : video.getOrientationTechnical().getAngle();
+        path = getPathFromImage(video.getRoot(), video.getRelativePath(), video.getName());
+        rating = video.getRating();
+        title = video.getTitle();
+        type = 2;
+        width = video.getWidth();
     }
 
     public ImageInternal getImageInternal() {
@@ -159,14 +180,14 @@ public class ImageSolr extends AbstractSolr {
         return image;
     }
     
-    private String getPathFromImage(ImageInternal image) {
-        int endRoot = image.getRoot().indexOf('&');
+    private String getPathFromImage(String root, String relativePath, String name) {
+        int endRoot = root.indexOf('&');
         StringBuilder temp = new StringBuilder();
         String relPath = (endRoot > 0) 
-            ? image.getRoot().substring(0, endRoot)
-            : image.getRoot();
+            ? root.substring(0, endRoot)
+            : root;
         temp.append(relPath);
-        temp.append(image.getRelativePath()).append('/').append(image.getName());
+        temp.append(relativePath).append('/').append(name);
         return temp.toString();
     }
     

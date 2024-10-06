@@ -2,6 +2,8 @@ package org.braun.digikam.backend.search.solr;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.braun.digikam.backend.ejb.DateWrapper;
@@ -50,7 +52,7 @@ public class SolrQueryBuilder {
         if (to == null) {
             return addQuery(fieldName, from);
         }
-        if (from == to) {
+        if (Objects.equals(from, to)) {
             return addQuery(fieldName, from);
         }
         addOperator();
@@ -72,7 +74,7 @@ public class SolrQueryBuilder {
         if (to == null) {
             return addQuery(fieldName, from);
         }
-        if (from == to) {
+        if (Objects.equals(from, to)) {
             return addQuery(fieldName, from);
         }
         addOperator();
@@ -138,22 +140,16 @@ public class SolrQueryBuilder {
         return this;
     }
     
-    public SolrQueryBuilder addQuery(String fieldName, Collection<Long> ids, boolean operatorOr) {
+    public SolrQueryBuilder addQuery(String fieldName, Collection<Long> ids) {
         if (ids == null || ids.isEmpty()) {
             return this;
         }
-        List<String> values = ids.stream().map(i -> String.valueOf(i)).toList();
-        if (operatorOr) {
-            addOperator();
-            query.append(fieldName).append(":")
-                .append("(")
-                .append(String.join(" ", values))
-                .append(")");
-        } else {
-            addOperator();
-            query.append(fieldName).append(":")
-                .append(String.join(" AND " + fieldName + ":", values));
-        }
+        List<String> values = ids.stream().map(i -> String.valueOf(i)).collect(Collectors.toList());
+        addOperator();
+        query.append(fieldName).append(":")
+            .append("(")
+            .append(String.join(" ", values))
+            .append(")");
         return this;
     }
     

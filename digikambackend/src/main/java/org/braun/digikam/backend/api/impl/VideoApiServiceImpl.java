@@ -30,9 +30,8 @@ public class VideoApiServiceImpl extends VideoApiService {
 
         VideoFacade facade = getVideoFacade();
         try {
-            List<Media> result = facade.findVideosByAttributes(
-                keywords, creator, orientation,
-                dateFrom, dateTo, ratingFrom, ratingTo);
+            List<Media> result = facade.findByVideosAttributesSolr(
+                    keywords, Boolean.FALSE, creator, orientation, dateFrom, dateTo, ratingFrom, ratingTo);
             return Response.ok().entity(result).build();
         } catch (ConditionParseException e) {
             throw new NotFoundException(404, e.getMessage());

@@ -42,6 +42,7 @@ import org.apache.solr.client.solrj.response.UpdateResponse;
 import org.braun.digikam.backend.Node;
 import org.braun.digikam.backend.NodeFactory;
 import org.braun.digikam.backend.StatusFactory;
+import org.braun.digikam.backend.api.NotFoundException;
 import org.braun.digikam.backend.entity.Thumbnail;
 import org.braun.digikam.backend.entity.ThumbnailToGenerate;
 import org.braun.digikam.backend.graphics.ImageUtil;
@@ -66,6 +67,8 @@ public class HouseKeepingFacade {
     private EJBContext context;
 
     @Inject
+    private VideoFacade videoFacade;
+    @Inject
     private ImageFacade imageFacade;
 
     @Inject
@@ -80,16 +83,17 @@ public class HouseKeepingFacade {
     @Asynchronous
     public Future<Integer> generateTumbnailsTagImages() {
         long startTst = System.currentTimeMillis();
-        List<ThumbnailToGenerate> result = findImages();
-        if (result.isEmpty()) {
+        List<ThumbnailToGenerate> resultImages = findImages();
+        List<ThumbnailToGenerate> resultVideos = findVideos();
+        
+        if (resultImages.isEmpty() && resultVideos.isEmpty()) {
             return new AsyncResult<>(0);
         }
         int generated = 0;
         List<Node> nodes = NodeFactory.getInstance().list();
         UserTransaction userTransaction = context.getUserTransaction();
         final String solrCollection = Configuration.getInstance().getSolrCollection();
-        try (SolrClient client = getSolrClient();
-            JsonReader reader = Json.createReader(this.getClass().getClassLoader().getResourceAsStream("org/braun/digikam/backend/override_labels.json"));) {
+        try (SolrClient client = getSolrClient(); JsonReader reader = Json.createReader(this.getClass().getClassLoader().getResourceAsStream("org/braun/digikam/backend/override_labels.json"));) {
             Map<String, String> autoKeywords = new HashMap<>();
             JsonObject jo = reader.readObject();
             for (Map.Entry<String, JsonValue> entry : jo.entrySet()) {
@@ -97,7 +101,7 @@ public class HouseKeepingFacade {
             }
             userTransaction.begin();
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            for (ThumbnailToGenerate thumbToGenerate : result) {
+            for (ThumbnailToGenerate thumbToGenerate : resultImages) {
                 LOG.info(thumbToGenerate);
                 Thumbnail thumbnail = thumbToGenerate.getThumbnail();
                 File imageFile = new File(thumbToGenerate.getPath());
@@ -140,17 +144,34 @@ public class HouseKeepingFacade {
                     userTransaction.begin();
                 }
             }
+
+            for (ThumbnailToGenerate thumb : resultVideos) {
+                LOG.info("Thumbnail-Generation for video {} started", thumb.getPath());
+                try {
+                    videoFacade.getThumbnail(thumb.getId()); // generates Thumbnail if not exist
+                } catch (NotFoundException e) {
+                    LOG.info("Thumbnail-Generation for video {} skipped", thumb.getPath());
+                }
+                ImageSolr video = new ImageSolr(videoFacade.getMetadata(thumb.getId()));
+                final UpdateResponse response = client.addBean(solrCollection, video);
+                generated++;
+                if (generated % 5 == 0) {
+                    userTransaction.commit();
+                    client.commit(solrCollection);
+                    userTransaction.begin();
+                }
+            }
             userTransaction.commit();
             client.commit(solrCollection);
         } catch (NotSupportedException | SystemException | RollbackException
-            | HeuristicMixedException | HeuristicRollbackException | IOException e) {
+                | HeuristicMixedException | HeuristicRollbackException | IOException e) {
             LOG.error("Thumbnail-Generation and tagging failed", e);
         } catch (Exception e) {
             LOG.error("Thumbnail-Generation and tagging failed", e);
         }
         NodeFactory.getInstance().refresh(tagsFacade.findAll());
         LOG.info("Thumbnail-Generation and tagging {} Images took {} seconds",
-            generated, (System.currentTimeMillis() - startTst) / 1000);
+                generated, (System.currentTimeMillis() - startTst) / 1000);
         StatusFactory.getInstance().aquireTumbnailGenerationStatusDone();
         return new AsyncResult<>(generated);
     }
@@ -159,15 +180,25 @@ public class HouseKeepingFacade {
         final String solrUrl = Configuration.getInstance().getSolrClientUrl();
         return new Http2SolrClient.Builder(solrUrl).build();
     }
-    
+
     private List<ThumbnailToGenerate> findImages() {
         String sqlStatement = "SELECT i.id, substr(ar.identifier, 16) root, a.relativePath, i.name,\n"
-            + "i.modificationDate, ii.orientation, null as data, ii.width, ii.height, t.imageId\n"
-            + "FROM AlbumRoots ar inner join Albums a on (ar.id = a.albumRoot) inner join Images i on a.id = i.album\n"
-            + "inner join ImageInformation ii on i.id = ii.imageId inner join ImageMetadata im on ii.imageid = im.imageid\n"
-            + "left join Thumbnail t on i.id = t.imageId\n"
-            + "where (t.imageId is null or t.modificationDate < i.modificationDate)\n"
-            + "and ii.width > 1024";
+                + "i.modificationDate, ii.orientation, null as data, ii.width, ii.height, t.imageId\n"
+                + "FROM AlbumRoots ar inner join Albums a on (ar.id = a.albumRoot) inner join Images i on a.id = i.album\n"
+                + "inner join ImageInformation ii on i.id = ii.imageId inner join ImageMetadata im on ii.imageid = im.imageid\n"
+                + "left join Thumbnail t on i.id = t.imageId\n"
+                + "where (t.imageId is null or t.modificationDate < i.modificationDate)";
+        Query query = getEntityManager().createNativeQuery(sqlStatement, ThumbnailToGenerate.class);
+        return query.getResultList();
+    }
+
+    private List<ThumbnailToGenerate> findVideos() {
+        String sqlStatement = "SELECT i.id, substr(ar.identifier, 16) root, a.relativePath, i.name,\n"
+                + " i.modificationDate, ii.orientation, null as data, ii.width, ii.height, t.imageId\n"
+                + "FROM AlbumRoots ar inner join Albums a on (ar.id = a.albumRoot) inner join Images i on a.id = i.album\n"
+                + " inner join ImageInformation ii on i.id = ii.imageId inner join VideoMetadata im on ii.imageid = im.imageid\n"
+                + " left join Thumbnail t on i.id = t.imageId\n"
+                + "where (t.imageId is null or t.modificationDate < i.modificationDate)";
         Query query = getEntityManager().createNativeQuery(sqlStatement, ThumbnailToGenerate.class);
         return query.getResultList();
     }
@@ -194,10 +225,10 @@ public class HouseKeepingFacade {
 
     private List<String> getTags(File image, Map<String, String> translatedKeywords) throws IOException {
         ProcessBuilder pb = new ProcessBuilder(
-            "/opt/photils-cli-0.4.1-linux-x86_64.AppImage",
-            "--image",
-            image.getPath(),
-            "--with_confidence"
+                "/opt/photils-cli-0.4.1-linux-x86_64.AppImage",
+                "--image",
+                image.getPath(),
+                "--with_confidence"
         );
         Process process = pb.start();
         return watch(process, translatedKeywords);
@@ -242,9 +273,7 @@ public class HouseKeepingFacade {
         }
         return name.toString();
     }
-    
 
-    
     public static class TagWeighted {
 
         String name;
