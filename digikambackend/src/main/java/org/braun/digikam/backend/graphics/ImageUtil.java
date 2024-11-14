@@ -43,9 +43,13 @@ public class ImageUtil {
     public static void getImage(File imageFile, OutputStream outputStream, int widthNew, int heightNew, Orientation orientation) throws IOException {
         BufferedImage image = readImage(imageFile, orientation);
         if (image == null) {
-            return;
+            throw new IOException("Result of read image is null.");
         }
 
+        if (BufferedImage.TYPE_CUSTOM == image.getType()) {
+            throw new IOException("Unsupported ImageType 0");
+        }
+        
         int width = image.getWidth();
         int height = image.getHeight();
 

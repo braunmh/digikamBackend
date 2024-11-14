@@ -120,7 +120,7 @@ public class HouseKeepingFacade {
                         thumbnailFacade.merge(thumbnail);
                     }
                 } catch (IOException e) {
-                    LOG.info("Thumbnail-Generation for image {} skipped", thumbToGenerate.getId());
+                    LOG.info("Thumbnail-Generation for image {} skipped. Msg: {}", thumbToGenerate.getId(), e.getMessage());
                 }
                 List<String> autoTags = getTags(imageFile, autoKeywords);
                 if (!autoTags.isEmpty()) {
