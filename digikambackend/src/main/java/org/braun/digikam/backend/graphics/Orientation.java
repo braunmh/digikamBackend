@@ -26,11 +26,9 @@ public enum Orientation {
       }
    }
    
-   public static Orientation parse(String value) {
-      if (null == value || value.length() == 0) return angle0;
+   public static Orientation parseFromDb(int value) {
       try {
-         int o = Integer.parseInt(value);
-         switch (o) {
+         switch (value) {
             case 0:
             case 1:
             case 2:

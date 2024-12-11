@@ -21,7 +21,7 @@ public class ImageInternal extends Image {
     }
     
     public ImageInternal orientationTechnical(int angle) {
-        orientationTechnical = Orientation.parse(angle);
+        orientationTechnical = Orientation.parseFromDb(angle);
         return this;
     }
 

@@ -59,8 +59,8 @@ public class SolrUpdateTest {
         }
     }
     
-    // @Test
-    public void insertTest() {
+    //@Test
+    public void updateTest() {
         em = getEntityManager();
 
         tagsFacade = new TagsFacade();
@@ -70,18 +70,19 @@ public class SolrUpdateTest {
         ImageFacade imageFacade = new ImageFacade();
         imageFacade.setEntityManager(em);
 
-        String sql = "select f.* from ImageFull f left join Thumbnail t on t.imageid = f.id \n" +
-            "where  -- f.id is null or f.id > 156200\n"
-            + "f.creationDate between '1983-01-01 00:00:00' and '2022-12-31 23:59:59'"
-            + " and f.id > 89476"
-            + " and not (f.latitudeNumber = 176.29444444444442 and f.longitudeNumber = 68.56194444444445)"
-            + " order by f.id";
+        String sql = """
+            select * from ImageFull f where f.creationDate between '2011-01-01 00:00:00' and '2020-12-31 23:59:59' order by f.relativePath, f.name""";
         // skipped 89476 'location'='176.29444444444442,68.56194444444445'
         List<ImageFull> source = em.createNativeQuery(sql, ImageFull.class).getResultList();
 
+        String relativePath = null;
+        String name = null;
+        
         try (SolrClient client = getSolrClient();) {
             int cnt = 0;
             for (ImageFull imageFull : source) {
+                relativePath = imageFull.getRelativePath();
+                name = imageFull.getName();
                 ImageSolr image = new ImageSolr(imageFacade.getMetadata(imageFull));
                 final UpdateResponse response = client.addBean("digikam", image);
                 cnt++;
@@ -94,14 +95,15 @@ public class SolrUpdateTest {
             client.commit("digikam");
         } catch (IOException | SolrServerException e) {
             LOG.error(e.getMessage(), e);
+        } finally {
+            System.out.println(String.format("Number of Images updated=%s, %s/%s", source.size(), relativePath, name));
         }
     }
 
     
-    @Test
+    // @Test
     public void testFind() {
         Date now = new Date();
-        // creationDate:[2024-07-07T00:00:00.0Z TO *] AND keywordIds:(10112 10204 10261 10652)
         em = getEntityManager();
         tagsFacade = new TagsFacade();
         tagsFacade.setEntityManager(em);

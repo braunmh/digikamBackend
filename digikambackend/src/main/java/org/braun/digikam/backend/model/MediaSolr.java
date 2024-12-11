@@ -29,6 +29,9 @@ public class MediaSolr extends AbstractSolr {
 
     @Field
     private int height;
+    
+    @Field 
+    private int orientation;
 
     public Media toMedia() {
         return new Media()
@@ -38,7 +41,8 @@ public class MediaSolr extends AbstractSolr {
             .name(name)
             .width(width)
             .height(height)
-            .score(score);
+            .score(score)
+            .orientation(orientation);
     }
     
     public String getId() {

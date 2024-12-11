@@ -30,9 +30,10 @@ import jakarta.validation.constraints.*;
   Media.JSON_PROPERTY_IMAGE,
   Media.JSON_PROPERTY_SCORE,
   Media.JSON_PROPERTY_WIDTH,
-  Media.JSON_PROPERTY_HEIGHT
+  Media.JSON_PROPERTY_HEIGHT,
+  Media.JSON_PROPERTY_ORIENTATION
 })
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJerseyServerCodegen", date = "2024-12-11T11:09:54.091531841+01:00[Europe/Berlin]", comments = "Generator version: 7.7.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJerseyServerCodegen", date = "2024-12-11T15:10:07.644747436+01:00[Europe/Berlin]", comments = "Generator version: 7.7.0")
 public class Media   {
   public static final String JSON_PROPERTY_ID = "id";
   @JsonProperty(JSON_PROPERTY_ID)
@@ -61,6 +62,10 @@ public class Media   {
   public static final String JSON_PROPERTY_HEIGHT = "height";
   @JsonProperty(JSON_PROPERTY_HEIGHT)
   private Integer height;
+
+  public static final String JSON_PROPERTY_ORIENTATION = "orientation";
+  @JsonProperty(JSON_PROPERTY_ORIENTATION)
+  private Integer orientation;
 
   public Media id(Long id) {
     this.id = id;
@@ -202,6 +207,26 @@ public class Media   {
     this.height = height;
   }
 
+  public Media orientation(Integer orientation) {
+    this.orientation = orientation;
+    return this;
+  }
+
+  /**
+   * Get orientation
+   * @return orientation
+   **/
+  @JsonProperty(value = "orientation")
+  @ApiModelProperty(required = true, value = "")
+  @NotNull 
+  public Integer getOrientation() {
+    return orientation;
+  }
+
+  public void setOrientation(Integer orientation) {
+    this.orientation = orientation;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -218,12 +243,13 @@ public class Media   {
         Objects.equals(this.image, media.image) &&
         Objects.equals(this.score, media.score) &&
         Objects.equals(this.width, media.width) &&
-        Objects.equals(this.height, media.height);
+        Objects.equals(this.height, media.height) &&
+        Objects.equals(this.orientation, media.orientation);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, creationDate, image, score, width, height);
+    return Objects.hash(id, name, creationDate, image, score, width, height, orientation);
   }
 
   @Override
@@ -238,6 +264,7 @@ public class Media   {
     sb.append("    score: ").append(toIndentedString(score)).append("\n");
     sb.append("    width: ").append(toIndentedString(width)).append("\n");
     sb.append("    height: ").append(toIndentedString(height)).append("\n");
+    sb.append("    orientation: ").append(toIndentedString(orientation)).append("\n");
     sb.append("}");
     return sb.toString();
   }

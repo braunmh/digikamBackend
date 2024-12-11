@@ -151,6 +151,7 @@ public class ImageFacade {
                     .addField("score")
                     .addField("height")
                     .addField("width")
+                    .addField("orientation")
                     .addQuery("type", 1) // for images
                     .addQuery("creator", creator)
                     .addQuery("make", make)
@@ -262,6 +263,7 @@ public class ImageFacade {
                     .score(1.0)
                     .width(i.getWidth())
                     .height(i.getHeight())
+                    .orientation(i.getOrientation())
             );
         }
         return result;
