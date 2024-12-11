@@ -1,4 +1,4 @@
-package org.braun.digikam.backend.util;
+package org.braun.digikam.common;
 
 import org.braun.digikam.backend.BadRequestException;
 
@@ -8,6 +8,7 @@ import org.braun.digikam.backend.BadRequestException;
  */
 public final class UncompleteDateTime {
 
+    private final String in;
     private Integer year;
     private Integer month;
     private Integer day;
@@ -19,6 +20,7 @@ public final class UncompleteDateTime {
     private int[] VALID_MONTHS_LEAP   = new int[] {0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
     public UncompleteDateTime(String in) throws BadRequestException {
+        this.in = in;
         if (in == null || in.isEmpty()) {
             return;
         }
@@ -133,6 +135,11 @@ public final class UncompleteDateTime {
         return false;
     }
 
+    @Override
+    public String toString() {
+        return in;
+    }
+    
     public static void main(String... args) {
         String tst = "20131230153054";
         try {

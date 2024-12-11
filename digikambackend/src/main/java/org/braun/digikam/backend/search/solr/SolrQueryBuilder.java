@@ -6,7 +6,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
-import org.braun.digikam.backend.ejb.DateWrapper;
+import org.braun.digikam.common.DateWrapper;
 
 /**
  *

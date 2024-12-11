@@ -1,4 +1,4 @@
-package org.braun.digikam.backend.ejb;
+package org.braun.digikam.common;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -6,22 +6,23 @@ import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import org.braun.digikam.backend.BadRequestException;
-import org.braun.digikam.backend.util.UncompleteDateTime;
 
 /**
  *
  * @author mbraun
  */
-public class DateWrapper {
+public class DateWrapper implements Comparable<DateWrapper> {
 
-    private UncompleteDateTime udt;
+    private final UncompleteDateTime udt;
 
     public DateWrapper(String udt) {
+        UncompleteDateTime temp;
         try {
-            this.udt = new UncompleteDateTime(udt);
+            temp = new UncompleteDateTime(udt);
         } catch (BadRequestException e) {
-            this.udt = null;
+            temp = null;
         }
+        this.udt = temp;
     }
 
     public boolean isEmpty() {
@@ -64,6 +65,10 @@ public class DateWrapper {
         return temp.getTime();
     }
 
+    public UncompleteDateTime getUncompleteDateTime() {
+        return udt;
+    }
+    
     public Date getUpperBound() {
         Calendar temp = Calendar.getInstance();
         temp.set(Calendar.YEAR, udt.getYear());
@@ -116,5 +121,13 @@ public class DateWrapper {
     
     private boolean isEmpty(Integer i) {
         return i == null || i == 0;
+    }
+
+    @Override
+    public int compareTo(DateWrapper o) {
+        if (o == null) {
+            return 1;
+        }
+        return getLowerBound().compareTo(o.getLowerBound());
     }
 }

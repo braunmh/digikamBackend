@@ -1,5 +1,6 @@
 package org.braun.digikam.backend.ejb;
 
+import org.braun.digikam.common.DateWrapper;
 import org.braun.digikam.backend.entity.ImageFull;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;

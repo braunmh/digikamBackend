@@ -1,5 +1,6 @@
 package org.braun.digikam.backend.ejb;
 
+import org.braun.digikam.common.DateWrapper;
 import org.braun.digikam.backend.entity.ImageFull;
 import org.braun.digikam.backend.entity.ImageComments;
 import java.io.ByteArrayOutputStream;
@@ -148,6 +149,8 @@ public class ImageFacade {
                     .addField("creationDate")
                     .addField("type")
                     .addField("score")
+                    .addField("height")
+                    .addField("width")
                     .addQuery("type", 1) // for images
                     .addQuery("creator", creator)
                     .addQuery("make", make)
@@ -207,7 +210,6 @@ public class ImageFacade {
         addRangeCondition(sql, "i.exposureTime", exposureTimeFrom, exposureTimeTo);
         addRangeCondition(sql, "i.aperture", apertureFrom, apertureTo);
         addRangeCondition(sql, "i.focalLength", focalLengthFrom, focalLengthTo);
-        addRangeCondition(sql, "i.sensitivity", isoFrom, isoTo);
         if (StringUtils.isNotBlank(orientation)) {
             if ("portrait".equals(orientation)) {
                 sql.addCondition(new JoinCondition(Operator.Less, "i.width", "i.height"));
@@ -258,6 +260,8 @@ public class ImageFacade {
                     .image(true)
                     .name(i.getName())
                     .score(1.0)
+                    .width(i.getWidth())
+                    .height(i.getHeight())
             );
         }
         return result;

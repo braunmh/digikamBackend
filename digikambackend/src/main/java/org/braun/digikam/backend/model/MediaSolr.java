@@ -24,12 +24,20 @@ public class MediaSolr extends AbstractSolr {
     @Field
     private double score;
 
+    @Field
+    private int width;
+
+    @Field
+    private int height;
+
     public Media toMedia() {
         return new Media()
             .id(Long.valueOf(id))
             .image(type == 1)
             .creationDate(dateToLocalDateTime(creationDate))
             .name(name)
+            .width(width)
+            .height(height)
             .score(score);
     }
     
@@ -71,5 +79,21 @@ public class MediaSolr extends AbstractSolr {
 
     public void setScore(double score) {
         this.score = score;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
     }
 }

@@ -2,9 +2,7 @@ package org.braun.digikam.backend.util;
 
 import jakarta.enterprise.inject.spi.CDI;
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.Properties;
 import javax.naming.InitialContext;

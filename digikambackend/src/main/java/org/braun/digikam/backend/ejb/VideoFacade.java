@@ -1,5 +1,6 @@
 package org.braun.digikam.backend.ejb;
 
+import org.braun.digikam.common.DateWrapper;
 import org.braun.digikam.backend.entity.ImageComments;
 import org.braun.digikam.backend.entity.VideoFull;
 import org.braun.digikam.backend.entity.Thumbnail;

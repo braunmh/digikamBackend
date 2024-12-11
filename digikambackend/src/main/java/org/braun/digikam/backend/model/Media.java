@@ -28,9 +28,11 @@ import jakarta.validation.constraints.*;
   Media.JSON_PROPERTY_NAME,
   Media.JSON_PROPERTY_CREATION_DATE,
   Media.JSON_PROPERTY_IMAGE,
-  Media.JSON_PROPERTY_SCORE
+  Media.JSON_PROPERTY_SCORE,
+  Media.JSON_PROPERTY_WIDTH,
+  Media.JSON_PROPERTY_HEIGHT
 })
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJerseyServerCodegen", date = "2024-03-20T12:51:17.342362153+01:00[Europe/Berlin]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJerseyServerCodegen", date = "2024-12-11T11:09:54.091531841+01:00[Europe/Berlin]", comments = "Generator version: 7.7.0")
 public class Media   {
   public static final String JSON_PROPERTY_ID = "id";
   @JsonProperty(JSON_PROPERTY_ID)
@@ -51,6 +53,14 @@ public class Media   {
   public static final String JSON_PROPERTY_SCORE = "score";
   @JsonProperty(JSON_PROPERTY_SCORE)
   private Double score;
+
+  public static final String JSON_PROPERTY_WIDTH = "width";
+  @JsonProperty(JSON_PROPERTY_WIDTH)
+  private Integer width;
+
+  public static final String JSON_PROPERTY_HEIGHT = "height";
+  @JsonProperty(JSON_PROPERTY_HEIGHT)
+  private Integer height;
 
   public Media id(Long id) {
     this.id = id;
@@ -138,8 +148,8 @@ public class Media   {
   }
 
   /**
-   * Get image
-   * @return image
+   * Get score
+   * @return score
    **/
   @JsonProperty(value = "score")
   @ApiModelProperty(required = true, value = "")
@@ -150,6 +160,46 @@ public class Media   {
 
   public void setScore(Double score) {
     this.score = score;
+  }
+
+  public Media width(Integer width) {
+    this.width = width;
+    return this;
+  }
+
+  /**
+   * Get width
+   * @return width
+   **/
+  @JsonProperty(value = "width")
+  @ApiModelProperty(required = true, value = "")
+  @NotNull 
+  public Integer getWidth() {
+    return width;
+  }
+
+  public void setWidth(Integer width) {
+    this.width = width;
+  }
+
+  public Media height(Integer height) {
+    this.height = height;
+    return this;
+  }
+
+  /**
+   * Get height
+   * @return height
+   **/
+  @JsonProperty(value = "height")
+  @ApiModelProperty(required = true, value = "")
+  @NotNull 
+  public Integer getHeight() {
+    return height;
+  }
+
+  public void setHeight(Integer height) {
+    this.height = height;
   }
 
 
@@ -165,13 +215,15 @@ public class Media   {
     return Objects.equals(this.id, media.id) &&
         Objects.equals(this.name, media.name) &&
         Objects.equals(this.creationDate, media.creationDate) &&
+        Objects.equals(this.image, media.image) &&
         Objects.equals(this.score, media.score) &&
-        Objects.equals(this.image, media.image);
+        Objects.equals(this.width, media.width) &&
+        Objects.equals(this.height, media.height);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, creationDate, score, image);
+    return Objects.hash(id, name, creationDate, image, score, width, height);
   }
 
   @Override
@@ -184,6 +236,8 @@ public class Media   {
     sb.append("    creationDate: ").append(toIndentedString(creationDate)).append("\n");
     sb.append("    image: ").append(toIndentedString(image)).append("\n");
     sb.append("    score: ").append(toIndentedString(score)).append("\n");
+    sb.append("    width: ").append(toIndentedString(width)).append("\n");
+    sb.append("    height: ").append(toIndentedString(height)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -199,4 +253,3 @@ public class Media   {
     return o.toString().replace("\n", "\n    ");
   }
 }
-

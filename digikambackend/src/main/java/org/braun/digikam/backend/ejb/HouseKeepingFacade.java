@@ -85,8 +85,9 @@ public class HouseKeepingFacade {
         long startTst = System.currentTimeMillis();
         List<ThumbnailToGenerate> resultImages = findImages();
         List<ThumbnailToGenerate> resultVideos = findVideos();
+        List<Thumbnail> imagesToDelete = findImagesToDelete();
         
-        if (resultImages.isEmpty() && resultVideos.isEmpty()) {
+        if (resultImages.isEmpty() && resultVideos.isEmpty() && imagesToDelete.isEmpty()) {
             return new AsyncResult<>(0);
         }
         int generated = 0;
@@ -161,13 +162,27 @@ public class HouseKeepingFacade {
                     userTransaction.begin();
                 }
             }
-            userTransaction.commit();
+            for (Thumbnail thum : imagesToDelete) {
+                client.deleteById(String.valueOf(thum.getImageid()));
+                thumbnailFacade.remove(thum);
+                if (generated % 50 == 0) {
+                    userTransaction.commit();
+                    client.commit(solrCollection);
+                    userTransaction.begin();
+                }
+            }
             client.commit(solrCollection);
         } catch (NotSupportedException | SystemException | RollbackException
                 | HeuristicMixedException | HeuristicRollbackException | IOException e) {
             LOG.error("Thumbnail-Generation and tagging failed", e);
         } catch (Exception e) {
             LOG.error("Thumbnail-Generation and tagging failed", e);
+        } finally {
+            try {
+                userTransaction.commit();
+            } catch (RollbackException | HeuristicRollbackException | HeuristicMixedException | SystemException e) {
+                LOG.info(e);
+            }
         }
         NodeFactory.getInstance().refresh(tagsFacade.findAll());
         LOG.info("Thumbnail-Generation and tagging {} Images took {} seconds",
@@ -203,6 +218,14 @@ public class HouseKeepingFacade {
         return query.getResultList();
     }
 
+    private List<Thumbnail> findImagesToDelete() {
+       Query query = getEntityManager().createNativeQuery(
+               "select t.*"
+                + " from Thumbnail t left join Images i on t.imageid = i.id"
+                + " where i.id is null", Thumbnail.class);
+       return query.getResultList();
+    }
+    
     private EntityManager getEntityManager() {
         return em;
     }
