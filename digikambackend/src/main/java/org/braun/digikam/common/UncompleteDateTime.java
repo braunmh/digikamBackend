@@ -25,16 +25,11 @@ public final class UncompleteDateTime {
             return;
         }
         switch(in.length()) {
-            case 8:
-                in = in + "------";
-                break;
-            case 12:
-                in = in + "--";
-                break;
-            case 14:
-                break;
-            default:
-                throw new BadRequestException("Invalid date. Length must be 14.");
+            case 8 -> in = in + "------";
+            case 12 -> in = in + "--";
+            case 14 -> {
+            }
+            default -> throw new BadRequestException("Invalid date. Length must be 14.");
         }
         year = toInt(in.substring(0, 4));
         month = toInt(in.substring(4, 6));

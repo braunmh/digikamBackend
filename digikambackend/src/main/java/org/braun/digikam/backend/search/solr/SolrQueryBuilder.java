@@ -140,7 +140,20 @@ public class SolrQueryBuilder {
         return this;
     }
     
-    public SolrQueryBuilder addQuery(String fieldName, Collection<Long> ids) {
+    public SolrQueryBuilder addQueryLong(String fieldName, Collection<Long> ids) {
+        if (ids == null || ids.isEmpty()) {
+            return this;
+        }
+        List<String> values = ids.stream().map(i -> String.valueOf(i)).collect(Collectors.toList());
+        addOperator();
+        query.append(fieldName).append(":")
+            .append("(")
+            .append(String.join(" ", values))
+            .append(")");
+        return this;
+    }
+    
+    public SolrQueryBuilder addQueryInt(String fieldName, Collection<Integer> ids) {
         if (ids == null || ids.isEmpty()) {
             return this;
         }

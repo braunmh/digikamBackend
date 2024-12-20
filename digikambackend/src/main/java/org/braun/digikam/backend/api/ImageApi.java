@@ -73,9 +73,22 @@ public class ImageApi  {
     throws NotFoundException {
         return delegate.getImage(imageId, securityContext);
     }
+    
+    @jakarta.ws.rs.GET
+    @Path("/thumbnail/{imageId}")
+    
+    @Produces({ "image/jpeg" })
+    @io.swagger.annotations.ApiOperation(value = "", notes = "", response = byte[].class, tags={ "image", })
+    @io.swagger.annotations.ApiResponses(value = {
+        @io.swagger.annotations.ApiResponse(code = 200, message = "OK", response = byte[].class)
+    })
+    public Response getImageThumbnail(@ApiParam(value = "Id of thumbnail to return", required = true) @PathParam("imageId") @NotNull  Long imageId,@Context SecurityContext securityContext)
+    throws NotFoundException {
+        return delegate.getImageThumbnail(imageId, securityContext);
+    }
+    
     @jakarta.ws.rs.GET
     @Path("/getInformation")
-    
     @Produces({ "application/json" })
     @io.swagger.annotations.ApiOperation(value = "", notes = "", response = Image.class, tags={ "image", })
     @io.swagger.annotations.ApiResponses(value = {

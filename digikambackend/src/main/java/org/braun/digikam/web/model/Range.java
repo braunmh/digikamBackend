@@ -44,7 +44,7 @@ public abstract class Range<TYPE extends Comparable<TYPE>> implements Serializab
         if (to == null) {
             return true;
         }
-        return from.compareTo(to) < 0;
+        return from.compareTo(to) <= 0;
     }
     
     public Range<TYPE> from(TYPE value) {

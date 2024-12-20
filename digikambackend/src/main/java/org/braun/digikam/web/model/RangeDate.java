@@ -15,4 +15,15 @@ public class RangeDate extends Range<DateWrapper> {
         super(from, to);
     }
     
+    @Override
+    public boolean isValid() {
+        if (getFrom() == null || getFrom().isEmpty()) {
+            return true;
+        }
+        if (getTo() == null || getTo().isEmpty()) {
+            return true;
+        }
+        return getFrom().compareTo(getTo()) <= 0;
+    }
+    
 }

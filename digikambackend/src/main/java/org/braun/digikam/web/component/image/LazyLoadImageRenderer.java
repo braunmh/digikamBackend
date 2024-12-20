@@ -20,7 +20,7 @@ import org.braun.digikam.web.util.Util;
  * @author mbraun
  */
 @ResourceDependencies ({
-   @ResourceDependency(target="head", name="jquery/lib/jquery-1.10.2.js"),
+//   @ResourceDependency(target="head", name="jquery/lib/jquery-1.10.2.js"),
    @ResourceDependency(target="head", name="lib/jquery.lazyload.js"),
    @ResourceDependency(target="head", name="lib/jquery.lazyload.init.js")
 })
@@ -69,7 +69,9 @@ public class LazyLoadImageRenderer extends BaseRenderer {
          writer.writeAttribute("width", width, "width");
       if (height > 0)
          writer.writeAttribute("height", height, "height");
-      writer.writeAttribute("data-original", getRequest(context).getContextPath() + image.getUrl(), null);
+      writer.writeAttribute("data-original",
+              String.format("%s/rest/image/thumbnail/%s", getRequest(context).getContextPath(), image.getImageId()), 
+              null);
       writer.endElement("img");
    }
 
@@ -81,26 +83,15 @@ public class LazyLoadImageRenderer extends BaseRenderer {
       }
    }
    private boolean isQuerformat(String value) {
-      if (null == value || value.length() == 0) return true;
+      if (null == value || value.isBlank()) {
+          return true;
+      }
       try {
          int o = Integer.parseInt(value);
-         switch (o) {
-            case 0:
-            case 1:
-            case 2:
-               return true;
-            case 3:
-            case 4:
-               return true;
-            case 5:
-            case 6:
-               return false;
-            case 7:
-            case 8:
-               return false;
-            default:
-               return true;
-         }
+          return switch (o) {
+              case 90, 270 -> false;
+              default -> true;
+          };
       } catch (NumberFormatException e) {
          return true;
       }

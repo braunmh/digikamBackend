@@ -20,6 +20,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import javax.imageio.ImageIO;
@@ -33,6 +34,8 @@ import org.apache.solr.client.solrj.impl.Http2SolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.braun.digikam.backend.NodeFactory;
 import org.braun.digikam.backend.api.NotFoundException;
+import static org.braun.digikam.backend.ejb.ImageFacade.LANDSCAPE;
+import static org.braun.digikam.backend.ejb.ImageFacade.PORTAIT;
 import org.braun.digikam.backend.graphics.ExifUtil;
 import org.braun.digikam.backend.model.Keyword;
 import org.braun.digikam.backend.model.Media;
@@ -117,25 +120,33 @@ public class VideoFacade {
         String dateFrom, String dateTo, Integer ratingFrom, Integer ratingTo) throws ConditionParseException {
         try (SolrClient client = getSolrClient()) {
             final String solrCollection = Configuration.getInstance().getSolrCollection();
+            Set<Integer> os = (orientation == null) ?
+                    Collections.emptySet() : (orientation.equals("Portrait"))
+                        ? PORTAIT
+                    : LANDSCAPE;
             SolrQueryBuilder builder = new SolrQueryBuilder()
                     .addField("id")
                     .addField("name")
                     .addField("creationDate")
                     .addField("type")
                     .addField("score")
+                    .addField("height")
+                    .addField("width")
+                    .addField("orientation")
                     .addQuery("type", 2) // for images
                     .addQuery("creator", creator)
+                    .addQueryInt("orientation", os)
                     .addQuery("creationDate", new DateWrapper(dateFrom), new DateWrapper(dateTo));
             if (keywordsOr != null && keywordsOr) {
                 Set<Long> kr = new HashSet<>();
                 for (Long k : keywords) {
                     kr.addAll(NodeFactory.getInstance().getChildrensRec(k));
                 }
-                builder.addQuery("keywordIds", kr);
+                builder.addQueryLong("keywordIds", kr);
             } else {
                 for (Long k : keywords) {
                     List<Long> kr = (NodeFactory.getInstance().getChildrensRec(k));
-                    builder.addQuery("keywordIds", kr);
+                    builder.addQueryLong("keywordIds", kr);
                 }
             }
             SolrQuery query = builder.build();

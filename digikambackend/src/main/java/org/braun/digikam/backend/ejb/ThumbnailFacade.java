@@ -22,4 +22,7 @@ public class ThumbnailFacade extends AbstractFacade<Thumbnail> {
         return em;
     }
 
+    public void setEntityManger(EntityManager em) {
+        this.em = em;
+    }
 }

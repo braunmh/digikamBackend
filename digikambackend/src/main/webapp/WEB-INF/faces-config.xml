@@ -3,5 +3,11 @@
               xmlns="https://jakarta.ee/xml/ns/jakartaee"
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-facesconfig_3_0.xsd">
-
+    <factory>
+        <exception-handler-factory>org.omnifaces.exceptionhandler.FullAjaxExceptionHandlerFactory</exception-handler-factory>
+    </factory>
+    <component>
+        <component-type>org.braun.component.LazyLoadImage</component-type>
+        <component-class>org.braun.digikam.web.component.image.LazyLoadImage</component-class>
+    </component>
 </faces-config>

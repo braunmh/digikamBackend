@@ -155,6 +155,40 @@ public class NodeFactory {
         return result;
     }
 
+    public List<Keyword> getKeywordByQualifiedName(String name) {
+        List<Keyword> result = new ArrayList<>();
+        try {
+            READ_LOCK.lock();
+            if (name == null || name.isEmpty()) {
+                for (Node n : nodes) {
+                    Keyword k = new Keyword();
+                    k.setId(n.getId());
+                    k.setName(n.getQualifiedName());
+                    k.setFullName(n.getFullName());
+                    result.add(k);
+                }
+            } else {
+                name = name.toLowerCase();
+                for (Node n : nodes) {
+                    if (n.getQualifiedName().toLowerCase().equals(name)) {
+                        Keyword k = new Keyword();
+                        k.setId(n.getId());
+                        k.setName(n.getQualifiedName());
+                        result.add(k);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            LOG.error("Aquiring ReadLock failed", e);
+        } finally {
+            READ_LOCK.unlock();
+        }
+        if (result.size() != 1) {
+            LOG.info("getKeywordByQualifiedName('%s') => %s" , name, result.size());
+        }
+        return result;
+    }
+
     public Keyword getKeywordById(long id) {
         for (Node n : nodes) {
             if (id == n.getId()) {

@@ -9,106 +9,108 @@ import jakarta.faces.component.UIComponentBase;
  */
 @FacesComponent(LazyLoadImage.COMPONENT_TYPE)
 public class LazyLoadImage extends UIComponentBase {
-   public static final String COMPONENT_FAMILY = "org.braun.component";
-   public static final String COMPONENT_TYPE = "org.braun.component.LazyLoadImage";
 
-   protected enum PropertyKeys {
-      style, styleClass, height, width, url, alt, title, heightOriginal, widthOriginal, orientation;
-   }
+    public static final String COMPONENT_FAMILY = "org.braun.component";
+    public static final String COMPONENT_TYPE = "org.braun.component.LazyLoadImage";
 
-   @Override
-   public String getFamily() {
-      return COMPONENT_FAMILY;
-   }
+    protected enum PropertyKeys {
+        style, styleClass, height, width, imageId, alt, title, heightOriginal, widthOriginal, orientation;
+    }
 
-   public LazyLoadImage() {
-      super();
-      setRendererType(COMPONENT_TYPE);
-   }
-  public String getStyle() {
-      return (String)getStateHelper().eval(PropertyKeys.style);
-   }
+    @Override
+    public String getFamily() {
+        return COMPONENT_FAMILY;
+    }
 
-   public void setStyle(String value) {
-		getStateHelper().put(PropertyKeys.style, value);
-   }
+    public LazyLoadImage() {
+        super();
+        setRendererType(COMPONENT_TYPE);
+    }
 
-   public String getStyleClass() {
-      return (String)getStateHelper().eval(PropertyKeys.styleClass);
-   }
+    public String getStyle() {
+        return (String) getStateHelper().eval(PropertyKeys.style);
+    }
 
-   public void setStyleClass(String value) {
-		getStateHelper().put(PropertyKeys.styleClass, value);
-   }
+    public void setStyle(String value) {
+        getStateHelper().put(PropertyKeys.style, value);
+    }
 
-   public String getHeight() {
-      return (String)getStateHelper().eval(PropertyKeys.height);
-   }
+    public String getStyleClass() {
+        return (String) getStateHelper().eval(PropertyKeys.styleClass);
+    }
 
-   public void setHeight(String value) {
-		getStateHelper().put(PropertyKeys.height, value);
-   }
+    public void setStyleClass(String value) {
+        getStateHelper().put(PropertyKeys.styleClass, value);
+    }
 
-   public String getWidth() {
-      return (String)getStateHelper().eval(PropertyKeys.width);
-   }
+    public String getHeight() {
+        return (String) getStateHelper().eval(PropertyKeys.height);
+    }
 
-   public void setWidth(String value) {
-		getStateHelper().put(PropertyKeys.width, value);
-   }
+    public void setHeight(String value) {
+        getStateHelper().put(PropertyKeys.height, value);
+    }
 
-   public String getUrl() {
-      return (String)getStateHelper().eval(PropertyKeys.url);
-   }
+    public String getWidth() {
+        return (String) getStateHelper().eval(PropertyKeys.width);
+    }
 
-   public void setUrl(String value) {
-		getStateHelper().put(PropertyKeys.url, value);
-   }
+    public void setWidth(String value) {
+        getStateHelper().put(PropertyKeys.width, value);
+    }
 
-   public String getAlt() {
-      return (String)getStateHelper().eval(PropertyKeys.alt);
-   }
+    public String getImageId() {
+        return (String) getStateHelper().eval(PropertyKeys.imageId);
+    }
 
-   public void setAlt(String value) {
-		getStateHelper().put(PropertyKeys.alt, value);
-   }
+    public void setImageId(String value) {
+        getStateHelper().put(PropertyKeys.imageId, value);
+    }
 
-   public String getTitle() {
-      return (String)getStateHelper().eval(PropertyKeys.title);
-   }
+    public String getAlt() {
+        return (String) getStateHelper().eval(PropertyKeys.alt);
+    }
 
-   public void setTitle(String value) {
-		getStateHelper().put(PropertyKeys.title, value);
-   }
+    public void setAlt(String value) {
+        getStateHelper().put(PropertyKeys.alt, value);
+    }
 
-   public String getHeightOriginal() {
-      return (String)getStateHelper().eval(PropertyKeys.heightOriginal);
-   }
+    public String getTitle() {
+        return (String) getStateHelper().eval(PropertyKeys.title);
+    }
 
-   public void setHeightOriginal(String value) {
-		getStateHelper().put(PropertyKeys.heightOriginal, value);
-   }
+    public void setTitle(String value) {
+        getStateHelper().put(PropertyKeys.title, value);
+    }
 
-   public String getWidthOriginal() {
-      return (String)getStateHelper().eval(PropertyKeys.widthOriginal);
-   }
+    public String getHeightOriginal() {
+        return (String) getStateHelper().eval(PropertyKeys.heightOriginal);
+    }
 
-   public void setWidthOriginal(String value) {
-		getStateHelper().put(PropertyKeys.widthOriginal, value);
-   }
+    public void setHeightOriginal(String value) {
+        getStateHelper().put(PropertyKeys.heightOriginal, value);
+    }
 
-   public String getOrientation() {
-      return (String)getStateHelper().eval(PropertyKeys.orientation);
-   }
-   
-   public void setOrientation(String value) {
-      getStateHelper().put(PropertyKeys.orientation, value);
-   }
-   
-   @Override
-   public String toString() {
-      return String.format("style=%s, styleClass=%s, height=%s, width=%s, url=%s, alt=%s, title=%s",
-              getStyle(), getStyleClass(), getHeight(), getWidth(), getUrl(), getAlt(), getTitle());
-   }
+    public String getWidthOriginal() {
+        return (String) getStateHelper().eval(PropertyKeys.widthOriginal);
+    }
+
+    public void setWidthOriginal(String value) {
+        getStateHelper().put(PropertyKeys.widthOriginal, value);
+    }
+
+    public String getOrientation() {
+        return (String) getStateHelper().eval(PropertyKeys.orientation);
+    }
+
+    public void setOrientation(String value) {
+        getStateHelper().put(PropertyKeys.orientation, value);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("style=%s, styleClass=%s, height=%s, width=%s, url=%s, alt=%s, title=%s",
+                getStyle(), getStyleClass(), getHeight(), getWidth(), getImageId(), getAlt(), getTitle());
+    }
 
 }

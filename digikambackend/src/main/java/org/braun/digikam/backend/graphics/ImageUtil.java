@@ -52,10 +52,12 @@ public class ImageUtil {
         
         int width = image.getWidth();
         int height = image.getHeight();
+        
+//        double heightWidth = width / height;
 
         BufferedImage tmpImage;
         if (height > width) {
-
+            widthNew = height * width / heightNew;
             int cropHeight = width / widthNew * heightNew;
             int crop = (height - cropHeight) / 2;
 
@@ -220,6 +222,12 @@ public class ImageUtil {
         return createThumbnail(img, targetWidth, targetHeight, w, h);
     }
 
+    public static void scaleImage(File file, OutputStream outputStream, int targetWidth, int targetHeight, Orientation orientation) throws IOException {
+        try (InputStream si = new FileInputStream(file)) {
+            scaleImage(si, outputStream, targetWidth, targetHeight, orientation);
+        }
+    }
+    
     public static void scaleImage(InputStream inputStream, OutputStream outputStream, int targetWidth, int targetHeight, Orientation orientation) throws IOException {
         BufferedImage ret = scaleImage(inputStream, targetWidth, targetHeight, orientation);
         if (null == ret) {

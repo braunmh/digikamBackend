@@ -4,6 +4,7 @@ import jakarta.faces.component.UIComponent;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.convert.ConverterException;
 import jakarta.faces.convert.FacesConverter;
+import jakarta.faces.convert.Converter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -14,33 +15,54 @@ import org.braun.digikam.common.UncompleteDateTime;
  *
  * @author mbraun
  */
-@FacesConverter("dateWrapperConverter")
-public class DateWrapperConverter extends TypedConverter<DateWrapper> {
+@FacesConverter(value = "dateWrapperConverter")
+public class DateWrapperConverter implements Converter<DateWrapper> {
 
-    private static final int[] monthes = new int[] {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-    
+    private static final int[] monthes = new int[]{31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
     @Override
-    public DateWrapper getAsType(FacesContext context, UIComponent component, String value) {
+    public DateWrapper getAsObject(FacesContext context, UIComponent component, String value) {
+        if (value == null || value.isBlank()) {
+            return new DateWrapper();
+        }
         DateWrapper dateWrapper;
         String[] parts = value.split(" ");
         switch (parts.length) {
-            case 1:
+            case 1 -> {
                 String date = parseDate(parts[0]);
                 dateWrapper = new DateWrapper(date);
-                break;
-            case 2:
-                date = parseDate(parts[0]);
+            }
+            case 2 -> {
+                String date = parseDate(parts[0]);
                 if (date.indexOf('-') > - 1) {
                     dateWrapper = new DateWrapper(date);
                 } else {
                     String time = parseTime(parts[1]);
                     dateWrapper = new DateWrapper(date + time);
                 }
-                break;
-            default:
-                throw new ConverterException("Ungültiges Datum");
+            }
+            default -> throw new ConverterException("Ungültiges Datum");
         }
         return dateWrapper;
+    }
+
+    @Override
+    public String getAsString(FacesContext context, UIComponent component, DateWrapper date) {
+        if (date == null || date.isEmpty()) {
+            return "";
+        }
+        UncompleteDateTime udt = date.getUncompleteDateTime();
+        StringBuilder res = new StringBuilder();
+        res.append((udt.getDay() == null) ? "--" : String.format("%02d", udt.getDay()));
+        res.append(".").append((udt.getMonth() == null) ? "--" : String.format("%02d", udt.getMonth()));
+        res.append(".").append(String.format("%04d", udt.getYear()));
+        if (udt.getHour() == null) {
+            return res.toString();
+        }
+        res.append(" ").append(String.format("%02d", udt.getHour()));
+        res.append(".").append((udt.getMinute() == null) ? "--" : String.format("%02d", udt.getMinute()));
+        res.append(".").append((udt.getSecond() == null) ? "--" : String.format("%02d", udt.getSecond()));
+        return "";
     }
 
     private String parseDate(String value) {
@@ -67,17 +89,19 @@ public class DateWrapperConverter extends TypedConverter<DateWrapper> {
                 }
                 year = parseNumber(parts.get(2), 0, 9999, "Jahr");
                 if (day > 0 && month == 0) {
-                    throw new ConverterException("Tagesangabe ohne Monat ist nicht zulässig"); 
+                    throw new ConverterException("Tagesangabe ohne Monat ist nicht zulässig");
                 }
-                if (day > monthes[month - 1]) {
-                    throw new ConverterException("Diese Tagesangabe ist für diesen Monat nicht zulässig"); 
-                }
-                if (month == 2 && year % 4 != 0 && day > 28) {
-                    throw new ConverterException("Diese Tagesangabe ist für diesen Monat nicht zulässig"); 
+                if (day > 0) {
+                    if (day > monthes[month - 1]) {
+                        throw new ConverterException("Diese Tagesangabe ist für diesen Monat nicht zulässig");
+                    }
+                    if (month == 2 && year % 4 != 0 && day > 28) {
+                        throw new ConverterException("Diese Tagesangabe ist für diesen Monat nicht zulässig");
+                    }
                 }
                 break;
             default:
-               throw new ConverterException("Ungültige Datumangabe dd.mm.jjjj");
+                throw new ConverterException("Ungültige Datumangabe dd.mm.jjjj");
         }
         if (year < 100) {
             Calendar today = Calendar.getInstance();
@@ -94,7 +118,7 @@ public class DateWrapperConverter extends TypedConverter<DateWrapper> {
         res.append((day == 0) ? "--" : String.format("%02d", day));
         return res.toString();
     }
-    
+
     private String parseTime(String value) {
         List<String> parts = getSplittedValues(value, ":");
         int hour = -1;
@@ -114,13 +138,13 @@ public class DateWrapperConverter extends TypedConverter<DateWrapper> {
                 second = parseNumber(parts.get(2), 0, 59, "Sekunde");
                 break;
             default:
-               throw new ConverterException("Ungültige Zeitangabe hh.mm.ss"); 
+                throw new ConverterException("Ungültige Zeitangabe hh.mm.ss");
         }
         if (hour < 0 && minute >= 0) {
-            throw new ConverterException("Minutenangaben ohne Stunden sind unzulässig."); 
+            throw new ConverterException("Minutenangaben ohne Stunden sind unzulässig.");
         }
         if (minute < 0 && second >= 0) {
-            throw new ConverterException("Sekundenangaben ohne Minuten sind unzulässig."); 
+            throw new ConverterException("Sekundenangaben ohne Minuten sind unzulässig.");
         }
         StringBuilder res = new StringBuilder();
         res.append((hour < 0) ? "--" : String.format("%02d", hour));
@@ -128,7 +152,7 @@ public class DateWrapperConverter extends TypedConverter<DateWrapper> {
         res.append((second < 0) ? "--" : String.format("%02d", second));
         return res.toString();
     }
-    
+
     private int parseNumber(String value, int from, int to, String type) {
         try {
             int i = Integer.parseInt(value);
@@ -140,7 +164,7 @@ public class DateWrapperConverter extends TypedConverter<DateWrapper> {
             throw new ConverterException("Ungültige Angabe für " + type);
         }
     }
-    
+
     private List<String> getSplittedValues(String value, String token) {
         String[] x = value.split(token);
         List<String> parts = new ArrayList<>();
@@ -150,22 +174,6 @@ public class DateWrapperConverter extends TypedConverter<DateWrapper> {
             }
         }
         return parts;
-    }
-    
-    @Override
-    public String getTypeAsString(FacesContext context, UIComponent component, DateWrapper date) {
-         UncompleteDateTime udt = date.getUncompleteDateTime();
-         StringBuilder res = new StringBuilder();
-         res.append((udt.getDay() == null) ? "--" : String.format("%02d", udt.getDay()));
-         res.append(".").append((udt.getMonth() == null) ? "--" : String.format("%02d", udt.getMonth()));
-         res.append(".").append(String.format("%04d", udt.getYear()));
-         if (udt.getHour() == null) {
-             return res.toString();
-         }
-         res.append(" ").append(String.format("%02d", udt.getHour()));
-         res.append(".").append((udt.getMinute()== null) ? "--" : String.format("%02d", udt.getMinute()));
-         res.append(".").append((udt.getSecond()== null) ? "--" : String.format("%02d", udt.getSecond()));
-         return "";
     }
 
 }

@@ -85,6 +85,19 @@ public class ImageApiServiceImpl extends ImageApiService {
     }
 
     /**
+     * 
+     * @param imageId
+     * @param securityContext
+     * @return thumbnail as byte[]
+     * @throws NotFoundException 
+     */
+    @Override
+    public Response getImageThumbnail(Long imageId, SecurityContext securityContext) throws NotFoundException {
+        ImageFacade facade = getImageFacade();
+        return Response.ok().entity(facade.getThumbnail(imageId)).build();
+    }
+
+    /**
      *
      * @param imageId of Image
      * @param securityContext

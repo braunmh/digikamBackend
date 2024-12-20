@@ -15,6 +15,10 @@ public class DateWrapper implements Comparable<DateWrapper> {
 
     private final UncompleteDateTime udt;
 
+    public DateWrapper() {
+        this(null);
+    }
+    
     public DateWrapper(String udt) {
         UncompleteDateTime temp;
         try {
@@ -125,9 +129,15 @@ public class DateWrapper implements Comparable<DateWrapper> {
 
     @Override
     public int compareTo(DateWrapper o) {
-        if (o == null) {
+        if ((o == null || o.isEmpty()) && isEmpty()) {
+            return 0;
+        }
+        if (o == null || o.isEmpty()) {
             return 1;
         }
-        return getLowerBound().compareTo(o.getLowerBound());
+        if (isEmpty()) {
+            return -1;
+        }
+        return getUncompleteDateTime().toString().compareTo( o.getUncompleteDateTime().toString());
     }
 }

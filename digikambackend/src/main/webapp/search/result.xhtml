@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:di="http://org.braun.digikam"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <body>
+
+        <ui:composition template="./../common.xhtml">
+
+            <ui:define name="content">
+                <h:outputScript library="jakarta.faces" name="jsf.js" target="head" />
+                <h:form id="resultForm">
+                    <ui:repeat var="epm" value="#{imageSearchBean.entriesPerMonth}">
+                        <h2><h:outputText value="#{epm.date}"/></h2>
+                        <ui:repeat var="img" value="#{epm.entries}">
+                            <div class="image">
+                                <h:outputLink value="#{request.contextPath}/rest/image/#{img.id}" target="blank">
+                                <di:lazyImage imageId="#{img.id}" id="image" height="500"
+                                    widthOriginal="#{img.width}" heightOriginal="#{img.height}"/> 
+                                </h:outputLink>
+                                <br/>
+                                <p:commandLink id="detail" value="" update="resultForm:detailTable"
+                                               oncomplete="PF('detailDialog').show()">
+                                    <h:graphicImage height="20" alt="Details" value="#{resource['image/info-circle.svg']}"/>
+                                    <f:setPropertyActionListener target="#{mediaDetailBean.media}" value="#{img}"/>
+                                </p:commandLink>
+                            </div>
+                        </ui:repeat>
+                        <br style="clear: left"/>
+                    </ui:repeat>
+                    <h:panelGroup id="detailTable">
+                    <p:dialog modal="true" widgetVar="detailDialog">
+                        <h:dataTable var="entry" value="#{mediaDetailBean.details}">
+                            <h:column>
+                                <h:outputText value="#{entry.name}"/>
+                            </h:column>
+                            <h:column>
+                                <h:outputText value="#{entry.value}"/>
+                            </h:column>
+                        </h:dataTable>
+                        <div style="text-align: right">
+                            <p:commandButton value="Schliessen" oncomplete="PF('detailDialog').hide()" /> 
+                        </div>
+                    </p:dialog>
+                        </h:panelGroup>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

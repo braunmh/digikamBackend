@@ -112,7 +112,7 @@ public class HouseKeepingFacade {
                 try {
                     Orientation orientation = Orientation.parse(thumbToGenerate.getOrientation());
                     baos.reset();
-                    ImageUtil.getImage(imageFile, baos, 1024, 1024, orientation);
+                    ImageUtil.scaleImage(imageFile, baos, 1024, 1024, orientation);
                     if (thumbnail.getData() == null) {
                         thumbnail.setData(baos.toByteArray());
                         thumbnailFacade.create(thumbnail);
@@ -197,12 +197,13 @@ public class HouseKeepingFacade {
     }
 
     private List<ThumbnailToGenerate> findImages() {
-        String sqlStatement = "SELECT i.id, substr(ar.identifier, 16) root, a.relativePath, i.name,\n"
-                + "i.modificationDate, ii.orientation, null as data, ii.width, ii.height, t.imageId\n"
-                + "FROM AlbumRoots ar inner join Albums a on (ar.id = a.albumRoot) inner join Images i on a.id = i.album\n"
-                + "inner join ImageInformation ii on i.id = ii.imageId inner join ImageMetadata im on ii.imageid = im.imageid\n"
-                + "left join Thumbnail t on i.id = t.imageId\n"
-                + "where (t.imageId is null or t.modificationDate < i.modificationDate)";
+        String sqlStatement = """
+            SELECT i.id, substr(ar.identifier, 16) root, a.relativePath, i.name,
+            i.modificationDate, ii.orientation, null as data, ii.width, ii.height, t.imageId
+            FROM AlbumRoots ar inner join Albums a on (ar.id = a.albumRoot) inner join Images i on a.id = i.album
+            inner join ImageInformation ii on i.id = ii.imageId inner join ImageMetadata im on ii.imageid = im.imageid
+            left join Thumbnail t on i.id = t.imageId
+            where (t.imageId is null or t.modificationDate < i.modificationDate)""";
         Query query = getEntityManager().createNativeQuery(sqlStatement, ThumbnailToGenerate.class);
         return query.getResultList();
     }

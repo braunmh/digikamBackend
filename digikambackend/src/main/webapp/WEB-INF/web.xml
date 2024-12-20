@@ -4,6 +4,18 @@
         <param-name>jakarta.faces.PROJECT_STAGE</param-name>
         <param-value>Development</param-value>
     </context-param>
+    <context-param>
+        <param-name>jakarta.faces.FACELETS_LIBRARIES</param-name>
+        <param-value>/WEB-INF/digikam.taglib.xml</param-value>
+    </context-param>
+    <context-param>
+        <param-name>org.omnifaces.EXCEPTION_TYPES_TO_UNWRAP</param-name>
+        <param-value>jakarta.ejb.EJBException,jakarta.persistence.RollbackException</param-value>
+    </context-param>
+    <context-param>
+        <param-name>org.omnifaces.EXCEPTION_TYPES_TO_IGNORE_IN_LOGGING</param-name>
+        <param-value>jakarta.faces.application.ViewExpiredException</param-value>
+    </context-param>
     <filter>
         <filter-name>ApiOriginFilter</filter-name>
         <filter-class>org.braun.digikam.backend.api.ApiOriginFilter</filter-class>
@@ -19,11 +31,19 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
-        <url-pattern>/faces/*</url-pattern>
+        <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
-        <welcome-file>faces/index.xhtml</welcome-file>
+        <welcome-file>search/search.xhtml</welcome-file>
     </welcome-file-list>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/WEB-INF/errorpages/500.xhtml</location>
+    </error-page>
+    <error-page>
+        <exception-type>jakarta.faces.application.ViewExpiredException</exception-type>
+        <location>/WEB-INF/errorpages/expired.xhtml</location>
+    </error-page>    
     <resource-ref>
         <description>DB Connection</description>
         <res-ref-name>jdbc/digikam</res-ref-name>

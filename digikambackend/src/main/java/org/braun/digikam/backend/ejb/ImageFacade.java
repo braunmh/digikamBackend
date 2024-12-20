@@ -12,6 +12,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import jakarta.ejb.Stateless;
+import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
@@ -19,6 +20,8 @@ import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
@@ -31,6 +34,7 @@ import org.apache.solr.client.solrj.impl.Http2SolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.braun.digikam.backend.NodeFactory;
 import org.braun.digikam.backend.api.NotFoundException;
+import org.braun.digikam.backend.entity.Thumbnail;
 import org.braun.digikam.backend.graphics.ExifUtil;
 import org.braun.digikam.backend.graphics.ImageUtil;
 import org.braun.digikam.backend.model.ImageInternal;
@@ -65,6 +69,9 @@ public class ImageFacade {
             + "i.lens, i.aperture, i.focalLength, i.focalLength35, i.exposureTime, i.sensitivity, i.creator, i.latitudeNumber, i.longitudeNumber "
             + "FROM ImageFull i";
 
+    @Inject
+    private ThumbnailFacade thumbnailFacade;
+    
     @PersistenceContext(unitName = "digikam")
     private EntityManager em;
 
@@ -74,6 +81,15 @@ public class ImageFacade {
         return imageStream;
     }
 
+    public byte[] getThumbnail(long id) throws NotFoundException {
+        Thumbnail thumb = thumbnailFacade.find(id);
+        if (thumb == null) {
+            return new byte[0];
+        } else {
+            return thumb.getData();
+        }
+    }
+    
     public byte[] getScaledImage(long id, int width, int height) throws NotFoundException {
         ImageInternal image = ImageFacade.this.getMetadata(id);
         FileInputStream fis = getImageFile(image.getRoot(), image.getRelativePath(), image.getName());
@@ -136,6 +152,9 @@ public class ImageFacade {
         return image;
     }
 
+    public static final Set<Integer> PORTAIT = new HashSet<>(Arrays.asList(90, 270));
+    public static final Set<Integer> LANDSCAPE = new HashSet<>(Arrays.asList(0, 180));
+    
     public List<Media> findImagesByImageAttributesSolr(
             List<Long> keywords, Boolean keywordsOr, String creator, String make, String model, String lens, String orientation,
             String dateFrom, String dateTo, Integer ratingFrom, Integer ratingTo, Integer isoFrom, Integer isoTo,
@@ -143,6 +162,10 @@ public class ImageFacade {
             Integer focalLengthFrom, Integer focalLengthTo) throws ConditionParseException {
         try (SolrClient client = getSolrClient()) {
             final String solrCollection = Configuration.getInstance().getSolrCollection();
+            Set<Integer> os = (orientation == null || orientation.isBlank()) ?
+                    Collections.emptySet() : (orientation.equals("Portrait"))
+                        ? PORTAIT
+                    : LANDSCAPE;
             SolrQueryBuilder builder = new SolrQueryBuilder()
                     .addField("id")
                     .addField("name")
@@ -162,17 +185,18 @@ public class ImageFacade {
                     .addQuery("exposureTime", exposureTimeFrom, exposureTimeTo)
                     .addQuery("focalLength", focalLengthFrom, focalLengthTo)
                     .addQuery("aperture", apertureFrom, apertureTo)
+                    .addQueryInt("orientation", os)
                     .addQuery("creationDate", new DateWrapper(dateFrom), new DateWrapper(dateTo));
             if (keywordsOr != null && keywordsOr) {
                 Set<Long> kr = new HashSet<>();
                 for (Long k : keywords) {
                     kr.addAll(NodeFactory.getInstance().getChildrensRec(k));
                 }
-                builder.addQuery("keywordIds", kr);
+                builder.addQueryLong("keywordIds", kr);
             } else {
                 for (Long k : keywords) {
                     List<Long> kr = (NodeFactory.getInstance().getChildrensRec(k));
-                    builder.addQuery("keywordIds", kr);
+                    builder.addQueryLong("keywordIds", kr);
                 }
             }
             SolrQuery query = builder.build();
