@@ -29,6 +29,7 @@ import org.apache.commons.imaging.formats.tiff.write.TiffOutputSet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.braun.digikam.backend.model.Image;
+import org.braun.digikam.backend.model.ImageInternal;
 import org.braun.digikam.backend.model.Keyword;
 import org.braun.digikam.backend.model.VideoInternal;
 
@@ -39,7 +40,7 @@ import org.braun.digikam.backend.model.VideoInternal;
 public class ExifUtil {
     private static final Logger LOG = LogManager.getLogger();
     
-    public static ByteArrayOutputStream writeExifData(Image image, byte[] imageByte) throws IOException {
+    public static ByteArrayOutputStream writeExifData(ImageInternal image, byte[] imageByte) throws IOException {
         try {
             TiffOutputSet outputSet = null;
             final ImageMetadata metadata = Imaging.getMetadata(imageByte);
@@ -67,6 +68,7 @@ public class ExifUtil {
                     addTag(exifDirectory, TiffTagConstants.TIFF_TAG_MAKE, image.getMake());
                     addTag(exifDirectory, TiffTagConstants.TIFF_TAG_MODEL, image.getModel());
                     addTag(exifDirectory, TiffTagConstants.TIFF_TAG_ARTIST, image.getCreator());
+                    addTag(exifDirectory, TiffTagConstants.TIFF_TAG_ORIENTATION, image.getAngle());
                     addTag(exifDirectory, TiffTagConstants.TIFF_TAG_COPYRIGHT, "Alle Rechte vorbehalten");
                     addTag(exifDirectory, MicrosoftTagConstants.EXIF_TAG_RATING, image.getRating());
                     addTag(exifDirectory, MicrosoftTagConstants.EXIF_TAG_XPTITLE, image.getTitle());

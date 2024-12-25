@@ -63,14 +63,14 @@ public class SearchParameter implements Serializable {
     private List<Media> result;
 
     public void isValid() throws ValidationException {
-        if (camera == null) {
+        if (camera == null || camera.isBlank()) {
             make = null;
             model = null;
         } else {
             String[] parts = camera.split(",");
-            make = parts[0];
+            make = parts[0].trim();
             if (parts.length > 1) {
-                model = parts[2];
+                model = parts[1].trim();
             }
         }
 

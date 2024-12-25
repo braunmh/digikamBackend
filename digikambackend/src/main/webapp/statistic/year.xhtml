@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <body>
+
+        <ui:composition template="./../common.xhtml">
+            <ui:param name="title" value="Statistik nach Monat"/>
+            <ui:define name="content">
+                    <ui:repeat var="year" value="#{statisticYearBean.years}">
+                        <ui:repeat var="month" value="#{year.month}">
+                            <div class="stat-container">
+                                <div class="stat-year"><h:outputText value="#{year.name}"/></div>
+                                <div class="stat-month">
+                                    <span style="width: 1rem"><h:outputText value="#{month.name}"/></span>
+                                    <span ><h:outputText value="#{month.count}"/></span>
+                                </div>
+                                <div class="stat-percent-right"></div>
+                            </div>
+                            <div class="stat-container">
+                                <div class="stat-percent-left" style="width: #{100 * month.count / statisticYearBean.maxMonthCount}%"></div>
+                                <div class="stat-percent-right"></div>
+                            </div>
+                        </ui:repeat>
+                        <div class="stat-container">
+                            <div class="stat-year"><h:outputText value="#{year.name}"/></div>
+                            <div class="stat-month">
+                                <span style="width: 1rem">--</span>
+                                <span ><h:outputText value="#{year.count}"/></span>
+                            </div>
+                            <div class="stat-percent-right"></div>
+                        </div>
+                        <div class="stat-container">
+                            <div class="stat-percent-left" style="width: #{100 * year.count / statisticYearBean.maxYearCount}%"></div>
+                            <div class="stat-percent-right"></div>
+                        </div>
+                    </ui:repeat>
+            </ui:define>
+        </ui:composition>
+
+    </body>
+</html>

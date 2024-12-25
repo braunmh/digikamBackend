@@ -11,6 +11,8 @@ import org.braun.digikam.backend.graphics.Orientation;
 public class ImageInternal extends Image {
     
     transient private Orientation orientationTechnical;
+    
+    transient private int angle;
 
     public Orientation getOrientationTechnical() {
         return orientationTechnical;
@@ -19,8 +21,13 @@ public class ImageInternal extends Image {
     public void setOrientationTechnical(Orientation orientationTechnical) {
         this.orientationTechnical = orientationTechnical;
     }
+
+    public int getAngle() {
+        return angle;
+    }
     
     public ImageInternal orientationTechnical(int angle) {
+        this.angle = angle;
         orientationTechnical = Orientation.parseFromDb(angle);
         return this;
     }

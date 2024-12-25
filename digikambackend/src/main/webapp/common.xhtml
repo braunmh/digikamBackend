@@ -10,6 +10,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <h:outputStylesheet name="default.css" library="css"/>
         <h:outputStylesheet name="primeflex3.css" library="css"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <title>#{title}</title>
     </h:head>
 
@@ -24,7 +25,7 @@
                         <p:menuitem value="Bilder suchen" outcome="/search/search" icon="pi pi-fw pi-search"/>
                     </p:submenu>                    
                     <p:submenu label="Statistik">
-                        <p:menuitem value="nach Monat" outcome="/search/search" icon="pi pi-fw pi-search"/>
+                        <p:menuitem value="nach Monat" outcome="/statistic/year" icon="pi pi-fw pi-search"/>
                         <p:menuitem value="nach Stuchwort" outcome="/search/search" icon="pi pi-fw pi-search"/>
                     </p:submenu>
                     <p:submenu label="Administration">

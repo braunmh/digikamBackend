@@ -37,6 +37,7 @@ import org.braun.digikam.backend.api.NotFoundException;
 import org.braun.digikam.backend.entity.Thumbnail;
 import org.braun.digikam.backend.graphics.ExifUtil;
 import org.braun.digikam.backend.graphics.ImageUtil;
+import org.braun.digikam.backend.graphics.Orientation;
 import org.braun.digikam.backend.model.ImageInternal;
 import org.braun.digikam.backend.model.Keyword;
 import org.braun.digikam.backend.model.Media;
@@ -95,7 +96,7 @@ public class ImageFacade {
         FileInputStream fis = getImageFile(image.getRoot(), image.getRelativePath(), image.getName());
         ByteArrayOutputStream scaledImage = new ByteArrayOutputStream();
         try {
-            ImageUtil.scaleImage(fis, scaledImage, width, height, image.getOrientationTechnical());
+            ImageUtil.scaleImage(fis, scaledImage, width, height, Orientation.angle0);
             ByteArrayOutputStream taggedImage = ExifUtil.writeExifData(image, scaledImage.toByteArray());
             return taggedImage.toByteArray();
         } catch (IOException e) {

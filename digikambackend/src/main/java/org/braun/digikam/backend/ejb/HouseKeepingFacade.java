@@ -45,8 +45,10 @@ import org.braun.digikam.backend.StatusFactory;
 import org.braun.digikam.backend.api.NotFoundException;
 import org.braun.digikam.backend.entity.Thumbnail;
 import org.braun.digikam.backend.entity.ThumbnailToGenerate;
+import org.braun.digikam.backend.graphics.ExifUtil;
 import org.braun.digikam.backend.graphics.ImageUtil;
 import org.braun.digikam.backend.graphics.Orientation;
+import org.braun.digikam.backend.model.ImageInternal;
 import org.braun.digikam.backend.model.ImageSolr;
 import org.braun.digikam.backend.util.Configuration;
 
@@ -102,6 +104,7 @@ public class HouseKeepingFacade {
             }
             userTransaction.begin();
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ByteArrayOutputStream taggedImage;
             for (ThumbnailToGenerate thumbToGenerate : resultImages) {
                 LOG.info(thumbToGenerate);
                 Thumbnail thumbnail = thumbToGenerate.getThumbnail();
@@ -109,15 +112,16 @@ public class HouseKeepingFacade {
                 if (!imageFile.exists()) {
                     continue;
                 }
+                ImageInternal imageInternal = imageFacade.getMetadata(thumbToGenerate.getId());
                 try {
-                    Orientation orientation = Orientation.parse(thumbToGenerate.getOrientation());
                     baos.reset();
-                    ImageUtil.scaleImage(imageFile, baos, 1024, 1024, orientation);
+                    ImageUtil.scaleImage(imageFile, baos, 1024, 1024, Orientation.angle0);
+                    taggedImage = ExifUtil.writeExifData(imageInternal, baos.toByteArray());
                     if (thumbnail.getData() == null) {
-                        thumbnail.setData(baos.toByteArray());
+                        thumbnail.setData(taggedImage.toByteArray());
                         thumbnailFacade.create(thumbnail);
                     } else {
-                        thumbnail.setData(baos.toByteArray());
+                        thumbnail.setData(taggedImage.toByteArray());
                         thumbnailFacade.merge(thumbnail);
                     }
                 } catch (IOException e) {
@@ -136,8 +140,8 @@ public class HouseKeepingFacade {
                     }
                     imagesFacade.addTag(image, tags);
                 }
-                ImageSolr image = new ImageSolr(imageFacade.getMetadata(thumbToGenerate.getId()));
-                final UpdateResponse response = client.addBean(solrCollection, image);
+                ImageSolr imageSolr = new ImageSolr(imageInternal);
+                final UpdateResponse response = client.addBean(solrCollection, imageSolr);
                 generated++;
                 if (generated % 5 == 0) {
                     userTransaction.commit();
@@ -163,7 +167,7 @@ public class HouseKeepingFacade {
                 }
             }
             for (Thumbnail thum : imagesToDelete) {
-                client.deleteById(String.valueOf(thum.getImageid()));
+                client.deleteById(solrCollection, String.valueOf(thum.getImageid()));
                 thumbnailFacade.remove(thum);
                 if (generated % 50 == 0) {
                     userTransaction.commit();

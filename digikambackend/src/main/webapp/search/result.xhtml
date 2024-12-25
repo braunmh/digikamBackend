@@ -9,7 +9,7 @@
     <body>
 
         <ui:composition template="./../common.xhtml">
-
+            <ui:param name="title" value="Suchergebnisse"/>
             <ui:define name="content">
                 <h:outputScript library="jakarta.faces" name="jsf.js" target="head" />
                 <h:form id="resultForm">
@@ -17,8 +17,8 @@
                         <h2><h:outputText value="#{epm.date}"/></h2>
                         <ui:repeat var="img" value="#{epm.entries}">
                             <div class="image">
-                                <h:outputLink value="#{request.contextPath}/rest/image/#{img.id}" target="blank">
-                                <di:lazyImage imageId="#{img.id}" id="image" height="500"
+                                <h:outputLink value="#{request.contextPath}/rest/image/#{img.id}" target="_blank">
+                                    <di:lazyImage imageId="#{img.id}" id="image" height="500" orientation="#{img.orientation}"
                                     widthOriginal="#{img.width}" heightOriginal="#{img.height}"/> 
                                 </h:outputLink>
                                 <br/>
