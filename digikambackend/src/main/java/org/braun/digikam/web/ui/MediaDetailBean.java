@@ -19,7 +19,6 @@ import org.braun.digikam.backend.model.Media;
 import org.braun.digikam.web.model.CatAperture;
 import org.braun.digikam.web.model.CatExposure;
 import org.primefaces.PrimeFaces;
-import org.primefaces.model.DialogFrameworkOptions;
 
 /**
  *

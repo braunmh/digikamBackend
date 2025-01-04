@@ -84,15 +84,19 @@ public class HouseKeepingFacade {
 
     @Asynchronous
     public Future<Integer> generateTumbnailsTagImages() {
+        int generated = 0;
+        try {
+        if (!StatusFactory.getInstance().aquireTumbnailGenerationStatusBussy()) {
+            return new AsyncResult<>(generated);
+        }
         long startTst = System.currentTimeMillis();
         List<ThumbnailToGenerate> resultImages = findImages();
         List<ThumbnailToGenerate> resultVideos = findVideos();
         List<Thumbnail> imagesToDelete = findImagesToDelete();
         
         if (resultImages.isEmpty() && resultVideos.isEmpty() && imagesToDelete.isEmpty()) {
-            return new AsyncResult<>(0);
+            return new AsyncResult<>(generated);
         }
-        int generated = 0;
         List<Node> nodes = NodeFactory.getInstance().list();
         UserTransaction userTransaction = context.getUserTransaction();
         final String solrCollection = Configuration.getInstance().getSolrCollection();
@@ -191,7 +195,11 @@ public class HouseKeepingFacade {
         NodeFactory.getInstance().refresh(tagsFacade.findAll());
         LOG.info("Thumbnail-Generation and tagging {} Images took {} seconds",
                 generated, (System.currentTimeMillis() - startTst) / 1000);
-        StatusFactory.getInstance().aquireTumbnailGenerationStatusDone();
+        } catch (IllegalStateException | SecurityException e) {
+          LOG.error("Thumbnail-Generation ended with error.", e);
+        } finally {
+            StatusFactory.getInstance().aquireTumbnailGenerationStatusDone();
+        }
         return new AsyncResult<>(generated);
     }
 
@@ -213,12 +221,13 @@ public class HouseKeepingFacade {
     }
 
     private List<ThumbnailToGenerate> findVideos() {
-        String sqlStatement = "SELECT i.id, substr(ar.identifier, 16) root, a.relativePath, i.name,\n"
-                + " i.modificationDate, ii.orientation, null as data, ii.width, ii.height, t.imageId\n"
-                + "FROM AlbumRoots ar inner join Albums a on (ar.id = a.albumRoot) inner join Images i on a.id = i.album\n"
-                + " inner join ImageInformation ii on i.id = ii.imageId inner join VideoMetadata im on ii.imageid = im.imageid\n"
-                + " left join Thumbnail t on i.id = t.imageId\n"
-                + "where (t.imageId is null or t.modificationDate < i.modificationDate)";
+        String sqlStatement = """
+                              SELECT i.id, substr(ar.identifier, 16) root, a.relativePath, i.name,
+                               i.modificationDate, ii.orientation, null as data, ii.width, ii.height, t.imageId
+                              FROM AlbumRoots ar inner join Albums a on (ar.id = a.albumRoot) inner join Images i on a.id = i.album
+                               inner join ImageInformation ii on i.id = ii.imageId inner join VideoMetadata im on ii.imageid = im.imageid
+                               left join Thumbnail t on i.id = t.imageId
+                              where (t.imageId is null or t.modificationDate < i.modificationDate)""";
         Query query = getEntityManager().createNativeQuery(sqlStatement, ThumbnailToGenerate.class);
         return query.getResultList();
     }

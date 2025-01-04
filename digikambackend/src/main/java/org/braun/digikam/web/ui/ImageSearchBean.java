@@ -112,7 +112,7 @@ public class ImageSearchBean implements Serializable {
                         entriesPerMonth.get(current).getEntries().add(media);
                     }
                 }
-                String outCome = "/search/result.jsf";
+                String outCome = "/search/result.xhtml";
                 return outCome;
             }
         } catch (ValidationException e) {

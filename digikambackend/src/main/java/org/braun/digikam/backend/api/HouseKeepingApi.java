@@ -37,7 +37,7 @@ public class HouseKeepingApi {
     })
     public Response generateThumbnails(@Context SecurityContext securityContext)
         throws NotFoundException {
-        if (StatusFactory.getInstance().aquireTumbnailGenerationStatusBussy()) {
+        if (!StatusFactory.getInstance().getTumbnailGenerationStatus()) {
             Future<Integer> cnt = houseKeepingFacade.generateTumbnailsTagImages();
         }
         return Response.ok().build();

@@ -24,7 +24,7 @@
                                 scrollHeight="250">
                                 <f:converter converterId="keywordConverter"/>
                             </p:autoComplete>
-                            <p:message id="keywordMsg" for="keywords" display="text"/>
+                            <p:message id="keywordMsg" for="keywords" display="tooltip"/>
                         </div>
                         <div class="field col-12 md:col-6">
                             <p:outputLabel for="creator" value="Urheber" />
@@ -59,7 +59,7 @@
                                 <f:converter converterId="dateWrapperConverter"/>
                                 <p:ajax update="dateFromMsg @this" event="change"/>
                             </p:inputText>
-                            <p:message id="dateFromMsg" for="dateFrom" display="text"/>
+                            <p:message id="dateFromMsg" for="dateFrom" display="tooltip"/>
                         </div>
                         <div class="field col-12 md:col-6">
                             <p:outputLabel for="dateTo" value="bis" />
@@ -67,7 +67,7 @@
                                 <f:converter converterId="dateWrapperConverter"/>
                                 <p:ajax update="dateToMsg @this" event="change"/>
                             </p:inputText>
-                            <p:message id="dateToMsg" for="dateTo" display="text"/>
+                            <p:message id="dateToMsg" for="dateTo" display="tooltip"/>
                         </div>
                         <div class="field col-12 md:col-6">
                             <p:outputLabel for="@next" value="Bewertung von" />
@@ -160,7 +160,7 @@
                             </p:selectOneMenu>
                         </div>
                     </div>
-                    <div style="text-align: right">
+                    <div class="command">
                         <p:selectBooleanCheckbox value="#{imageSearchBean.searchParameter.keywordsOr}" itemLabel="oder"/>
                         <p:selectBooleanCheckbox value="#{imageSearchBean.searchParameter.ascending}" itemLabel="Aufsteigend"/>
                         <p:commandButton styleClass="di-button" id="reset" value="zurücksetzen" action="#{imageSearchBean.init()}"/>

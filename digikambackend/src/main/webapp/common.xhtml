@@ -12,6 +12,16 @@
         <h:outputStylesheet name="primeflex3.css" library="css"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <title>#{title}</title>
+        <!--
+        <style>
+            a.up {
+                padding-left: 1.5rem;
+            }
+            a.up-info-circle {
+                background: url("#{resource['image/info-circle.svg']}") no-repeat border-box;
+            }
+        </style>
+        -->
     </h:head>
 
     <h:body>
@@ -30,9 +40,12 @@
                     </p:submenu>
                     <p:submenu label="Administration">
                         <p:menuitem value="Refresh Caches"/>
-                        <p:menuitem value="Suchindex aktualisieren"/>
+                        <p:menuitem value="Suchindex aktualisieren" outcome="/admin/generate"/>
                     </p:submenu>
                 </p:menu>
+                <!--span>
+                    <a tabindex="-1" role="menuitem" href="/digikam/search/search.xhtml" class="ui-menuitem-link ui-corner-all up up-search">Bilder suchen</a>
+                </span-->
             </h:form>
         </div>
 

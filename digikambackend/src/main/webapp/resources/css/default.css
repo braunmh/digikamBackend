@@ -46,15 +46,19 @@ h3 {
     font-size: 1.3rem;
 }
 a:link, a:visited {
-  color: #045491;
-  font-weight : bold;
+  color: #495057;
+  font-weight : normal;
   text-decoration: none;
 }
 
 a:link:hover, a:visited:hover  {
-  color: #045491;
+  color: #495057;
   font-weight : bold;
-  text-decoration : underline;
+  text-decoration: none;
+}
+
+div.command {
+    text-align: right;
 }
 
 div.stat-container {
@@ -85,3 +89,12 @@ div.stat-count {
 div.image {float: left; margin: .3rem}
 
 .di-button {margin-left: .3rem !important}
+
+/* Menu-Items ohne zusätzliche span's' */
+a.up {
+    padding-left: 1.5rem;
+}
+a.up-info-circle {
+    background: url("#{resource['image/info-circle.svg']}") no-repeat border-box;
+}
+
