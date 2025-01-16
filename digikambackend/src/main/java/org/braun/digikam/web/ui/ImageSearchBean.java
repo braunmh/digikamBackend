@@ -150,7 +150,7 @@ public class ImageSearchBean implements Serializable {
     }
     
     public List<Keyword> completeKeyword(String query) {
-        return NodeFactory.getInstance().getKeywordByName(query.toLowerCase());
+        return NodeFactory.getInstance().getKeywordByFullName(query.toLowerCase());
     }
     
     public List<String> completeCamera(String query) {
