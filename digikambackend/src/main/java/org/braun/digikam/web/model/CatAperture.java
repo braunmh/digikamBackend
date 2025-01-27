@@ -10,7 +10,7 @@ import java.util.List;
 public class CatAperture extends Catalogue<Double> {
     
     public static final List<CatAperture> values =
-        Arrays.asList(new CatAperture().id(0).value(null).name("--"),
+        Arrays.asList(new CatAperture().id(0).value(null).name(""),
             new CatAperture().id(1).value(1.0).name("1"),
             new CatAperture().id(2).value(1.4).name("1.4"),
             new CatAperture().id(3).value(1.7).name("1.7"),

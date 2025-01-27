@@ -262,6 +262,45 @@ public class SearchParameter implements Serializable {
         return ratingTo;
     }
 
+    public CatAperture getApertureFrom() {
+        if (apertureFrom == null) {
+            apertureFrom = new CatAperture();
+        }
+        return apertureFrom;
+    }
+
+    public CatAperture getApertureTo() {
+        if (apertureTo == null) {
+            apertureTo = new CatAperture();
+        }
+        return apertureTo;
+    }
+
+    public CatIso getIsoFrom() {
+        if (isoFrom == null) {
+            isoFrom = new CatIso();
+        }
+        return isoFrom;
+    }
+
+    public CatIso getIsoTo() {
+        if (isoTo == null) {
+            isoTo = new CatIso();
+        }
+        return isoTo;
+    }
+
+    public CatOrientation getOrientation() {
+        if (orientation == null) {
+            orientation = new CatOrientation();
+        }
+        return orientation;
+    }
+
+    public void setIsoFrom(CatIso isoFrom) {
+        this.isoFrom = isoFrom;
+    }
+
     public void setFocalLengthFrom(CatFocalLength focalLengthFrom) {
         this.focalLengthFrom = focalLengthFrom;
     }
@@ -290,16 +329,8 @@ public class SearchParameter implements Serializable {
         this.rating = rating;
     }
 
-    public CatAperture getApertureFrom() {
-        return apertureFrom;
-    }
-
     public void setApertureFrom(CatAperture apertureFrom) {
         this.apertureFrom = apertureFrom;
-    }
-
-    public CatAperture getApertureTo() {
-        return apertureTo;
     }
 
     public void setApertureTo(CatAperture apertureTo) {
@@ -326,24 +357,8 @@ public class SearchParameter implements Serializable {
         this.date = date;
     }
 
-    public CatOrientation getOrientation() {
-        return orientation;
-    }
-
     public void setOrientation(CatOrientation orientation) {
         this.orientation = orientation;
-    }
-
-    public CatIso getIsoFrom() {
-        return isoFrom;
-    }
-
-    public void setIsoFrom(CatIso isoFrom) {
-        this.isoFrom = isoFrom;
-    }
-
-    public CatIso getIsoTo() {
-        return isoTo;
     }
 
     public void setIsoTo(CatIso isoTo) {

@@ -11,7 +11,7 @@ public class CatOrientation extends Catalogue<String> {
     
     public static final List<CatOrientation> values =
         Arrays.asList(
-            new CatOrientation().id(0).value(null).name("--"),
+            new CatOrientation().id(0).value(null).name(""),
             new CatOrientation().id(1).value("Landscape").name("Querformat"),
             new CatOrientation().id(5).value("Portrait").name("Hochformat")
         );

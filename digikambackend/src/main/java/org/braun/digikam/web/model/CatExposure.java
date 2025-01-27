@@ -10,7 +10,7 @@ import java.util.List;
 public class CatExposure extends Catalogue<Double> {
     
     public static final List<CatExposure> values =
-        Arrays.asList(new CatExposure().id(0).value(null).name("--"),
+        Arrays.asList(new CatExposure().id(0).value(null).name(""),
             new CatExposure().id(1).value(1/8000d).name("1/8000"),
             new CatExposure().id(2).value(1/4000d).name("1/4000"),
             new CatExposure().id(3).value(1/2000d).name("1/2000"),

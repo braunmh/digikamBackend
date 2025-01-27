@@ -98,3 +98,16 @@ a.up-info-circle {
     background: url("#{resource['image/info-circle.svg']}") no-repeat border-box;
 }
 
+a.buttom {
+  color: white;
+  padding: 0 0.2rem 0 0.2rem;
+  font-weight: bold;    
+}
+
+div.top {
+    position: sticky;
+    top: 0;
+    overflow: hidden;
+    z-index: 1;
+}
+

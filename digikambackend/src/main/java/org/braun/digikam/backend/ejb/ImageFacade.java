@@ -184,7 +184,7 @@ public class ImageFacade {
                     .addQuery("rating", ratingFrom, ratingTo)
                     .addQuery("iso", isoFrom, isoTo)
                     .addQuery("exposureTime", exposureTimeFrom, exposureTimeTo)
-                    .addQuery("focalLength", focalLengthFrom, focalLengthTo)
+                    .addQuery("focalLength35", focalLengthFrom, focalLengthTo)
                     .addQuery("aperture", apertureFrom, apertureTo)
                     .addQueryInt("orientation", os)
                     .addQuery("creationDate", new DateWrapper(dateFrom), new DateWrapper(dateTo));

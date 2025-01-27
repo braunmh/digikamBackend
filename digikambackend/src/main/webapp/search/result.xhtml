@@ -10,6 +10,9 @@
 
         <ui:composition template="./../common.xhtml">
             <ui:param name="title" value="Suchergebnisse"/>
+            <ui:define name="navigation">
+                <h:link outcome="/search/search" value="zurück" styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left buttom"/>
+            </ui:define>
             <ui:define name="content">
                 <h:outputScript library="jakarta.faces" name="jsf.js" target="head" />
                 <h:form id="resultForm">
@@ -18,7 +21,7 @@
                         <ui:repeat var="img" value="#{epm.entries}">
                             <div class="image">
                                 <h:outputLink value="#{request.contextPath}/rest/image/#{img.id}" target="_blank">
-                                    <di:lazyImage imageId="#{img.id}" id="image" height="500" orientation="#{img.orientation}"
+                                    <di:lazyImage imageId="#{img.id}" id="image" width="#{sessionUserBean.imageWidth}" orientation="#{img.orientation}"
                                     widthOriginal="#{img.width}" heightOriginal="#{img.height}"/> 
                                 </h:outputLink>
                                 <br/>

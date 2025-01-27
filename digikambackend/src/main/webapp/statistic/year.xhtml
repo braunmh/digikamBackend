@@ -2,12 +2,16 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:comp="http://xmlns.jcp.org/jsf/composite/comp">
 
     <body>
 
         <ui:composition template="./../common.xhtml">
             <ui:param name="title" value="Statistik nach Monat"/>
+            <ui:define name="navigation">
+                <comp:navigation/>
+            </ui:define>
             <ui:define name="content">
                     <ui:repeat var="year" value="#{statisticYearBean.years}">
                         <ui:repeat var="month" value="#{year.month}">

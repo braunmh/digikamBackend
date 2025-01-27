@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+      xmlns:p="http://primefaces.org/ui">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        <p:commandButton id="mainmenuButton" value="" type="button" icon="pi pi-bars"/>
+        <p:menu overlay="true" trigger="mainmenuButton" my="left top" at="left bottom">
+            <p:submenu label="Suche">
+                <p:menuitem value="Bilder suchen" outcome="/search/search" icon="pi pi-fw pi-search"/>
+            </p:submenu>                    
+            <p:submenu label="Statistik">
+                <p:menuitem value="nach Monat" outcome="/statistic/year" icon="pi pi-fw pi-search"/>
+                <p:menuitem value="nach Stuchwort" outcome="/search/search" icon="pi pi-fw pi-search"/>
+            </p:submenu>
+            <p:submenu label="Administration">
+                <p:menuitem value="Refresh Caches"/>
+                <p:menuitem value="Suchindex aktualisieren" outcome="/admin/generate"/>
+            </p:submenu>
+        </p:menu>
+    </cc:implementation>
+</html>

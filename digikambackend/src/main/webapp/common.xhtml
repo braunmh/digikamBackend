@@ -12,44 +12,25 @@
         <h:outputStylesheet name="primeflex3.css" library="css"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <title>#{title}</title>
-        <!--
-        <style>
-            a.up {
-                padding-left: 1.5rem;
-            }
-            a.up-info-circle {
-                background: url("#{resource['image/info-circle.svg']}") no-repeat border-box;
-            }
-        </style>
-        -->
     </h:head>
 
-    <h:body>
-
+    <h:body onload="retrieveWidthHeight()">
+        <script type="text/javascript">
+        function retrieveWidthHeight() {
+            var innerWidth =  "" + window.innerWidth;
+            var innerHeight = "" + window.innerHeight;
+            setWidthHeight([{name: "innerHeight", value: innerHeight}, {name: "innerWidth", value: innerWidth}]);
+        }
+        </script>
         <div id="top" class="top">
-            <h:form id="menu">
-                <p:growl id="growl"/>
-                <p:commandButton id="mainmenuButton" value="" type="button" icon="pi pi-bars"/>
-                <p:menu overlay="true" trigger="mainmenuButton" my="left top" at="left bottom">
-                    <p:submenu label="Suche">
-                        <p:menuitem value="Bilder suchen" outcome="/search/search" icon="pi pi-fw pi-search"/>
-                    </p:submenu>                    
-                    <p:submenu label="Statistik">
-                        <p:menuitem value="nach Monat" outcome="/statistic/year" icon="pi pi-fw pi-search"/>
-                        <p:menuitem value="nach Stuchwort" outcome="/search/search" icon="pi pi-fw pi-search"/>
-                    </p:submenu>
-                    <p:submenu label="Administration">
-                        <p:menuitem value="Refresh Caches"/>
-                        <p:menuitem value="Suchindex aktualisieren" outcome="/admin/generate"/>
-                    </p:submenu>
-                </p:menu>
-                <!--span>
-                    <a tabindex="-1" role="menuitem" href="/digikam/search/search.xhtml" class="ui-menuitem-link ui-corner-all up up-search">Bilder suchen</a>
-                </span-->
-            </h:form>
+        <h:form id="menu">
+            <p:remoteCommand name="setWidthHeight"  action="#{sessionUserBean.setWidthHeight}" />
+            <p:growl id="growl"/>
+            <ui:insert name="navigation">Navigation</ui:insert>
+        </h:form>
         </div>
 
-        <div id="content" class="center_content">
+        <div id="content" >
             <ui:insert name="content">Content</ui:insert>
         </div>
 

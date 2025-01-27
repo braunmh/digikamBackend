@@ -4,13 +4,16 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:comp="http://xmlns.jcp.org/jsf/composite/comp">
 
     <body>
 
         <ui:composition template="./../common.xhtml">
             <ui:param name="title" value="Bilder suchen"/>
-
+            <ui:define name="navigation">
+                <comp:navigation/>
+            </ui:define>
             <ui:define name="content">
                 <div class="card">
                 <h:form id="mainForm">
@@ -54,110 +57,134 @@
                             </p:selectOneMenu>
                         </div>
                         <div class="field col-12 md:col-6">
-                            <p:outputLabel for="dateFrom" value="Datum von" />
+                            <div class="ui-outputpanel ui-widget ui-float-label">
                             <p:inputText id="dateFrom" value="#{imageSearchBean.searchParameter.date.from}" >
                                 <f:converter converterId="dateWrapperConverter"/>
                                 <p:ajax update="dateFromMsg @this" event="change"/>
                             </p:inputText>
+                            <p:outputLabel for="dateFrom" value="Datum von" />
                             <p:message id="dateFromMsg" for="dateFrom" display="tooltip"/>
+                            </div>
                         </div>
                         <div class="field col-12 md:col-6">
-                            <p:outputLabel for="dateTo" value="bis" />
+                            <div class="ui-outputpanel ui-widget ui-float-label">
                             <p:inputText id="dateTo" value="#{imageSearchBean.searchParameter.date.to}">
                                 <f:converter converterId="dateWrapperConverter"/>
                                 <p:ajax update="dateToMsg @this" event="change"/>
                             </p:inputText>
+                            <p:outputLabel for="dateTo" value="bis" />
                             <p:message id="dateToMsg" for="dateTo" display="tooltip"/>
+                            </div>
                         </div>
                         <div class="field col-12 md:col-6">
-                            <p:outputLabel for="@next" value="Bewertung von" />
+                            <div class="ui-outputpanel ui-widget ui-float-label">
                             <p:selectOneMenu id="ratingFrom"
                                             value="#{imageSearchBean.searchParameter.ratingFrom}">
                                 <f:selectItems value="#{imageSearchBean.ratingValues}" 
                                                var="rating" itemLabel="#{rating.name}" itemValue="#{rating}"/>
                                 <f:converter converterId="ratingConverter"/>
                             </p:selectOneMenu>
+                            <p:outputLabel for="@previous" value="Bewertung von" />
+                            </div>
                         </div>
                         <div class="field col-12 md:col-6">
-                            <p:outputLabel for="@next" value="bis" />
+                            <div class="ui-outputpanel ui-widget ui-float-label">
                             <p:selectOneMenu id="ratingTo"
                                             value="#{imageSearchBean.searchParameter.ratingTo}">
                                 <f:selectItems value="#{imageSearchBean.ratingValues}" 
                                                var="rating" itemLabel="#{rating.name}" itemValue="#{rating}"/>
                                 <f:converter converterId="ratingConverter"/>
                             </p:selectOneMenu>
+                            <p:outputLabel for="@previous" value="bis" />
+                            </div>
                         </div>
                         <div class="field col-12 md:col-6">
-                            <p:outputLabel for="@next" value="ISO von" />
+                            <div class="ui-outputpanel ui-widget ui-float-label">
                             <p:selectOneMenu id="isoFrom"
                                             value="#{imageSearchBean.searchParameter.isoFrom}">
                                 <f:selectItems value="#{imageSearchBean.isoValues}" 
                                                var="entry" itemLabel="#{entry.name}" itemValue="#{entry}"/>
                                 <f:converter converterId="isoConverter"/>
                             </p:selectOneMenu>
+                            <p:outputLabel for="@previous" value="ISO von" />
+                            </div>
                         </div>
                         <div class="field col-12 md:col-6">
-                            <p:outputLabel for="@next" value="bis" />
+                            <div class="ui-outputpanel ui-widget ui-float-label">
                             <p:selectOneMenu id="isoTo"
                                             value="#{imageSearchBean.searchParameter.isoTo}">
                                 <f:selectItems value="#{imageSearchBean.isoValues}" 
                                                var="entry" itemLabel="#{entry.name}" itemValue="#{entry}"/>
                                 <f:converter converterId="isoConverter"/>
                             </p:selectOneMenu>
+                            <p:outputLabel for="@previous" value="bis" />
+                            </div>
                         </div>
                         <div class="field col-12 md:col-6">
-                            <p:outputLabel for="@next" value="Blende von" />
+                            <div class="ui-outputpanel ui-widget ui-float-label">
                             <p:selectOneMenu id="apertureFrom"
                                             value="#{imageSearchBean.searchParameter.apertureFrom}">
                                 <f:selectItems value="#{imageSearchBean.apertureValues}" 
                                                var="entry" itemLabel="#{entry.name}" itemValue="#{entry}"/>
                                 <f:converter converterId="apertureConverter"/>
                             </p:selectOneMenu>
+                            <p:outputLabel for="@previous" value="Blende von" />
+                        </div>
                         </div>
                         <div class="field col-12 md:col-6">
-                            <p:outputLabel for="@next" value="bis" />
+                            <div class="ui-outputpanel ui-widget ui-float-label">
                             <p:selectOneMenu id="apertureTo"
                                             value="#{imageSearchBean.searchParameter.apertureTo}">
                                 <f:selectItems value="#{imageSearchBean.apertureValues}" 
                                                var="entry" itemLabel="#{entry.name}" itemValue="#{entry}"/>
                                 <f:converter converterId="apertureConverter"/>
                             </p:selectOneMenu>
+                            <p:outputLabel for="@previous" value="bis" />
+                        </div>
                         </div>
                         <div class="field col-12 md:col-6">
-                            <p:outputLabel for="@next" value="Brennweite von" />
+                            <div class="ui-outputpanel ui-widget ui-float-label">
                             <p:selectOneMenu id="focalLengthFrom"
                                             value="#{imageSearchBean.searchParameter.focalLengthFrom}">
                                 <f:selectItems value="#{imageSearchBean.focalLengthValues}" 
                                                var="entry" itemLabel="#{entry.name}" itemValue="#{entry}"/>
                                 <f:converter converterId="focalLengthConverter"/>
                             </p:selectOneMenu>
+                            <p:outputLabel for="@previous" value="Brennweite von" />
+                        </div>
                         </div>
                         <div class="field col-12 md:col-6">
-                            <p:outputLabel for="@next" value="bis" />
+                            <div class="ui-outputpanel ui-widget ui-float-label">
                             <p:selectOneMenu id="focalLengthTo"
                                             value="#{imageSearchBean.searchParameter.focalLengthTo}">
                                 <f:selectItems value="#{imageSearchBean.focalLengthValues}" 
                                                var="entry" itemLabel="#{entry.name}" itemValue="#{entry}"/>
                                 <f:converter converterId="focalLengthConverter"/>
                             </p:selectOneMenu>
+                            <p:outputLabel for="@previous" value="bis" />
+                        </div>
                         </div>
                         <div class="field col-12 md:col-6">
-                            <p:outputLabel for="@next" value="Belichtungszeit von" />
+                            <div class="ui-outputpanel ui-widget ui-float-label">
                             <p:selectOneMenu id="exposureFrom"
                                             value="#{imageSearchBean.searchParameter.exposureFrom}">
                                 <f:selectItems value="#{imageSearchBean.exposureValues}" 
                                                var="entry" itemLabel="#{entry.name}" itemValue="#{entry}"/>
                                 <f:converter converterId="exposureConverter"/>
                             </p:selectOneMenu>
+                            <p:outputLabel for="@previous" value="Belichtungszeit von" />
+                        </div>
                         </div>
                         <div class="field col-12 md:col-6">
-                            <p:outputLabel for="@next" value="bis" />
+                            <div class="ui-outputpanel ui-widget ui-float-label">
                             <p:selectOneMenu id="exposureTo"
                                             value="#{imageSearchBean.searchParameter.exposureTo}">
                                 <f:selectItems value="#{imageSearchBean.exposureValues}" 
                                                var="entry" itemLabel="#{entry.name}" itemValue="#{entry}"/>
                                 <f:converter converterId="exposureConverter"/>
                             </p:selectOneMenu>
+                            <p:outputLabel for="@previous" value="bis" />
+                        </div>
                         </div>
                     </div>
                     <div class="command">

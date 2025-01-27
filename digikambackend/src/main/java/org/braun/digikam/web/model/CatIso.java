@@ -10,7 +10,7 @@ import java.util.List;
 public class CatIso extends Catalogue<Integer> {
     
     public static final List<CatIso> values =
-        Arrays.asList(new CatIso().id(0).value(null).name("--"),
+        Arrays.asList(new CatIso().id(0).value(null).name(""),
             new CatIso().id(1).value(50).name("50"),
             new CatIso().id(2).value(64).name("64"),
             new CatIso().id(3).value(100).name("100"),
