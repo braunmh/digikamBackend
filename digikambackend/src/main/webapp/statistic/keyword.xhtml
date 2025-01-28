@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../common.xhtml"
+                xmlns:comp="http://xmlns.jcp.org/jsf/composite/comp"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:param name="title" value="Statistik nach Stichwort"/>
+    <ui:define name="navigation">
+        <comp:navigation/>
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="card">
+            <h:form id="mainForm">
+                <div class="ui-fluid formgrid grid">
+                    <div class="field col-12 md:col-6">
+                        <p:outputLabel for="keywords" value="Stichworte" />
+                        <p:autoComplete id="keywords" var="keyword" dropdown="true" 
+                            multiple="false" value="#{statisticKeywordBean.content.keyword}"
+                            completeMethod="#{statisticKeywordBean.completeKeyword}"
+                            itemLabel="#{keyword.name}" itemValue="#{keyword}"
+                            scrollHeight="250" required="true">
+                            <f:converter converterId="keywordConverter"/>
+                        </p:autoComplete>
+                        <p:message id="keywordMsg" for="keywords" display="tooltip"/>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <p:outputLabel for="year" value="Jahr" id="labelYear" />
+                        <p:inputText id="year" value="#{statisticKeywordBean.content.year}" required="true">
+                            <p:ajax event="change" update="year yearMsg labelYear"/>
+                            <f:converter converterId="yearConverter"/>
+                        </p:inputText>
+                        <p:message id="yearMsg" for="year" display="tooltip"/>
+                    </div>
+                </div>
+                <div class="command">
+                    <p:commandButton styleClass="di-button" id="execute" 
+                        value="Statistik generieren" update="@form"
+                        action="#{statisticKeywordBean.execute()}"/>
+                </div>
+                <p:dataTable id="result" var="entry" value="#{statisticKeywordBean.result}">
+                    <p:column headerText="Name">
+                        <h:outputText value="#{entry.name}"/>
+                    </p:column>
+                    <p:column headerText="Anzahl">
+                        <h:outputText value="#{entry.count}"/>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </div>
+    </ui:define>
+
+</ui:composition>
