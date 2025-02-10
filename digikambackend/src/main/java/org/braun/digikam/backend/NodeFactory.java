@@ -3,8 +3,10 @@ package org.braun.digikam.backend;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -23,7 +25,7 @@ public class NodeFactory {
     private static final ReadWriteLock LOCK = new ReentrantReadWriteLock();
     private static final Lock READ_LOCK = LOCK.readLock();
     private static final Lock WRITE_LOCK = LOCK.writeLock();
-    private List<Node> nodes;
+    private ArrayList<Node> nodes;
 
     private static final NodeFactory INSTANCE = new NodeFactory();
 
@@ -63,7 +65,7 @@ public class NodeFactory {
 
             nodes = new ArrayList(map.values());
             initFullNames(root);
-            initQualifiedNames();
+            initQualifiedNames(nodes);
         } catch (Exception e) {
             LOG.error("Aquiring WriteLock failed", e);
         } finally {
@@ -82,6 +84,7 @@ public class NodeFactory {
 
     private void initFullNames(Node p) {
         p.setFullName("");
+        p.setQualifiedName("");
         for (Node c : p.getChildren()) {
             initFullNames(c, p.getFullName());
         }
@@ -93,24 +96,34 @@ public class NodeFactory {
         }
     }
 
-    private void initQualifiedNames() {
-        Collections.sort(nodes, (Node n1, Node n2) -> n1.getName().compareTo(n2.getName()));
-        for (Node n : nodes) {
-            if (n.getParent() == null || n.getQualifiedName() != null) {
+    private void initQualifiedNames(List<Node> tags) {
+        List<Node> ns = tags.stream().toList();
+        int count = 0;
+        for (count = 0; count < tags.size(); count++) {
+            Node node = ns.get(count);
+            if (node.getParent() == null) {
+                node.setQualifiedName(node.getName());
                 continue;
             }
-
-            List<Node> siblings = getNodeByName(n);
-            if (siblings.size() == 1) {
-                n.setQualifiedName(n.getName());
-            } else {
-                for (Node s : siblings) {
-                    s.setQualifiedName(s.getParent().getName() + "/" + s.getName());
-                }
-            }
+            String[] fullNames = node.getFullName().split("/");
+            String qName = calculateQualifiedName(node.getName(), fullNames, fullNames.length - 1);
+            node.setQualifiedName(qName);
         }
+        Collections.sort(tags, (Node n1, Node n2) -> n1.getName().compareTo(n2.getName()));
     }
 
+    private String calculateQualifiedName(String name, String[] fullNames, int current) {
+        String searchName = "/" + name;
+        if (nodes.stream().filter(o -> o.getFullName().endsWith(searchName)).count() == 1) {
+            return name;
+        }
+        if (current == 0) {
+            return name;
+        }
+        current--;
+        return calculateQualifiedName(fullNames[current] + searchName, fullNames, current);
+    }
+    
     private List<Node> getNodeByName(Node curNode) {
         List<Node> result = new ArrayList<>();
         for (Node n : nodes) {

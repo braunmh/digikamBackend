@@ -79,8 +79,25 @@ public class TagsFacadeTest {
     private TagsFacade tagsFacade;
     private Map<String, Tags> tagsCached = new HashMap<>();
     private EntityManager em;
-    
+  
     @Test
+    public void testNewAlgo() {
+        em = getEntityManager();
+        tagsFacade = new TagsFacade();
+        tagsFacade.setEntityManager(em);
+        NodeFactory.getInstance().refresh(tagsFacade.findAll());
+        List<Node> nodes = NodeFactory.getInstance().list();
+        long cntAuto = nodes.stream().filter(n -> n.getFullName() != null && n.getFullName().startsWith("/_auto")).count();
+        long cntAutoLeave = nodes.stream()
+                .filter(n -> n.getFullName() != null && n.getFullName().startsWith("/_auto") && n.getChildren().isEmpty())
+                .count();
+        long cntManuell = nodes.stream().filter(n -> n.getFullName() != null && n.getFullName().startsWith("/_manuell")).count();
+        long cntManuellLeave = nodes.stream()
+                .filter(n -> n.getFullName() != null && n.getFullName().startsWith("/_manuell") && n.getChildren().isEmpty())
+                .count();
+        System.out.println(String.format("auto=%s (%s), manuell=%s (%s)", cntAuto, cntAutoLeave, cntManuell, cntManuellLeave));
+    }
+    
     public void validateAutoTags() {
         em = getEntityManager();
         tagsFacade = new TagsFacade();

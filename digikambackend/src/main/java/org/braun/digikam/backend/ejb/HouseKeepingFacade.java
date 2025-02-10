@@ -17,6 +17,7 @@ import jakarta.json.JsonValue;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
 import jakarta.transaction.HeuristicMixedException;
 import jakarta.transaction.HeuristicRollbackException;
 import jakarta.transaction.NotSupportedException;
@@ -43,6 +44,7 @@ import org.braun.digikam.backend.Node;
 import org.braun.digikam.backend.NodeFactory;
 import org.braun.digikam.backend.StatusFactory;
 import org.braun.digikam.backend.api.NotFoundException;
+import org.braun.digikam.backend.entity.StatisticView;
 import org.braun.digikam.backend.entity.Thumbnail;
 import org.braun.digikam.backend.entity.ThumbnailToGenerate;
 import org.braun.digikam.backend.graphics.ExifUtil;
@@ -50,6 +52,7 @@ import org.braun.digikam.backend.graphics.ImageUtil;
 import org.braun.digikam.backend.graphics.Orientation;
 import org.braun.digikam.backend.model.ImageInternal;
 import org.braun.digikam.backend.model.ImageSolr;
+import org.braun.digikam.backend.model.Statistic;
 import org.braun.digikam.backend.util.Configuration;
 
 /**
@@ -62,6 +65,15 @@ public class HouseKeepingFacade {
 
     private static final Logger LOG = LogManager.getLogger();
 
+    private static final String GET_STATISTICS = 
+            """
+            select 1 id, 'image' name,  count(*) count from ImageMetadata
+            union select 3, 'video' property,  count(*) count from VideoMetadata
+            union select 2, 'image_size', sum(fileSize) from Images i inner join ImageMetadata im on i.id = im.imageid
+            union select 4, 'video_size', sum(fileSize) from Images i inner join VideoMetadata vm on i.id = vm.imageid
+            union select 5, 'keyword', count(*) from Tags
+            order by 1""";
+    
     @PersistenceContext(unitName = "digikam")
     private EntityManager em;
 
@@ -82,6 +94,17 @@ public class HouseKeepingFacade {
     @Inject
     private TagsFacade tagsFacade;
 
+    public List<Statistic> getStatistics() {
+        Query query = getEntityManager().createNativeQuery(GET_STATISTICS, StatisticView.class);
+        List<Statistic> result = new ArrayList<>();
+        List<StatisticView> temp = query.getResultList();
+        
+        for (StatisticView v : temp) {
+            result.add(new Statistic().order(v.getId()).count(String.format("%,d", v.getCount())).name(v.getName()));
+        }
+        return result;
+    }
+    
     @Asynchronous
     public Future<Integer> generateTumbnailsTagImages() {
         int generated = 0;
@@ -284,7 +307,7 @@ public class HouseKeepingFacade {
                         }
                         TagWeighted tw = TagWeighted.parse(line, translatedKeywords);
                         if (tw.weight >= 0.99 && !"Örtlichkeit".equals(tw.name)) {
-                            tags.add("auto|" + tw.name);
+                            tags.add("_auto|" + tw.name);
                         }
                     }
                 } catch (IOException e) {

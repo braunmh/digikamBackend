@@ -11,9 +11,11 @@ import jakarta.ws.rs.core.SecurityContext;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
+import java.util.List;
 import java.util.concurrent.Future;
 import org.braun.digikam.backend.StatusFactory;
 import org.braun.digikam.backend.ejb.HouseKeepingFacade;
+import org.braun.digikam.backend.model.Statistic;
 @Stateless
 @Named
 @Path("/houseKeeping")
@@ -55,5 +57,18 @@ public class HouseKeepingApi {
         throws NotFoundException {
         StatusResponse response = new StatusResponse().status(StatusFactory.getInstance().getTumbnailGenerationStatus());
         return Response.ok().entity(response).build();
+    }
+    
+    @GET
+    @Path("/Statistic")
+    @Produces({ "application/json" })
+    @io.swagger.annotations.ApiOperation(value = "", notes = "", response = Statistic.class, responseContainer = "List", tags={ "houseKeeping", })
+    @io.swagger.annotations.ApiResponses(value = {
+        @io.swagger.annotations.ApiResponse(code = 200, message = "return statistics about number of Images, Videos, Keywords", response = Statistic.class, responseContainer = "List")
+    })
+    public Response getStatistic(@Context SecurityContext securityContext)
+    throws NotFoundException {
+        List<Statistic> result = houseKeepingFacade.getStatistics();
+        return Response.ok().entity(result).build();
     }
 }

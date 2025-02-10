@@ -18,7 +18,7 @@
                 <div class="card">
                 <h:form id="mainForm">
                     <div class="ui-fluid formgrid grid">
-                        <div class="field col-12 md:col-6">
+                        <comp:inputElement>
                             <p:outputLabel for="keywords" value="Stichworte" />
                             <p:autoComplete id="keywords" var="keyword" dropdown="true" 
                                 multiple="true" value="#{imageSearchBean.searchParameter.keywords}"
@@ -28,56 +28,51 @@
                                 <f:converter converterId="keywordConverter"/>
                             </p:autoComplete>
                             <p:message id="keywordMsg" for="keywords" display="tooltip"/>
-                        </div>
-                        <div class="field col-12 md:col-6">
-                            <p:outputLabel for="creator" value="Urheber" />
+                        </comp:inputElement>
+                        <comp:inputElement>
                             <p:autoComplete id="creator" var="creators" dropdown="true" 
                                 value="#{imageSearchBean.searchParameter.creator}"
                                 completeMethod="#{imageSearchBean.completeCreator}"
                                 itemLabel="#{creators}" itemValue="#{creators}"
                                 scrollHeight="250">
                             </p:autoComplete>
-                        </div>
-                        <div class="field col-12 md:col-6">
-                            <p:outputLabel for="camera" value="Kamera" />
+                            <p:outputLabel for="creator" value="Urheber" />
+                        </comp:inputElement>
+                        <comp:inputElement>
                             <p:autoComplete id="camera" var="cameras" dropdown="true" 
                                 value="#{imageSearchBean.searchParameter.camera}"
                                 completeMethod="#{imageSearchBean.completeCamera}"
                                 itemLabel="#{cameras}" itemValue="#{cameras}"
                                 scrollHeight="250">
                             </p:autoComplete>
-                        </div>
-                        <div class="field col-12 md:col-6">
-                            <p:outputLabel for="orientation" value="Format" />
+                            <p:outputLabel for="camera" value="Kamera" />
+                        </comp:inputElement>
+                        <comp:inputElement>
                             <p:selectOneMenu id="orientation" 
                                             value="#{imageSearchBean.searchParameter.orientation}">
                                 <f:selectItems value="#{imageSearchBean.orientationValues}" var="orientation" 
                                     itemLabel="#{orientation.name}" itemValue="#{orientation}"/>
                                 <f:converter converterId="orientationConverter"/>
                             </p:selectOneMenu>
-                        </div>
-                        <div class="field col-12 md:col-6">
-                            <div class="ui-outputpanel ui-widget ui-float-label">
+                            <p:outputLabel for="orientation" value="Format" />
+                        </comp:inputElement>
+                        <comp:inputElement>
                             <p:inputText id="dateFrom" value="#{imageSearchBean.searchParameter.date.from}" >
                                 <f:converter converterId="dateWrapperConverter"/>
                                 <p:ajax update="dateFromMsg @this" event="change"/>
                             </p:inputText>
                             <p:outputLabel for="dateFrom" value="Datum von" />
                             <p:message id="dateFromMsg" for="dateFrom" display="tooltip"/>
-                            </div>
-                        </div>
-                        <div class="field col-12 md:col-6">
-                            <div class="ui-outputpanel ui-widget ui-float-label">
+                        </comp:inputElement>
+                        <comp:inputElement>
                             <p:inputText id="dateTo" value="#{imageSearchBean.searchParameter.date.to}">
                                 <f:converter converterId="dateWrapperConverter"/>
                                 <p:ajax update="dateToMsg @this" event="change"/>
                             </p:inputText>
                             <p:outputLabel for="dateTo" value="bis" />
                             <p:message id="dateToMsg" for="dateTo" display="tooltip"/>
-                            </div>
-                        </div>
-                        <div class="field col-12 md:col-6">
-                            <div class="ui-outputpanel ui-widget ui-float-label">
+                        </comp:inputElement>
+                        <comp:inputElement>
                             <p:selectOneMenu id="ratingFrom"
                                             value="#{imageSearchBean.searchParameter.ratingFrom}">
                                 <f:selectItems value="#{imageSearchBean.ratingValues}" 
@@ -85,10 +80,8 @@
                                 <f:converter converterId="ratingConverter"/>
                             </p:selectOneMenu>
                             <p:outputLabel for="@previous" value="Bewertung von" />
-                            </div>
-                        </div>
-                        <div class="field col-12 md:col-6">
-                            <div class="ui-outputpanel ui-widget ui-float-label">
+                        </comp:inputElement>
+                        <comp:inputElement>
                             <p:selectOneMenu id="ratingTo"
                                             value="#{imageSearchBean.searchParameter.ratingTo}">
                                 <f:selectItems value="#{imageSearchBean.ratingValues}" 
@@ -96,10 +89,8 @@
                                 <f:converter converterId="ratingConverter"/>
                             </p:selectOneMenu>
                             <p:outputLabel for="@previous" value="bis" />
-                            </div>
-                        </div>
-                        <div class="field col-12 md:col-6">
-                            <div class="ui-outputpanel ui-widget ui-float-label">
+                        </comp:inputElement>
+                        <comp:inputElement>
                             <p:selectOneMenu id="isoFrom"
                                             value="#{imageSearchBean.searchParameter.isoFrom}">
                                 <f:selectItems value="#{imageSearchBean.isoValues}" 
@@ -107,10 +98,8 @@
                                 <f:converter converterId="isoConverter"/>
                             </p:selectOneMenu>
                             <p:outputLabel for="@previous" value="ISO von" />
-                            </div>
-                        </div>
-                        <div class="field col-12 md:col-6">
-                            <div class="ui-outputpanel ui-widget ui-float-label">
+                        </comp:inputElement>
+                        <comp:inputElement>
                             <p:selectOneMenu id="isoTo"
                                             value="#{imageSearchBean.searchParameter.isoTo}">
                                 <f:selectItems value="#{imageSearchBean.isoValues}" 
@@ -118,10 +107,8 @@
                                 <f:converter converterId="isoConverter"/>
                             </p:selectOneMenu>
                             <p:outputLabel for="@previous" value="bis" />
-                            </div>
-                        </div>
-                        <div class="field col-12 md:col-6">
-                            <div class="ui-outputpanel ui-widget ui-float-label">
+                        </comp:inputElement>
+                        <comp:inputElement>
                             <p:selectOneMenu id="apertureFrom"
                                             value="#{imageSearchBean.searchParameter.apertureFrom}">
                                 <f:selectItems value="#{imageSearchBean.apertureValues}" 
@@ -129,10 +116,8 @@
                                 <f:converter converterId="apertureConverter"/>
                             </p:selectOneMenu>
                             <p:outputLabel for="@previous" value="Blende von" />
-                        </div>
-                        </div>
-                        <div class="field col-12 md:col-6">
-                            <div class="ui-outputpanel ui-widget ui-float-label">
+                        </comp:inputElement>
+                        <comp:inputElement>
                             <p:selectOneMenu id="apertureTo"
                                             value="#{imageSearchBean.searchParameter.apertureTo}">
                                 <f:selectItems value="#{imageSearchBean.apertureValues}" 
@@ -140,10 +125,8 @@
                                 <f:converter converterId="apertureConverter"/>
                             </p:selectOneMenu>
                             <p:outputLabel for="@previous" value="bis" />
-                        </div>
-                        </div>
-                        <div class="field col-12 md:col-6">
-                            <div class="ui-outputpanel ui-widget ui-float-label">
+                        </comp:inputElement>
+                        <comp:inputElement>
                             <p:selectOneMenu id="focalLengthFrom"
                                             value="#{imageSearchBean.searchParameter.focalLengthFrom}">
                                 <f:selectItems value="#{imageSearchBean.focalLengthValues}" 
@@ -151,10 +134,8 @@
                                 <f:converter converterId="focalLengthConverter"/>
                             </p:selectOneMenu>
                             <p:outputLabel for="@previous" value="Brennweite von" />
-                        </div>
-                        </div>
-                        <div class="field col-12 md:col-6">
-                            <div class="ui-outputpanel ui-widget ui-float-label">
+                        </comp:inputElement>
+                        <comp:inputElement>
                             <p:selectOneMenu id="focalLengthTo"
                                             value="#{imageSearchBean.searchParameter.focalLengthTo}">
                                 <f:selectItems value="#{imageSearchBean.focalLengthValues}" 
@@ -162,10 +143,8 @@
                                 <f:converter converterId="focalLengthConverter"/>
                             </p:selectOneMenu>
                             <p:outputLabel for="@previous" value="bis" />
-                        </div>
-                        </div>
-                        <div class="field col-12 md:col-6">
-                            <div class="ui-outputpanel ui-widget ui-float-label">
+                        </comp:inputElement>
+                        <comp:inputElement>
                             <p:selectOneMenu id="exposureFrom"
                                             value="#{imageSearchBean.searchParameter.exposureFrom}">
                                 <f:selectItems value="#{imageSearchBean.exposureValues}" 
@@ -173,10 +152,8 @@
                                 <f:converter converterId="exposureConverter"/>
                             </p:selectOneMenu>
                             <p:outputLabel for="@previous" value="Belichtungszeit von" />
-                        </div>
-                        </div>
-                        <div class="field col-12 md:col-6">
-                            <div class="ui-outputpanel ui-widget ui-float-label">
+                        </comp:inputElement>
+                        <comp:inputElement>
                             <p:selectOneMenu id="exposureTo"
                                             value="#{imageSearchBean.searchParameter.exposureTo}">
                                 <f:selectItems value="#{imageSearchBean.exposureValues}" 
@@ -184,8 +161,7 @@
                                 <f:converter converterId="exposureConverter"/>
                             </p:selectOneMenu>
                             <p:outputLabel for="@previous" value="bis" />
-                        </div>
-                        </div>
+                        </comp:inputElement>
                     </div>
                     <div class="command">
                         <p:selectBooleanCheckbox value="#{imageSearchBean.searchParameter.keywordsOr}" itemLabel="oder"/>

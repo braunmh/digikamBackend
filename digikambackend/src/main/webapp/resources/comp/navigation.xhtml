@@ -10,19 +10,20 @@
 
     <!-- IMPLEMENTATION -->
     <cc:implementation>
-        <p:commandButton id="mainmenuButton" value="" type="button" icon="pi pi-bars"/>
+        <p:commandButton id="mainmenuButton" value="Menu" type="button" icon="pi pi-bars"/>
         <p:menu overlay="true" trigger="mainmenuButton" my="left top" at="left bottom">
             <p:submenu label="Suche">
                 <p:menuitem value="Bilder suchen" outcome="/search/search" icon="pi pi-fw pi-search"/>
             </p:submenu>                    
             <p:submenu label="Statistik">
-                <p:menuitem value="nach Monat" outcome="/statistic/year" icon="pi pi-fw pi-search"/>
-                <p:menuitem value="nach Stichwort" outcome="/statistic/keyword" icon="pi pi-fw pi-search"/>
+                <p:menuitem value="nach Monat" outcome="/statistic/year" icon="pi pi-fw pi-align-justify"/>
+                <p:menuitem value="nach Stichwort" outcome="/statistic/keyword" icon="pi pi-fw pi-align-justify"/>
             </p:submenu>
             <p:submenu label="Administration">
-                <p:menuitem value="Refresh Caches"/>
-                <p:menuitem value="Suchindex aktualisieren" outcome="/admin/generate"/>
+                <p:menuitem value="Refresh Caches" icon="pi-fw pi pi-database" action="#{adminBean.refreshCaches}"/>
+                <p:menuitem value="Suchindex aktualisieren" outcome="/admin/generate" icon="pi-fw pi pi-database"/>
             </p:submenu>
+            <p:menuitem value="Info" icon="pi-fw pi pi-info" outcome="/statistics"/>
         </p:menu>
     </cc:implementation>
 </html>

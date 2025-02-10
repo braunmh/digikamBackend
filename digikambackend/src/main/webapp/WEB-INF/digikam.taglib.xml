@@ -43,7 +43,7 @@
         </attribute>
         <attribute>
             <description><![CDATA[]]></description>
-            <name>with</name>
+            <name>width</name>
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>

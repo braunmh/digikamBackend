@@ -3,12 +3,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:comp="http://xmlns.jcp.org/jsf/composite/comp">
 
     <body>
 
         <ui:composition template="./../common.xhtml">
             <ui:param name="title" value="Thumbnail Generierung"/>
+            <ui:define name="navigation">
+                <comp:navigation/>
+            </ui:define>
             <ui:define name="content">
                 <h:form>
                 <div class="command">
@@ -16,7 +20,7 @@
                         itemLabel="Thumbnail Generierung aktiv" 
                         disabled="true"/>
                     <p:commandButton styleClass="di-button" id="generate" value="Generieren" 
-                        action="#{adminBean.generate()}"/>
+                        action="#{adminBean.generate()}" update="@form" />
                 </div>
                 </h:form>
             </ui:define>

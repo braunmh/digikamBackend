@@ -6,4 +6,5 @@ import jakarta.ws.rs.core.SecurityContext;
 public abstract class HouseKeepingApiService {
     public abstract Response generateThumbnails(SecurityContext securityContext) throws NotFoundException;
     public abstract Response generationStatus(SecurityContext securityContext) throws NotFoundException;
+    public abstract Response getStatistic(SecurityContext securityContext) throws NotFoundException;
 }

@@ -45,7 +45,7 @@ public class StatisticKeywordBean implements Serializable {
     }
     
     public List<Keyword> completeKeyword(String query) {
-        return NodeFactory.getInstance().getKeywordByFullName(query.toLowerCase());
+        return NodeFactory.getInstance().getKeywordByName(query.toLowerCase());
     }
     
     public StatisticKeywordParameter getContent() {
