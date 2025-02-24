@@ -7,4 +7,5 @@ import jakarta.validation.constraints.*;
 public abstract class LensApiService {
     public abstract Response findLensByNameAndMakeAndModel( @NotNull String name, @NotNull String makeAndModel,SecurityContext securityContext) throws NotFoundException;
     public abstract Response refreshLensCache(SecurityContext securityContext) throws NotFoundException;
+    public abstract Response getAllCombination(SecurityContext securityContext) throws NotFoundException;
 }

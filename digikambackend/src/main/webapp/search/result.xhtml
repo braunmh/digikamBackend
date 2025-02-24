@@ -16,9 +16,9 @@
             <ui:define name="content">
                 <h:outputScript library="jakarta.faces" name="jsf.js" target="head" />
                 <h:form id="resultForm">
-                    <ui:repeat var="epm" value="#{imageSearchBean.entriesPerMonth}">
+                    <ui:repeat id="all" var="epm" value="#{imageSearchBean.entriesPerMonth}">
                         <h2><h:outputText value="#{epm.date}"/></h2>
-                        <ui:repeat var="img" value="#{epm.entries}">
+                        <ui:repeat id="month" var="img" value="#{epm.entries}">
                             <div class="image">
                                 <h:outputLink value="#{request.contextPath}/rest/image/#{img.id}" target="_blank">
                                     <di:lazyImage imageId="#{img.id}" id="image" width="#{sessionUserBean.imageWidth}" orientation="#{img.orientation}"

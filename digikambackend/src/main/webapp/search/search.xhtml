@@ -44,6 +44,7 @@
                                 completeMethod="#{imageSearchBean.completeCamera}"
                                 itemLabel="#{cameras}" itemValue="#{cameras}"
                                 scrollHeight="250">
+                                <p:ajax event="change" listener="#{imageSearchBean.changeAction}" />
                             </p:autoComplete>
                             <p:outputLabel for="camera" value="Kamera" />
                         </comp:inputElement>
@@ -55,6 +56,15 @@
                                 <f:converter converterId="orientationConverter"/>
                             </p:selectOneMenu>
                             <p:outputLabel for="orientation" value="Format" />
+                        </comp:inputElement>
+                        <comp:inputElement styleClass="field col-12 md:col-12">
+                            <p:autoComplete id="lens" var="lenses" dropdown="true" 
+                                value="#{imageSearchBean.searchParameter.lens}"
+                                completeMethod="#{imageSearchBean.completeLens}"
+                                itemLabel="#{lenses}" itemValue="#{lenses}" 
+                                scrollHeight="250">
+                            </p:autoComplete>
+                            <p:outputLabel for="lens" value="Objektiv" />
                         </comp:inputElement>
                         <comp:inputElement>
                             <p:inputText id="dateFrom" value="#{imageSearchBean.searchParameter.date.from}" >
@@ -166,8 +176,8 @@
                     <div class="command">
                         <p:selectBooleanCheckbox value="#{imageSearchBean.searchParameter.keywordsOr}" itemLabel="oder"/>
                         <p:selectBooleanCheckbox value="#{imageSearchBean.searchParameter.ascending}" itemLabel="Aufsteigend"/>
-                        <p:commandButton styleClass="di-button" id="reset" value="zurücksetzen" action="#{imageSearchBean.init()}"/>
-                        <p:commandButton styleClass="di-button" id="execute" value="suchen" action="#{imageSearchBean.execute()}"/>
+                        <p:commandButton styleClass="di-button" id="reset" value="zurücksetzen" action="#{imageSearchBean.init()}" immediate="true" update="@form"/>
+                        <p:commandButton styleClass="di-button" id="execute" value="suchen" action="#{imageSearchBean.execute()}" update="@form"/>
                     </div>
                 </h:form>
                 </div>

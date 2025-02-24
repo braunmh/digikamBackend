@@ -58,6 +58,7 @@ public class InitListener implements ServletContextListener {
             imageMetadataFacade = Util.EJB.lookup(ImageMetadataFacade.class);
         }
         CameraFactory.getInstance().refresh(imageMetadataFacade.findAllCameras());
+        CameraLensFactory.getInstance().refresh(imageMetadataFacade.getAllCombinations());
         LOG.info("Initialize application done");
     }
 

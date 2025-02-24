@@ -64,7 +64,7 @@ public class SolrUpdateTest {
         }
     }
 
-    @Test
+    //@Test
     public void regenerateThumbnails() {
         EntityTransaction userTransaction = null;
         try {
@@ -120,7 +120,7 @@ public class SolrUpdateTest {
         }
     }
 
-    // @Test
+    @Test
     public void updateTest() {
         em = getEntityManager();
 
@@ -131,8 +131,10 @@ public class SolrUpdateTest {
         ImageFacade imageFacade = new ImageFacade();
         imageFacade.setEntityManager(em);
 
-        String sql = """
-            select * from ImageFull f where f.creationDate between '2021-01-01 00:00:00' and '2024-12-31 23:59:59' order by f.relativePath, f.name""";
+        String sql = 
+            """
+            select * from ImageFull f where f.lens = 'LAOWA 90mm f/2,8 2x Ultra Macro APO'
+            """;
         // skipped 89476 'location'='176.29444444444442,68.56194444444445'
         List<ImageFull> source = em.createNativeQuery(sql, ImageFull.class).getResultList();
 

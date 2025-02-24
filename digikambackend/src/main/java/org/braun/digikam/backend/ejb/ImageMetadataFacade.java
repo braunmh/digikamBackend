@@ -8,6 +8,8 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import org.apache.commons.lang3.StringUtils;
 import org.braun.digikam.backend.CameraFactory;
+import org.braun.digikam.backend.entity.CameraLensView;
+import org.braun.digikam.backend.model.CameraLens;
 import org.braun.digikam.backend.search.sql.EmptyCondition;
 import org.braun.digikam.backend.search.sql.Operator;
 import org.braun.digikam.backend.search.sql.SimpleCondition;
@@ -53,6 +55,24 @@ public class ImageMetadataFacade  {
         sql.addOrderClause("lens");
         Query query = sql.buildQuery(em, null);
         return query.getResultList();
+    }
+    
+    private static final String ALL_COMBINATIONS = 
+            """
+            select distinct concat(make, ', ', model) camera, ifnull(lens, '') lens 
+            from ImageMetadata
+            order by 1, 2""";
+    
+    public List<CameraLens> getAllCombinations() {
+        Query query = getEntityManager().createNativeQuery(ALL_COMBINATIONS, CameraLensView.class);
+        List<CameraLensView> tmp = query.getResultList();
+        List<CameraLens> result = new ArrayList<>();
+        for (CameraLensView entry : tmp) {
+            result.add(new CameraLens()
+                .camera(entry.getId().getCamera())
+                .lens(entry.getId().getLens()));
+        }
+        return result;
     }
     
     void setEntityManager(EntityManager em) {

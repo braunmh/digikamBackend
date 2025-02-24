@@ -4,6 +4,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
+import jakarta.faces.event.AjaxBehaviorEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.io.Serializable;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.braun.digikam.backend.CameraFactory;
+import org.braun.digikam.backend.CameraLensFactory;
 import org.braun.digikam.backend.CreatorFactory;
 import org.braun.digikam.backend.NodeFactory;
 import org.braun.digikam.backend.api.NotFoundException;
@@ -159,6 +161,14 @@ public class ImageSearchBean implements Serializable {
     
     public List<String> completeCreator(String query) {
         return CreatorFactory.getInstance().findByName(query).stream().map(c -> c.getName()).toList();
+    }
+    
+    public List<String> completeLens(String query) {
+        return CameraLensFactory.getInstance().getLensByCameraAndLens(searchParameter.getCamera(), query);
+    }
+    
+    public void changeAction(AjaxBehaviorEvent event) {
+        LOG.info("Values changed by autocomplete.ajax");
     }
     
     public List<CatFocalLength> getFocalLengthValues() {
