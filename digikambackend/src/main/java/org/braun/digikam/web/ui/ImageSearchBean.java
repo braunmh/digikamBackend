@@ -168,7 +168,8 @@ public class ImageSearchBean implements Serializable {
     }
     
     public void changeAction(AjaxBehaviorEvent event) {
-        LOG.info("Values changed by autocomplete.ajax");
+        LOG.info("Values changed by autocomplete.ajax. ClientId: {}, Id: {}", 
+            event.getComponent().getClientId(), event.getComponent().getId());
     }
     
     public List<CatFocalLength> getFocalLengthValues() {

@@ -1,5 +1,7 @@
 package org.braun.digikam.backend.ejb;
 
+import com.thebuzzmedia.exiftool.ExifTool;
+import com.thebuzzmedia.exiftool.ExifToolBuilder;
 import org.braun.digikam.backend.entity.Tags;
 import org.braun.digikam.backend.entity.Images;
 import jakarta.annotation.Resource;
@@ -35,6 +37,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.Future;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
@@ -44,6 +47,7 @@ import org.braun.digikam.backend.Node;
 import org.braun.digikam.backend.NodeFactory;
 import org.braun.digikam.backend.StatusFactory;
 import org.braun.digikam.backend.api.NotFoundException;
+import org.braun.digikam.backend.entity.ImageMetadata;
 import org.braun.digikam.backend.entity.StatisticView;
 import org.braun.digikam.backend.entity.Thumbnail;
 import org.braun.digikam.backend.entity.ThumbnailToGenerate;
@@ -52,8 +56,10 @@ import org.braun.digikam.backend.graphics.ImageUtil;
 import org.braun.digikam.backend.graphics.Orientation;
 import org.braun.digikam.backend.model.ImageInternal;
 import org.braun.digikam.backend.model.ImageSolr;
+import org.braun.digikam.backend.model.Keyword;
 import org.braun.digikam.backend.model.Statistic;
 import org.braun.digikam.backend.util.Configuration;
+import org.braun.digikam.backend.util.exif.ExifData;
 
 /**
  *
@@ -89,6 +95,9 @@ public class HouseKeepingFacade {
     private ImagesFacade imagesFacade;
 
     @Inject
+    private ImageMetadataFacade imageMetadataFacade; 
+    
+    @Inject
     private ThumbnailFacade thumbnailFacade;
 
     @Inject
@@ -123,7 +132,9 @@ public class HouseKeepingFacade {
         List<Node> nodes = NodeFactory.getInstance().list();
         UserTransaction userTransaction = context.getUserTransaction();
         final String solrCollection = Configuration.getInstance().getSolrCollection();
-        try (SolrClient client = getSolrClient(); JsonReader reader = Json.createReader(this.getClass().getClassLoader().getResourceAsStream("org/braun/digikam/backend/override_labels.json"));) {
+        try (SolrClient client = getSolrClient(); 
+                JsonReader reader = Json.createReader(this.getClass().getClassLoader().getResourceAsStream("org/braun/digikam/backend/override_labels.json"));
+                ExifTool exifTool = new ExifToolBuilder().enableStayOpen().build();) {
             Map<String, String> autoKeywords = new HashMap<>();
             JsonObject jo = reader.readObject();
             for (Map.Entry<String, JsonValue> entry : jo.entrySet()) {
@@ -140,6 +151,19 @@ public class HouseKeepingFacade {
                     continue;
                 }
                 ImageInternal imageInternal = imageFacade.getMetadata(thumbToGenerate.getId());
+                if (imageInternal.getFocalLength() == null || imageInternal.getFocalLength() == 0) {
+                    ExifData exifData = new ExifData(exifTool, imageFile);
+                    ImageMetadata im = imageMetadataFacade.find(thumbToGenerate.getId());
+                    if (im != null) {
+                        im.setLens(exifData.getLens());
+                        im.setFocalLength(exifData.getFocalLength(im.getLens()));
+                        im.setFocalLength35(exifData.getFocalLength35(im.getFocalLength(), im.getMake(), im.getModel()));
+                        imageMetadataFacade.merge(im);
+                        imageInternal.setFocalLength(im.getFocalLength());
+                        imageInternal.setFocalLength35(im.getFocalLength35());
+                        imageInternal.setLens(im.getLens());
+                    }
+                }
                 try {
                     baos.reset();
                     ImageUtil.scaleImage(imageFile, baos, 1024, 1024, Orientation.angle0);
@@ -164,6 +188,7 @@ public class HouseKeepingFacade {
                             continue;
                         }
                         tags.add(t);
+                        imageInternal.addKeywordsItem(new Keyword().id(t.getId()).name(t.getName()));
                     }
                     imagesFacade.addTag(image, tags);
                 }

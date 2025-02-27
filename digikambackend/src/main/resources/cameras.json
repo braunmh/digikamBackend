@@ -1,0 +1,15 @@
+{
+  "cameras" : [ {
+    "make" : "SONY",
+    "model" : "ILCA-99M2",
+    "crop" : 1.0
+  }, {
+    "make" : "SONY",
+    "model" : "ILCE-7RM5",
+    "crop" : 1.0
+  }, {
+    "make" : "SONY",
+    "model" : "ILCE-6400",
+    "crop" : 1.5
+  } ]
+}

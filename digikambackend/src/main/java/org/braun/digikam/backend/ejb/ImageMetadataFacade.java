@@ -9,6 +9,7 @@ import jakarta.persistence.Query;
 import org.apache.commons.lang3.StringUtils;
 import org.braun.digikam.backend.CameraFactory;
 import org.braun.digikam.backend.entity.CameraLensView;
+import org.braun.digikam.backend.entity.ImageMetadata;
 import org.braun.digikam.backend.model.CameraLens;
 import org.braun.digikam.backend.search.sql.EmptyCondition;
 import org.braun.digikam.backend.search.sql.Operator;
@@ -20,13 +21,18 @@ import org.braun.digikam.backend.search.sql.Sql;
  * @author mbraun
  */
 @Stateless
-public class ImageMetadataFacade  {
+public class ImageMetadataFacade extends AbstractFacade<ImageMetadata>  {
     
     private static final String FIND_CAMERAS = "select distinct make, model from ImageMetadata order by make, model";
     
     @PersistenceContext(unitName = "digikam")
     private EntityManager em;
 
+    public ImageMetadataFacade() {
+        super(ImageMetadata.class);
+    }
+
+    @Override
     protected EntityManager getEntityManager() {
         return em;
     }
