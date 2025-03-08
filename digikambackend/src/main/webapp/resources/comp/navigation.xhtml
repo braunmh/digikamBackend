@@ -16,14 +16,15 @@
                 <p:menuitem value="Bilder suchen" outcome="/search/search" icon="pi pi-fw pi-search"/>
             </p:submenu>                    
             <p:submenu label="Statistik">
+                <p:menuitem value="Info" icon="pi-fw pi pi-info" outcome="/statistic/statistics"/>
                 <p:menuitem value="nach Monat" outcome="/statistic/year" icon="pi pi-fw pi-align-justify"/>
                 <p:menuitem value="nach Stichwort" outcome="/statistic/keyword" icon="pi pi-fw pi-align-justify"/>
+                <p:menuitem value="nach Kamera / Objektiv" outcome="/statistic/diagram" icon="pi pi-fw pi-align-justify"/>
             </p:submenu>
             <p:submenu label="Administration">
                 <p:menuitem value="Refresh Caches" icon="pi-fw pi pi-database" action="#{adminBean.refreshCaches}"/>
                 <p:menuitem value="Suchindex aktualisieren" outcome="/admin/generate" icon="pi-fw pi pi-database"/>
             </p:submenu>
-            <p:menuitem value="Info" icon="pi-fw pi pi-info" outcome="/statistics"/>
         </p:menu>
     </cc:implementation>
 </html>

@@ -1,0 +1,161 @@
+<svg id="temperatureChart" viewBox="-20 0 700 400">
+<!-- 
+const 2023-09 = [
+  { day: 01, temp: 21 },
+  { day: 02, temp: 24 },
+  { day: 03, temp: 22 },
+  { day: 04, temp: 25 },
+  { day: 05, temp: 29 },
+  { day: 06, temp: 17 },	
+  { day: 07, temp: 21 },
+  { day: 08, temp: 24 },
+  { day: 09, temp: 22 },
+  { day: 10, temp: 17 },	
+  ...
+];
+-->
+    <defs>
+        <pattern id="grid" patternUnits="userSpaceOnUse" width="10" height="10" x="0" y="0">
+            <path d="M0,0 v10 h10" stroke="#57c4ff" fill="none"></path>
+        </pattern>
+        <marker id="markerArrow" markerWidth="130" markerHeight="13" refX="2" refY="6" orient="auto">
+            <path d="M0,2 l8,4 l-8,4" fill="none" stroke="#999" stroke-width="1"></path>
+        </marker>	 
+        <symbol id="#line">
+            <polyline fill="none" stroke="black" stroke-width="3" points="
+       				0,120
+       				20,60
+       				40,80
+       				60,20">
+            </polyline> 
+        </symbol> 
+    </defs>
+ 
+    <rect x="-20" y="0" width="700" height="400" fill="url(#grid)"></rect>
+ 
+    <path class="axis" d="M-10,400 v-395"></path>
+    <path class="axis" d="M-10,200 h685"></path>
+    <text x="-7" y="213" fill="darkslategray">(0,0)</text>
+    <polyline points="
+ 0,120 
+ 20.689655172413794,80 
+ 41.37931034482759,106.66666666666669
+ 62.06896551724138,66.66666666666663
+ 82.75862068965517,13.333333333333314
+ 103.44827586206897,173.33333333333334
+ 124.13793103448276,120
+ 144.82758620689657,80
+ 165.51724137931035,106.66666666666669
+ 186.20689655172413,173.33333333333334
+ 206.89655172413794,120
+ 227.58620689655174,80
+ 248.27586206896552,106.66666666666669
+ 268.9655172413793,66.66666666666663
+ 289.65517241379314,13.333333333333314
+ 310.3448275862069,173.33333333333334
+ 331.0344827586207,120
+ 351.7241379310345,80
+ 372.41379310344826,106.66666666666669
+ 393.1034482758621,173.33333333333334
+ 413.7931034482759,120
+ 434.48275862068965,80
+ 455.1724137931035,106.66666666666669
+ 475.86206896551727,66.66666666666663
+ 496.55172413793105,13.333333333333314
+ 517.2413793103449,40
+ 537.9310344827586,120
+ 558.6206896551724,80
+ 579.3103448275863,133.33333333333337
+ 600,66.66666666666663" fill="none" stroke="#666" stroke-width="1">
+    </polyline>
+    <circle cx="0" cy="120" r="4" fill="red">
+        <title>(1.09.): 21° Celsius</title>
+    </circle>
+    <circle cx="20.689655172413794" cy="80" r="4" fill="red">
+        <title>(2.09.): 24° Celsius</title>
+    </circle>
+    <circle cx="41.37931034482759" cy="106.66666666666669" r="4" fill="red">
+        <title>(3.09.): 22° Celsius</title>
+    </circle>
+    <circle cx="62.06896551724138" cy="66.66666666666663" r="4" fill="red">
+        <title>(4.09.): 25° Celsius</title>
+    </circle>
+    <circle cx="82.75862068965517" cy="13.333333333333314" r="4" fill="red">
+        <title>(5.09.): 29° Celsius</title>
+    </circle>
+    <circle cx="103.44827586206897" cy="173.33333333333334" r="4" fill="red">
+        <title>(6.09.): 17° Celsius</title>
+    </circle>
+    <circle cx="124.13793103448276" cy="120" r="4" fill="red">
+        <title>(7.09.): 21° Celsius</title>
+    </circle>
+    <circle cx="144.82758620689657" cy="80" r="4" fill="red">
+        <title>(8.09.): 24° Celsius</title>
+    </circle>
+    <circle cx="165.51724137931035" cy="106.66666666666669" r="4" fill="red">
+        <title>(9.09.): 22° Celsius</title>
+    </circle>
+    <circle cx="186.20689655172413" cy="173.33333333333334" r="4" fill="red">
+        <title>(10.09.): 17° Celsius</title>
+    </circle>
+    <circle cx="206.89655172413794" cy="120" r="4" fill="red">
+        <title>(11.09.): 21° Celsius</title>
+    </circle>
+    <circle cx="227.58620689655174" cy="80" r="4" fill="red">
+        <title>(12.09.): 24° Celsius</title>
+    </circle>
+    <circle cx="248.27586206896552" cy="106.66666666666669" r="4" fill="red">
+        <title>(13.09.): 22° Celsius</title>
+    </circle>
+    <circle cx="268.9655172413793" cy="66.66666666666663" r="4" fill="red">
+        <title>(14.09.): 25° Celsius</title>
+    </circle>
+    <circle cx="289.65517241379314" cy="13.333333333333314" r="4" fill="red">
+        <title>(15.09.): 29° Celsius</title>
+    </circle>
+    <circle cx="310.3448275862069" cy="173.33333333333334" r="4" fill="red">
+        <title>(16.09.): 17° Celsius</title>
+    </circle>
+    <circle cx="331.0344827586207" cy="120" r="4" fill="red">
+        <title>(17.09.): 21° Celsius</title>
+    </circle>
+    <circle cx="351.7241379310345" cy="80" r="4" fill="red">
+        <title>(18.09.): 24° Celsius</title>
+    </circle>
+    <circle cx="372.41379310344826" cy="106.66666666666669" r="4" fill="red">
+        <title>(19.09.): 22° Celsius</title>
+    </circle>
+    <circle cx="393.1034482758621" cy="173.33333333333334" r="4" fill="red">
+        <title>(20.09.): 17° Celsius</title>
+    </circle>
+    <circle cx="413.7931034482759" cy="120" r="4" fill="red">
+        <title>(21.09.): 21° Celsius</title>
+    </circle>
+    <circle cx="434.48275862068965" cy="80" r="4" fill="red">
+        <title>(22.09.): 24° Celsius</title>
+    </circle>
+    <circle cx="455.1724137931035" cy="106.66666666666669" r="4" fill="red">
+        <title>(23.09.): 22° Celsius</title>
+    </circle>
+    <circle cx="475.86206896551727" cy="66.66666666666663" r="4" fill="red">
+        <title>(24.09.): 25° Celsius</title>
+    </circle>
+    <circle cx="496.55172413793105" cy="13.333333333333314" r="4" fill="red">
+        <title>(25.09.): 29° Celsius</title>
+    </circle>
+    <circle cx="517.2413793103449" cy="40" r="4" fill="red">
+        <title>(26.09.): 27° Celsius</title>
+    </circle>
+    <circle cx="537.9310344827586" cy="120" r="4" fill="red">
+        <title>(27.09.): 21° Celsius</title>
+    </circle>
+    <circle cx="558.6206896551724" cy="80" r="4" fill="red">
+        <title>(28.09.): 24° Celsius</title>
+    </circle>
+    <circle cx="579.3103448275863" cy="133.33333333333337" r="4" fill="red">
+        <title>(29.09.): 20° Celsius</title>
+    </circle>
+    <circle cx="600" cy="66.66666666666663" r="4" fill="red">
+        <title>(30.09.): 25° Celsius</title>
+    </circle>
+</svg>

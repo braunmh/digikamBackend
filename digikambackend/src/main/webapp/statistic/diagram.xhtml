@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../common.xhtml"
+                xmlns:comp="http://xmlns.jcp.org/jsf/composite/comp"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:di="http://org.braun.digikam"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:param name="title" value="Statistik nach Kamera und Objektiv"/>
+    <ui:define name="navigation">
+        <comp:navigation/>
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="card">
+            <h:form id="mainForm">
+                <div class="ui-fluid formgrid grid">
+                    <comp:inputElement>
+                        <p:autoComplete id="camera" var="cameras" dropdown="true" 
+                            value="#{diagramBean.content.camera}"
+                            completeMethod="#{diagramBean.completeCamera}"
+                            itemLabel="#{cameras}" itemValue="#{cameras}"
+                            scrollHeight="250" required="true">
+                            <p:ajax event="change" listener="#{diagramBean.changeAction}" />
+                        </p:autoComplete>
+                        <p:outputLabel for="camera" value="Kamera" />
+                        <p:message id="cameraMsg" for="camera" display="tooltip"/>
+                    </comp:inputElement>
+                    <comp:inputElement>
+                        <p:selectOneMenu id="diagram" required="true"
+                                        value="#{diagramBean.content.diagram}">
+                            <f:selectItems value="#{diagramBean.diagramValues}" var="diagram" 
+                                itemLabel="#{diagram.name}" itemValue="#{diagram}"/>
+                            <f:converter converterId="diagramConverter"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel for="diagram" value="Diagrammtyp" />
+                        <p:message id="diagramMsg" for="diagram" display="tooltip"/>
+                    </comp:inputElement>
+                    <comp:inputElement styleClass="field col-12 md:col-12">
+                        <p:autoComplete id="lens" var="lenses" dropdown="true" 
+                            value="#{diagramBean.content.lens}" required="true"
+                            completeMethod="#{diagramBean.completeLens}"
+                            itemLabel="#{lenses}" itemValue="#{lenses}" 
+                            scrollHeight="250">
+                        </p:autoComplete>
+                        <p:outputLabel for="lens" value="Objektiv" />
+                        <p:message id="lensMsg" for="lens" display="tooltip"/>
+                    </comp:inputElement>
+                </div>
+                <div class="command">
+                    <p:commandButton styleClass="di-button" id="execute" 
+                        value="Diagramm generieren" update="@form"
+                        action="#{diagramBean.execute()}"/>
+                </div>
+                <p:panel id="graphic" rendered="#{not empty diagramBean.model}">
+                    <di:diagram model="#{diagramBean.model}"/>
+                </p:panel>
+            </h:form>
+        </div>
+    </ui:define>
+
+</ui:composition>

@@ -144,22 +144,22 @@ public class MediaDetailBean implements Serializable {
 
         public Detail(String name, String value) {
             this.name = name;
-            this.value = value;
+            this.value = (value == null) ? "" : value;
         }
 
-        public Detail(String name, double value) {
+        public Detail(String name, Double value) {
             this.name = name;
-            this.value = String.valueOf(value);
+            this.value = (value == null) ? "" : String.valueOf(value);
         }
 
-        public Detail(String name, int value) {
+        public Detail(String name, Integer value) {
             this.name = name;
-            this.value = String.valueOf(value);
+            this.value = (value == null) ? "" : String.valueOf(value);
         }
 
-        public Detail(String name, long value) {
+        public Detail(String name, Long value) {
             this.name = name;
-            this.value = String.valueOf(value);
+            this.value = (value == null) ? "" : String.valueOf(value);
         }
 
         public String getName() {

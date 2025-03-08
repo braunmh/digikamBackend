@@ -2,11 +2,9 @@ package org.braun.digikam.web.ui;
 
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.context.FacesContext;
-import jakarta.faces.event.ActionEvent;
 import jakarta.inject.Named;
 import java.io.Serializable;
 import java.util.Map;
-import org.omnifaces.util.Faces;
 
 /**
  *

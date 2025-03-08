@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../common.xhtml"
+                xmlns:comp="http://xmlns.jcp.org/jsf/composite/comp"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:param name="title" value="Allgemeine Statistik"/>
+    <ui:define name="navigation">
+        <comp:navigation/>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:dataTable var="entry" value="#{adminBean.statistics}">
+            <h:column>
+                <h:outputText value="#{entry.name}"/>
+            </h:column>
+            <h:column>
+                <h:outputText value="#{entry.count}"/>
+            </h:column>
+        </h:dataTable>
+    </ui:define>
+
+</ui:composition>

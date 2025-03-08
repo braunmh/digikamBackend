@@ -10,4 +10,8 @@
         <component-type>org.braun.component.LazyLoadImage</component-type>
         <component-class>org.braun.digikam.web.component.image.LazyLoadImage</component-class>
     </component>
+    <component>
+        <component-type>org.braun.component.Diagram</component-type>
+        <component-class>org.braun.digikam.web.component.diagram.Diagram</component-class>
+    </component>
 </faces-config>

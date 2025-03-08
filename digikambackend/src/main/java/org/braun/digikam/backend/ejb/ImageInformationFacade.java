@@ -22,10 +22,11 @@ public class ImageInformationFacade extends AbstractFacade<ImageInformation> {
     private static final Logger LOG = LogManager.getLogger();
     
     private static final String SQL_FIND_BY_NAME
-        = "select ii.imageid, ii.rating, ii.creationDate, ii.digitizationDate, ii.orientation,\n"
-        + "ii.width, ii.height, ii.format, ii.colorDepth, ii.colorModel\n"
-        + "from ImageInformation ii inner join Images i on ii.imageid = i.id\n"
-        + "where i.name = ?";
+        = """
+          select ii.imageid, ii.rating, ii.creationDate, ii.digitizationDate, ii.orientation,
+          ii.width, ii.height, ii.format, ii.colorDepth, ii.colorModel
+          from ImageInformation ii inner join Images i on ii.imageid = i.id
+          where i.name = ?""";
 
     @PersistenceContext(unitName = "digikam")
     private EntityManager em;

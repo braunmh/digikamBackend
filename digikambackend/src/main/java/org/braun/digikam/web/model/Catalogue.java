@@ -69,4 +69,8 @@ public abstract class Catalogue<T extends Comparable<T>> implements Serializable
         return "Catalogue{" + "id=" + id + ", name=" + name + ", value=" + value + '}';
     }
 
+    public boolean isEmpty() {
+        return id == 0;
+    }
+            
 }

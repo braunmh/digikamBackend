@@ -84,4 +84,31 @@
             <type>java.lang.String</type>
         </attribute>
     </tag>
+    <tag>
+        <tag-name>
+            diagram
+        </tag-name>
+        <component>
+            <component-type>org.braun.component.Diagram</component-type>
+            <renderer-type>org.braun.component.Diagram</renderer-type>
+        </component>
+        <attribute>
+            <description><![CDATA[DiagramModel filled by Backend.]]></description>
+            <name>model</name>
+            <required>true</required>
+            <type>org.braun.digikam.web.component.diagram.DiagramModel</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[]]></description>
+            <name>height</name>
+            <required>false</required>
+            <type>java.lang.Integer</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[]]></description>
+            <name>width</name>
+            <required>false</required>
+            <type>java.lang.Integer</type>
+        </attribute>
+    </tag>
 </facelet-taglib>
