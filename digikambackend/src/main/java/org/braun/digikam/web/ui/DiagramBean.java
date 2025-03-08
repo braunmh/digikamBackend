@@ -8,7 +8,6 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.io.Serializable;
 import java.util.List;
-import java.util.function.Function;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.braun.digikam.backend.CameraFactory;
@@ -54,7 +53,7 @@ public class DiagramBean implements Serializable {
                     .height(2 * userBean.getInnerWidth() / 3)
                     .width(userBean.getInnerWidth());
             switch (content.getDiagram().getId()) {
-                case CatDiagram.EXPOSURE_TIME:
+                case CatDiagram.EXPOSURE_TIME -> {
                     points = imageMetadatafacade.getExposureTime(content.getMake(), content.getModel(), content.getLens());
                     builder.axisXFormat(d -> {
                         if (d == null || d == 0) {
@@ -68,8 +67,8 @@ public class DiagramBean implements Serializable {
                     })
                             .axisXUnit("s")
                             .axisXDescription("Belichtungszeit");
-                    break;
-                case CatDiagram.APERTURE:
+                }
+                case CatDiagram.APERTURE -> {
                     points = imageMetadatafacade.getAperture(content.getMake(), content.getModel(), content.getLens());
                     builder.axisXUnit("f")
                             .axisXFormat(n -> {
@@ -77,14 +76,14 @@ public class DiagramBean implements Serializable {
                                 return String.format("%.1f", t);
                             })
                             .axisXDescription("Blende");
-                    break;
-                case CatDiagram.FOCALLENGTH:
+                }
+                case CatDiagram.FOCALLENGTH -> {
                     points = imageMetadatafacade.getFocalLenth(content.getMake(), content.getModel(), content.getLens());
                     builder.axisXFormat(d -> String.valueOf(d.longValue()))
                             .axisXUnit("mm")
                             .axisXDescription("Brennweite");
-                    break;
-                case CatDiagram.ISO:
+                }
+                case CatDiagram.ISO -> {
                     points = imageMetadatafacade.getIso(content.getMake(), content.getModel(), content.getLens());
                     builder.axisXUnit("ISO")
                             .axisXFormat(n -> {
@@ -92,9 +91,9 @@ public class DiagramBean implements Serializable {
                                 return String.valueOf(t.longValue());
                             })
                             .axisXDescription("ISO");
-                    break;
-                default:
-                // no op
+                }
+                default -> {
+                }
             }
 
             if (points == null || points.size() < 2) {
