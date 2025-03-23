@@ -52,6 +52,7 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.14.0</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -193,6 +194,16 @@
             <groupId>com.github.mjeanroy</groupId>
             <artifactId>exiftool-lib</artifactId>
             <version>3.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>jakarta.persistence</artifactId>
+            <version>2.2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.braun.extrb</groupId>
+            <artifactId>external-resource-bundle</artifactId>
+            <version>1.0.1</version>
         </dependency>
     </dependencies>
     <build>

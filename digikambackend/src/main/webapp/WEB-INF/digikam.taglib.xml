@@ -111,4 +111,14 @@
             <type>java.lang.Integer</type>
         </attribute>
     </tag>
+    <function>
+        <function-name>label</function-name>
+        <function-class>org.braun.digikam.web.component.function.ResourceBundleWrapper</function-class>
+        <function-signature>String label(java.lang.String)</function-signature>
+    </function>
+    <function>
+        <function-name>message</function-name>
+        <function-class>org.braun.digikam.web.component.function.ResourceBundleWrapper</function-class>
+        <function-signature>String message(java.lang.String)</function-signature>
+    </function>
 </facelet-taglib>

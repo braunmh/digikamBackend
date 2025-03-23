@@ -5,7 +5,8 @@ import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.io.Serializable;
-import java.util.List;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.braun.digikam.backend.CameraFactory;
 import org.braun.digikam.backend.CreatorFactory;
 import org.braun.digikam.backend.NodeFactory;
@@ -15,6 +16,7 @@ import org.braun.digikam.backend.ejb.ImageCopyrightFacade;
 import org.braun.digikam.backend.ejb.ImageMetadataFacade;
 import org.braun.digikam.backend.ejb.TagsFacade;
 import org.braun.digikam.backend.model.Statistic;
+import org.braun.digikam.common.LabelResourceBundle;
 import org.omnifaces.cdi.ViewScoped;
 
 /**
@@ -25,7 +27,9 @@ import org.omnifaces.cdi.ViewScoped;
 @ViewScoped
 public class AdminBean implements Serializable {
     
-    private List<Statistic> statistics;
+    private static final Logger LOG = LogManager.getLogger();
+    
+    private Statistic statistics;
     
     @Inject
     private HouseKeepingFacade houseKeepingFacade;
@@ -55,9 +59,13 @@ public class AdminBean implements Serializable {
         CreatorFactory.getInstance().refresh(imageCopyrightFacade.findAllCreators());
         CameraFactory.getInstance().refresh(imageMetadatafacade.findAllCameras());
         NodeFactory.getInstance().refresh(tagsFacade.findAll());
+        
+        // Implicit refresh in case resourceBundle has changes
+        LabelResourceBundle labelResourceBundle = new LabelResourceBundle();
+        labelResourceBundle.refresh();
     }
 
-    public List<Statistic> getStatistics() {
+    public Statistic getStatistics() {
         if (statistics == null) {
             statistics = houseKeepingFacade.getStatistics();
         }

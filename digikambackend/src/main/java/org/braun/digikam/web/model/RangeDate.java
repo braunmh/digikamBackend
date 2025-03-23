@@ -25,5 +25,10 @@ public class RangeDate extends Range<DateWrapper> {
         }
         return getFrom().compareTo(getTo()) <= 0;
     }
+
+    @Override
+    public boolean isEmpty() {
+        return (getFrom() == null || getFrom().isEmpty()) && (getTo() == null || getTo().isEmpty());
+    }
     
 }

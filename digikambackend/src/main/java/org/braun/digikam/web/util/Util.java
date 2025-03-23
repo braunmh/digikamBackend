@@ -30,7 +30,7 @@ public class Util {
 
    public static boolean componentIsDisabled(UIComponent component) {
 
-      return (Boolean.valueOf(String.valueOf(component.getAttributes().get("disabled"))));
+      return (Boolean.parseBoolean(String.valueOf(component.getAttributes().get("disabled"))));
 
    }
 

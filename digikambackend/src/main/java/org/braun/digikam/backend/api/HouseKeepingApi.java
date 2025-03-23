@@ -59,16 +59,14 @@ public class HouseKeepingApi {
         return Response.ok().entity(response).build();
     }
     
-    @GET
-    @Path("/Statistic")
     @Produces({ "application/json" })
-    @io.swagger.annotations.ApiOperation(value = "", notes = "", response = Statistic.class, responseContainer = "List", tags={ "houseKeeping", })
+    @io.swagger.annotations.ApiOperation(value = "", notes = "", response = Statistic.class, tags={ "houseKeeping", })
     @io.swagger.annotations.ApiResponses(value = {
-        @io.swagger.annotations.ApiResponse(code = 200, message = "return statistics about number of Images, Videos, Keywords", response = Statistic.class, responseContainer = "List")
+        @io.swagger.annotations.ApiResponse(code = 200, message = "return statistics about number of Images, Videos, Keywords, Creators, ...", response = Statistic.class)
     })
     public Response getStatistic(@Context SecurityContext securityContext)
     throws NotFoundException {
-        List<Statistic> result = houseKeepingFacade.getStatistics();
+        Statistic result = houseKeepingFacade.getStatistics();
         return Response.ok().entity(result).build();
     }
 }

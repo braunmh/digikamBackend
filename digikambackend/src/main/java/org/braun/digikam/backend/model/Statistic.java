@@ -16,89 +16,83 @@ package org.braun.digikam.backend.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
+import java.util.ArrayList;
+import java.util.List;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.validation.constraints.*;
+import jakarta.validation.Valid;
 
 /**
  * Statistic
  */
 @JsonPropertyOrder({
-  Statistic.JSON_PROPERTY_ORDER,
-  Statistic.JSON_PROPERTY_NAME,
-  Statistic.JSON_PROPERTY_COUNT
+  Statistic.JSON_PROPERTY_GLOBAL,
+  Statistic.JSON_PROPERTY_CREATORS
 })
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJerseyServerCodegen", date = "2025-02-06T13:18:35.766166086+01:00[Europe/Berlin]", comments = "Generator version: 7.7.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJerseyServerCodegen", date = "2025-03-10T18:21:26.080365595+01:00[Europe/Berlin]", comments = "Generator version: 7.7.0")
 public class Statistic   {
-  public static final String JSON_PROPERTY_ORDER = "order";
-  @JsonProperty(JSON_PROPERTY_ORDER)
-  private Integer order;
+  public static final String JSON_PROPERTY_GLOBAL = "global";
+  @JsonProperty(JSON_PROPERTY_GLOBAL)
+  private List<@Valid StatGlobal> global = new ArrayList<>();
 
-  public static final String JSON_PROPERTY_NAME = "name";
-  @JsonProperty(JSON_PROPERTY_NAME)
-  private String name;
+  public static final String JSON_PROPERTY_CREATORS = "creators";
+  @JsonProperty(JSON_PROPERTY_CREATORS)
+  private List<@Valid StatCreator> creators = new ArrayList<>();
 
-  public static final String JSON_PROPERTY_COUNT = "count";
-  @JsonProperty(JSON_PROPERTY_COUNT)
-  private String count;
+  public Statistic global(List<@Valid StatGlobal> global) {
+    this.global = global;
+    return this;
+  }
 
-  public Statistic order(Integer order) {
-    this.order = order;
+  public Statistic addGlobalItem(StatGlobal globalItem) {
+    if (this.global == null) {
+      this.global = new ArrayList<>();
+    }
+    this.global.add(globalItem);
     return this;
   }
 
   /**
-   * Get order
-   * @return order
+   * Get global
+   * @return global
    **/
-  @JsonProperty(value = "order")
+  @JsonProperty(value = "global")
   @ApiModelProperty(required = true, value = "")
-  @NotNull 
-  public Integer getOrder() {
-    return order;
+  @NotNull @Valid 
+  public List<@Valid StatGlobal> getGlobal() {
+    return global;
   }
 
-  public void setOrder(Integer order) {
-    this.order = order;
+  public void setGlobal(List<@Valid StatGlobal> global) {
+    this.global = global;
   }
 
-  public Statistic name(String name) {
-    this.name = name;
+  public Statistic creators(List<@Valid StatCreator> creators) {
+    this.creators = creators;
+    return this;
+  }
+
+  public Statistic addCreatorsItem(StatCreator creatorsItem) {
+    if (this.creators == null) {
+      this.creators = new ArrayList<>();
+    }
+    this.creators.add(creatorsItem);
     return this;
   }
 
   /**
-   * Get name
-   * @return name
+   * Get creators
+   * @return creators
    **/
-  @JsonProperty(value = "name")
+  @JsonProperty(value = "creators")
   @ApiModelProperty(required = true, value = "")
-  @NotNull 
-  public String getName() {
-    return name;
+  @NotNull @Valid 
+  public List<@Valid StatCreator> getCreators() {
+    return creators;
   }
 
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public Statistic count(String count) {
-    this.count = count;
-    return this;
-  }
-
-  /**
-   * Get count
-   * @return count
-   **/
-  @JsonProperty(value = "count")
-  @ApiModelProperty(required = true, value = "")
-  @NotNull 
-  public String getCount() {
-    return count;
-  }
-
-  public void setCount(String count) {
-    this.count = count;
+  public void setCreators(List<@Valid StatCreator> creators) {
+    this.creators = creators;
   }
 
 
@@ -111,14 +105,13 @@ public class Statistic   {
       return false;
     }
     Statistic statistic = (Statistic) o;
-    return Objects.equals(this.order, statistic.order) &&
-        Objects.equals(this.name, statistic.name) &&
-        Objects.equals(this.count, statistic.count);
+    return Objects.equals(this.global, statistic.global) &&
+        Objects.equals(this.creators, statistic.creators);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(order, name, count);
+    return Objects.hash(global, creators);
   }
 
   @Override
@@ -126,9 +119,8 @@ public class Statistic   {
     StringBuilder sb = new StringBuilder();
     sb.append("class Statistic {\n");
     
-    sb.append("    order: ").append(toIndentedString(order)).append("\n");
-    sb.append("    name: ").append(toIndentedString(name)).append("\n");
-    sb.append("    count: ").append(toIndentedString(count)).append("\n");
+    sb.append("    global: ").append(toIndentedString(global)).append("\n");
+    sb.append("    creators: ").append(toIndentedString(creators)).append("\n");
     sb.append("}");
     return sb.toString();
   }

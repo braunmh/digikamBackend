@@ -14,14 +14,33 @@
     </ui:define>
 
     <ui:define name="content">
-        <h:dataTable var="entry" value="#{adminBean.statistics}">
-            <h:column>
-                <h:outputText value="#{entry.name}"/>
-            </h:column>
-            <h:column>
-                <h:outputText value="#{entry.count}"/>
-            </h:column>
-        </h:dataTable>
+        <p:panel header="Allgemeine Daten">
+            <h:dataTable var="entry" value="#{adminBean.statistics.global}">
+                <h:column>
+                    <h:outputText value="#{entry.name}"/>
+                </h:column>
+                <h:column>
+                    <h:outputText value="#{entry.count}">
+                        <f:convertNumber groupingUsed="true" type="number"/>
+                    </h:outputText>
+                </h:column>
+            </h:dataTable>
+        </p:panel>
+        <p:panel header="Urheber und Kamera">
+            <h:dataTable var="entry" value="#{adminBean.statistics.creators}">
+                <h:column>
+                    <h:outputText value="#{entry.creator}"/>
+                </h:column>
+                <h:column>
+                    <h:outputText value="#{entry.camera}"/>
+                </h:column>
+                <h:column>
+                    <h:outputText value="#{entry.count}">
+                        <f:convertNumber groupingUsed="true" type="number"/>
+                    </h:outputText>
+                </h:column>
+            </h:dataTable>
+        </p:panel>
     </ui:define>
 
 </ui:composition>

@@ -19,7 +19,6 @@ import jakarta.json.JsonValue;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
-import jakarta.persistence.TypedQuery;
 import jakarta.transaction.HeuristicMixedException;
 import jakarta.transaction.HeuristicRollbackException;
 import jakarta.transaction.NotSupportedException;
@@ -36,8 +35,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.Future;
-import org.apache.commons.lang3.StringUtils;
+import java.util.stream.Collectors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
@@ -48,6 +48,7 @@ import org.braun.digikam.backend.NodeFactory;
 import org.braun.digikam.backend.StatusFactory;
 import org.braun.digikam.backend.api.NotFoundException;
 import org.braun.digikam.backend.entity.ImageMetadata;
+import org.braun.digikam.backend.entity.StatAuthorView;
 import org.braun.digikam.backend.entity.StatisticView;
 import org.braun.digikam.backend.entity.Thumbnail;
 import org.braun.digikam.backend.entity.ThumbnailToGenerate;
@@ -57,6 +58,8 @@ import org.braun.digikam.backend.graphics.Orientation;
 import org.braun.digikam.backend.model.ImageInternal;
 import org.braun.digikam.backend.model.ImageSolr;
 import org.braun.digikam.backend.model.Keyword;
+import org.braun.digikam.backend.model.StatCreator;
+import org.braun.digikam.backend.model.StatGlobal;
 import org.braun.digikam.backend.model.Statistic;
 import org.braun.digikam.backend.util.Configuration;
 import org.braun.digikam.backend.util.exif.ExifData;
@@ -96,6 +99,9 @@ public class HouseKeepingFacade {
 
     @Inject
     private ImageMetadataFacade imageMetadataFacade; 
+
+    @Inject
+    private ImageCopyrightFacade imageCopyrightFacade;
     
     @Inject
     private ThumbnailFacade thumbnailFacade;
@@ -103,13 +109,24 @@ public class HouseKeepingFacade {
     @Inject
     private TagsFacade tagsFacade;
 
-    public List<Statistic> getStatistics() {
+    public Statistic getStatistics() {
         Query query = getEntityManager().createNativeQuery(GET_STATISTICS, StatisticView.class);
-        List<Statistic> result = new ArrayList<>();
+        Statistic result = new Statistic();
         List<StatisticView> temp = query.getResultList();
         
         for (StatisticView v : temp) {
-            result.add(new Statistic().order(v.getId()).count(String.format("%,d", v.getCount())).name(v.getName()));
+            result.addGlobalItem(new StatGlobal().order(v.getId()).count(v.getCount()).name(v.getName()));
+        }
+        
+        List<StatAuthorView> creators = imageCopyrightFacade.findAuthorCameraStatistic();
+        Set<String> cntCreators = creators.stream().map(c -> c.getId().getCreator()).collect(Collectors.toSet());
+        result.addGlobalItem(new StatGlobal().order(6).name("Urheber").count(cntCreators.size()));
+        
+        for (StatAuthorView creator : creators) {
+            result.addCreatorsItem(new StatCreator()
+                    .creator(creator.getId().getCreator())
+                    .count(creator.getCount())
+                    .camera(creator.getId().getMake() + ", " + creator.getId().getModel()));
         }
         return result;
     }

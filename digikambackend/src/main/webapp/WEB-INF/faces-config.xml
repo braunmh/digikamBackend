@@ -3,6 +3,17 @@
               xmlns="https://jakarta.ee/xml/ns/jakartaee"
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-facesconfig_3_0.xsd">
+    <application>
+        <locale-config>
+            <default-locale>de</default-locale>
+        </locale-config>
+<!--
+        <resource-bundle>
+            <base-name>org.braun.digikam.common.LabelResourceBundle</base-name>
+            <var>label</var>
+        </resource-bundle>
+-->
+    </application>
     <factory>
         <exception-handler-factory>org.omnifaces.exceptionhandler.FullAjaxExceptionHandlerFactory</exception-handler-factory>
     </factory>

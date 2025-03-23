@@ -5,6 +5,7 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:di="http://org.braun.digikam"
       xmlns:comp="http://xmlns.jcp.org/jsf/composite/comp">
 
     <body>
@@ -36,7 +37,7 @@
                                 itemLabel="#{creators}" itemValue="#{creators}"
                                 scrollHeight="250">
                             </p:autoComplete>
-                            <p:outputLabel for="creator" value="Urheber" />
+                            <p:outputLabel for="creator" value="#{di:label('search.creator')}" />
                         </comp:inputElement>
                         <comp:inputElement>
                             <p:autoComplete id="camera" var="cameras" dropdown="true" 
@@ -46,7 +47,7 @@
                                 scrollHeight="250">
                                 <p:ajax event="change" listener="#{imageSearchBean.changeAction}" />
                             </p:autoComplete>
-                            <p:outputLabel for="camera" value="Kamera" />
+                            <p:outputLabel for="camera" value="#{di:label('search.camera')}" />
                         </comp:inputElement>
                         <comp:inputElement>
                             <p:selectOneMenu id="orientation" 
@@ -64,14 +65,14 @@
                                 itemLabel="#{lenses}" itemValue="#{lenses}" 
                                 scrollHeight="250">
                             </p:autoComplete>
-                            <p:outputLabel for="lens" value="Objektiv" />
+                            <p:outputLabel for="lens" value="#{di:label('search.lens')}" />
                         </comp:inputElement>
                         <comp:inputElement>
                             <p:inputText id="dateFrom" value="#{imageSearchBean.searchParameter.date.from}" >
                                 <f:converter converterId="dateWrapperConverter"/>
                                 <p:ajax update="dateFromMsg @this" event="change"/>
                             </p:inputText>
-                            <p:outputLabel for="dateFrom" value="Datum von" />
+                            <p:outputLabel for="dateFrom" value="#{di:label('search.date')} von" />
                             <p:message id="dateFromMsg" for="dateFrom" display="tooltip"/>
                         </comp:inputElement>
                         <comp:inputElement>
@@ -79,7 +80,7 @@
                                 <f:converter converterId="dateWrapperConverter"/>
                                 <p:ajax update="dateToMsg @this" event="change"/>
                             </p:inputText>
-                            <p:outputLabel for="dateTo" value="bis" />
+                            <p:outputLabel for="dateTo" value="#{di:label('search.rangeTo')}" />
                             <p:message id="dateToMsg" for="dateTo" display="tooltip"/>
                         </comp:inputElement>
                         <comp:inputElement>
@@ -89,7 +90,7 @@
                                                var="rating" itemLabel="#{rating.name}" itemValue="#{rating}"/>
                                 <f:converter converterId="ratingConverter"/>
                             </p:selectOneMenu>
-                            <p:outputLabel for="@previous" value="Bewertung von" />
+                            <p:outputLabel for="@previous" value="#{di:label('search.rating')} von" />
                         </comp:inputElement>
                         <comp:inputElement>
                             <p:selectOneMenu id="ratingTo"
@@ -98,7 +99,7 @@
                                                var="rating" itemLabel="#{rating.name}" itemValue="#{rating}"/>
                                 <f:converter converterId="ratingConverter"/>
                             </p:selectOneMenu>
-                            <p:outputLabel for="@previous" value="bis" />
+                            <p:outputLabel for="@previous" value="#{di:label('search.rangeTo')}" />
                         </comp:inputElement>
                         <comp:inputElement>
                             <p:selectOneMenu id="isoFrom"
@@ -107,7 +108,7 @@
                                                var="entry" itemLabel="#{entry.name}" itemValue="#{entry}"/>
                                 <f:converter converterId="isoConverter"/>
                             </p:selectOneMenu>
-                            <p:outputLabel for="@previous" value="ISO von" />
+                            <p:outputLabel for="@previous" value="#{di:label('search.iso')} von" />
                         </comp:inputElement>
                         <comp:inputElement>
                             <p:selectOneMenu id="isoTo"
@@ -116,7 +117,7 @@
                                                var="entry" itemLabel="#{entry.name}" itemValue="#{entry}"/>
                                 <f:converter converterId="isoConverter"/>
                             </p:selectOneMenu>
-                            <p:outputLabel for="@previous" value="bis" />
+                            <p:outputLabel for="@previous" value="#{di:label('search.rangeTo')}" />
                         </comp:inputElement>
                         <comp:inputElement>
                             <p:selectOneMenu id="apertureFrom"
@@ -125,7 +126,7 @@
                                                var="entry" itemLabel="#{entry.name}" itemValue="#{entry}"/>
                                 <f:converter converterId="apertureConverter"/>
                             </p:selectOneMenu>
-                            <p:outputLabel for="@previous" value="Blende von" />
+                            <p:outputLabel for="@previous" value="#{di:label('search.aperture')}" />
                         </comp:inputElement>
                         <comp:inputElement>
                             <p:selectOneMenu id="apertureTo"
@@ -134,7 +135,7 @@
                                                var="entry" itemLabel="#{entry.name}" itemValue="#{entry}"/>
                                 <f:converter converterId="apertureConverter"/>
                             </p:selectOneMenu>
-                            <p:outputLabel for="@previous" value="bis" />
+                            <p:outputLabel for="@previous" value="#{di:label('search.rangeTo')}" />
                         </comp:inputElement>
                         <comp:inputElement>
                             <p:selectOneMenu id="focalLengthFrom"
@@ -143,7 +144,7 @@
                                                var="entry" itemLabel="#{entry.name}" itemValue="#{entry}"/>
                                 <f:converter converterId="focalLengthConverter"/>
                             </p:selectOneMenu>
-                            <p:outputLabel for="@previous" value="Brennweite von" />
+                            <p:outputLabel for="@previous" value="#{di:label('search.focalLength')} von" />
                         </comp:inputElement>
                         <comp:inputElement>
                             <p:selectOneMenu id="focalLengthTo"
@@ -152,7 +153,7 @@
                                                var="entry" itemLabel="#{entry.name}" itemValue="#{entry}"/>
                                 <f:converter converterId="focalLengthConverter"/>
                             </p:selectOneMenu>
-                            <p:outputLabel for="@previous" value="bis" />
+                            <p:outputLabel for="@previous" value="#{di:label('search.rangeTo')}" />
                         </comp:inputElement>
                         <comp:inputElement>
                             <p:selectOneMenu id="exposureFrom"
@@ -161,7 +162,7 @@
                                                var="entry" itemLabel="#{entry.name}" itemValue="#{entry}"/>
                                 <f:converter converterId="exposureConverter"/>
                             </p:selectOneMenu>
-                            <p:outputLabel for="@previous" value="Belichtungszeit von" />
+                            <p:outputLabel for="@previous" value="#{di:label('search.exposure')} von" />
                         </comp:inputElement>
                         <comp:inputElement>
                             <p:selectOneMenu id="exposureTo"
@@ -170,7 +171,7 @@
                                                var="entry" itemLabel="#{entry.name}" itemValue="#{entry}"/>
                                 <f:converter converterId="exposureConverter"/>
                             </p:selectOneMenu>
-                            <p:outputLabel for="@previous" value="bis" />
+                            <p:outputLabel for="@previous" value="#{di:label('search.rangeTo')}" />
                         </comp:inputElement>
                     </div>
                     <div class="command">
