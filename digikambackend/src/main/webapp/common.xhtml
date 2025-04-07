@@ -26,15 +26,18 @@
         <div id="top" class="top">
         <h:form id="menu">
             <p:remoteCommand name="setWidthHeight"  action="#{sessionUserBean.setWidthHeight}" />
-            <p:growl id="growl"/>
             <ui:insert name="navigation">Navigation</ui:insert>
         </h:form>
         </div>
 
         <div id="content" >
-            <ui:insert name="content">Content</ui:insert>
+            <div class="card" style="margin-top: 1rem">
+                <h:form id="mainForm">
+                    <p:growl id="growl"/>
+                    <ui:insert name="content">Content</ui:insert>
+                </h:form>
+            </div>
         </div>
-
     </h:body>
 
 </html>

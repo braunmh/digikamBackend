@@ -86,7 +86,12 @@ public class ImageSearchBean implements Serializable {
                     getSearchParameter().getAperture().getTo(), 
                     getSearchParameter().getFocalLength().getFrom(), 
                     getSearchParameter().getFocalLength().getTo());
-            if (!result.isEmpty()) {
+            if (result.isEmpty()) {
+                FacesContext.getCurrentInstance().addMessage(
+                    null, 
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Es wurden keine Bilder gefunden", null));
+            } 
+            else {
                 getSearchParameter().getResult().clear();
                 if (getSearchParameter().isKeywordsOr()) {
                     Collections.sort(result, new MediaScoreComparator(getSearchParameter().isAscending()));

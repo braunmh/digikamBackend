@@ -3,51 +3,74 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="./../common.xhtml"
-                xmlns:comp="http://xmlns.jcp.org/jsf/composite/comp"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://xmlns.jcp.org/jsf/core">
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:comp="http://xmlns.jcp.org/jsf/composite/comp">
 
     <ui:define name="navigation">
         <comp:navigation/>
     </ui:define>
 
     <ui:define name="content">
-        <h:form id="form">
-            <p:growl id="msgs" showDetail="false"/>
-            <p:dataTable id="labels" widgetVar="labelsWidget" var="label" value="#{labelBean.content}"
-                         editable="true" selection="#{labelBean.selectedLabels}" rowKey="#{label.id}"
-                         selectionPageOnly="false" selectionRowMode="none" cellNavigation="true">
-                <f:facet name="header">
-                    <span>Liste der Labels</span>
-                </f:facet> 
-                <p:ajax event="rowEdit" listener="#{labelBean.edit}" update=":form:msgs"/>
-                <!--p:column selectionBox="true" style="width:16px;text-align:center"/-->
-                <p:column headerText="Schlüssel" sortBy="#{label.key}" filterBy="#{label.key}" filterMatchMode="contains">
-                    <p:cellEditor>
-                        <f:facet name="output"><h:outputText value="#{label.key}"/></f:facet>
-                        <f:facet name="input"><p:inputText value="#{label.key}" label="Schlüssel"/></f:facet>
-                    </p:cellEditor>
-                </p:column>
-                <p:column headerText="Wert" sortBy="#{label.value}" filterBy="#{label.value}" filterMatchMode="contains">
-                    <p:cellEditor>
-                        <f:facet name="output"><h:outputText value="#{label.value}"/></f:facet>
-                        <f:facet name="input"><p:inputText value="#{label.value}" label="Wert"/></f:facet>
-                    </p:cellEditor>
-                </p:column>
-                <p:column id="command" style="width: 10rem">
-                    <p:rowEditor/>
-                    <p:commandButton type="button" icon="pi pi-delete-left" action="#{labelBean.delete(label)}"
-                        styleClass="rounded-button ui-button-flat ui-button-plain" ajax="true"/>
-                </p:column>
-            </p:dataTable>
+        <p:dataTable id="labels" widgetVar="labelsWidget" var="row" value="#{labelBean.content}"
+                     paginator="true" rows="10"
+                paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                currentPageReportTemplate="{startRecord}-{endRecord} von {totalRecords}"
+                rowsPerPageTemplate="10,20,40"
+                     >
+            <f:facet name="header">
+                <span>Liste der Labels</span>
+            </f:facet> 
+            <p:autoUpdate on="tabelleChange"/>
+            <p:column id="col-key" headerText="Schlüssel" sortBy="#{row.key}" filterBy="#{row.key}" filterMatchMode="contains" field="key">
+                <h:outputText value="#{row.key}"/>
+            </p:column>
+            <p:column id="col-value" headerText="Wert" sortBy="#{row.value}" filterBy="#{row.value}" filterMatchMode="contains" field="value">
+                <h:outputText value="#{row.value}"/>
+            </p:column>
+            <p:column id="col-action" style="width: 10rem">
+                <p:commandButton id="editModel" title="Ändern" update="mainForm:detailTable"
+                    oncomplete="PF('detailDialogWidget').show()" styleClass="ui-button-flat"
+                    icon="pi pi-file-edit">
+                    <f:setPropertyActionListener value="#{row}" target="#{labelBean.selected}"/>      
+                </p:commandButton>
+                <p:commandButton title="Löschen" icon="pi pi-trash" update="@form" process="@this" oncomplete="PF('labelsWidget').filter()"
+                    styleClass="ui-button-flat" actionListener="#{labelBean.deleteLabel}">
+                    <p:confirm type="popup" icon="pi pi-trash" message="Möchten Sie dieses Label wirklich löschen?"/>
+                    <f:attribute name="item" value="#{row}"/>
+                </p:commandButton>
+            </p:column>
+        </p:dataTable>
+        <div class="command">
+            <p:commandButton value="Labels aktualisieren" process="@this" update=":mainForm:growl"
+                action="#{labelBean.refreshCache()}"/>
+        </div>
+        <h:panelGroup id="detailTable">
+        <p:dialog header="Label ändern" widgetVar="detailDialogWidget" modal="true" resizable="false">
+            <p:panel id="labelDetail" rendered="#{not empty labelBean.selected}">
+                <comp:inputElement>
+                    <p:inputText id="ikey" value="#{labelBean.selected.key}"/>
+                    <p:outputLabel for="ikey" value="Schlüssel"/>
+                    <p:message for="ikey" display="tooltip"/>
+                </comp:inputElement>
+                <comp:inputElement>
+                    <p:inputText id="ivalue" value="#{labelBean.selected.value}"/>
+                    <p:outputLabel for="ivalue" value="Wert"/>
+                    <p:message for="ivalue" display="tooltip"/>
+                </comp:inputElement>
+            </p:panel>
             <div class="command">
-                <p:commandButton value="Hinzufügen" process="@this" update=":form:msgs"
-                    action="#{labelBean.add()}" oncomplete="PF('labelsWidget').addRow();"/>
-                <p:commandButton value="Löschen" process="@this" update=":form"
-                    action="#{labelBean.delete()}"/>
+                <p:commandButton styleClass="di-button" value="Sichern" actionListener="#{labelBean.updateLabel}"/>
+                <p:commandButton styleClass="di-button" value="Hinzufügen" actionListener="#{labelBean.addLabel}"/>
+                <p:commandButton styleClass="di-button" value="Schliessen" oncomplete="PF('detailDialogWidget').hide()" />
             </div>
-        </h:form>
+        </p:dialog>
+        </h:panelGroup>
+        <p:confirmPopup global="true">
+             <p:commandButton value="Nein" type="button" styleClass="ui-confirm-popup-no ui-button-flat"/>
+             <p:commandButton value="Ja" type="button" styleClass="ui-confirm-popup-yes" />
+         </p:confirmPopup>
     </ui:define>
 
 </ui:composition>

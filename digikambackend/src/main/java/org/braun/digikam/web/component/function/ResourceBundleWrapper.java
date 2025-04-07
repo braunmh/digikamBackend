@@ -41,4 +41,12 @@ public class ResourceBundleWrapper {
         }
         return rb.getString(key);
     }
+    
+    public static void refreshLabel() {
+        new LabelResourceBundle().refresh();
+    }
+
+    public static void refreshMessage() {
+        new MessageResourceBundle().refresh();
+    }
 }

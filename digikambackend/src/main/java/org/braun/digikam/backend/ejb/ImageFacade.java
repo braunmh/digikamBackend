@@ -175,7 +175,7 @@ public class ImageFacade {
                     .addField("score")
                     .addField("height")
                     .addField("width")
-                    .addField("orientation")
+                    .addField("format")
                     .addQuery("type", 1) // for images
                     .addQuery("creator", creator)
                     .addQuery("make", make)
@@ -186,7 +186,7 @@ public class ImageFacade {
                     .addQuery("exposureTime", exposureTimeFrom, exposureTimeTo)
                     .addQuery("focalLength35", focalLengthFrom, focalLengthTo)
                     .addQuery("aperture", apertureFrom, apertureTo)
-                    .addQueryInt("orientation", os)
+                    .addQueryInt("format", os)
                     .addQuery("creationDate", new DateWrapper(dateFrom), new DateWrapper(dateTo));
             if (keywordsOr != null && keywordsOr) {
                 Set<Long> kr = new HashSet<>();

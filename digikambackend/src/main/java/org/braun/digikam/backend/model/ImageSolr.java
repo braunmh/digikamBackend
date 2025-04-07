@@ -81,6 +81,8 @@ public class ImageSolr extends AbstractSolr {
     @Field
     private String name;
     
+    @Field int format;
+    
     public ImageSolr() {
         type = 1;
     }
@@ -96,6 +98,7 @@ public class ImageSolr extends AbstractSolr {
         focalLength = image.getFocalLength();
         focalLength35 = image.getFocalLength35();
         height = image.getHeight();
+        width = image.getWidth();
         id = String.valueOf(image.getId());
         iso = image.getIso();
         keywordIds = (image.getKeywords() == null || image.getKeywords().isEmpty()) 
@@ -111,7 +114,7 @@ public class ImageSolr extends AbstractSolr {
         rating = image.getRating();
         title = image.getTitle();
         type = 1;
-        width = image.getWidth();
+        format = (width == null || height == null) ? 0 : (width > height) ? 0 : 90;
     }
 
     public ImageSolr(VideoInternal video) {
@@ -133,6 +136,7 @@ public class ImageSolr extends AbstractSolr {
         title = video.getTitle();
         type = 2;
         width = video.getWidth();
+        format = (width == null || height == null) ? 0 : (width > height) ? 0 : 90;
     }
 
     public ImageInternal getImageInternal() {
@@ -365,6 +369,14 @@ public class ImageSolr extends AbstractSolr {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public int getFormat() {
+        return format;
+    }
+
+    public void setFormat(int format) {
+        this.format = format;
     }
 
 }

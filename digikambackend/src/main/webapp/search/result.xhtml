@@ -15,7 +15,6 @@
             </ui:define>
             <ui:define name="content">
                 <h:outputScript library="jakarta.faces" name="jsf.js" target="head" />
-                <h:form id="resultForm">
                     <ui:repeat id="all" var="epm" value="#{imageSearchBean.entriesPerMonth}">
                         <h2><h:outputText value="#{epm.date}"/></h2>
                         <ui:repeat id="month" var="img" value="#{epm.entries}">
@@ -25,7 +24,7 @@
                                     widthOriginal="#{img.width}" heightOriginal="#{img.height}"/> 
                                 </h:outputLink>
                                 <br/>
-                                <p:commandLink id="detail" value="" update="resultForm:detailTable"
+                                <p:commandLink id="detail" value="" update="mainForm:detailTable"
                                                oncomplete="PF('detailDialog').show()">
                                     <h:graphicImage height="32" alt="Details" value="#{resource['image/info-circle.svg']}"/>
                                     <f:setPropertyActionListener target="#{mediaDetailBean.media}" value="#{img}"/>
@@ -48,8 +47,7 @@
                             <p:commandButton value="Schliessen" oncomplete="PF('detailDialog').hide()" /> 
                         </div>
                     </p:dialog>
-                        </h:panelGroup>
-                </h:form>
+                </h:panelGroup>
             </ui:define>
         </ui:composition>
     </body>

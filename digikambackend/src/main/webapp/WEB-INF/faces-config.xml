@@ -7,12 +7,10 @@
         <locale-config>
             <default-locale>de</default-locale>
         </locale-config>
-<!--
-        <resource-bundle>
+        <!--resource-bundle>
             <base-name>org.braun.digikam.common.LabelResourceBundle</base-name>
             <var>label</var>
-        </resource-bundle>
--->
+        </resource-bundle-->
     </application>
     <factory>
         <exception-handler-factory>org.omnifaces.exceptionhandler.FullAjaxExceptionHandlerFactory</exception-handler-factory>

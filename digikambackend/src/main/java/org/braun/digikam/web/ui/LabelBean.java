@@ -2,10 +2,10 @@ package org.braun.digikam.web.ui;
 
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
+import jakarta.faces.event.ActionEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.io.Serializable;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import org.apache.commons.lang3.StringUtils;
@@ -13,7 +13,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.braun.digikam.backend.ejb.LabelFacade;
 import org.braun.digikam.backend.entity.Label;
+import org.braun.digikam.web.component.function.ResourceBundleWrapper;
 import org.omnifaces.cdi.ViewScoped;
+import org.primefaces.PrimeFaces;
 import org.primefaces.event.RowEditEvent;
 
 /**
@@ -30,22 +32,14 @@ public class LabelBean implements Serializable {
     private LabelFacade labelFacade;
     
     private List<Label> content;
-
-    private List<Label> selectedLabels;
     
+    private Label selected;
+
     public List<Label> getContent() {
         if (content == null) {
             content = labelFacade.findAll();
         }
         return content;
-    }
-
-    public List<Label> getSelectedLabels() {
-        return selectedLabels;
-    }
-
-    public void setSelectedLabels(List<Label> selectedLabels) {
-        this.selectedLabels = selectedLabels;
     }
 
     public void edit(RowEditEvent<Label> event) {
@@ -77,20 +71,59 @@ public class LabelBean implements Serializable {
         setMessage("Label " + event.getObject().getKey() + " geändert");
     }
     
-    public void delete() {
-        if (selectedLabels != null && !selectedLabels.isEmpty()) {
-            Iterator<Label> iter = getContent().iterator();
-            List<Long> ids = selectedLabels.stream().map(l -> l.getId()).toList();
-            while (iter.hasNext()) {
-                Label curLabel = iter.next();
-                if (ids.contains(curLabel.getId())) {
-                    iter.remove();
-                    if (curLabel.getId() > 0) {
-                        labelFacade.remove(curLabel);
-                    }
-                }
-            }
+    public void deleteLabel(ActionEvent e) {
+        Label labelToDelete = (Label) e.getComponent().getAttributes().get("item");
+        getContent().removeIf(l -> Objects.equals(l.getId(), labelToDelete.getId()));
+        if (labelToDelete.getId() != null && labelToDelete.getId() > 0) {
+            labelFacade.remove(labelToDelete);
         }
+    }
+    
+    public void refreshCache() {
+        ResourceBundleWrapper.refreshLabel();
+    }
+    
+    public void updateLabel() {
+        LOG.info("Update");
+        if (isValidSelected()) {
+            Label t = labelFacade.findByKeyLanguageCountry(selected.getKey(), null, null);
+            if (t != null && !Objects.equals(t.getId(), selected.getId())) {
+                setMessage("Schlüssel existiert bereits.");
+                return;
+            }
+            labelFacade.merge(selected);
+            PrimeFaces.current().executeScript("PF('labelsWidget').filter(); PF('detailDialogWidget').hide()");
+        }
+    }
+
+    public void addLabel() {
+        LOG.info("Update");
+        if (isValidSelected()) {
+            Label t = labelFacade.findByKeyLanguageCountry(selected.getKey(), null, null);
+            if (t != null) {
+                setMessage("Schlüssel existiert bereits.");
+                return;
+            }
+            selected = labelFacade.createNew(selected);
+            PrimeFaces.current().executeScript("PF('labelsWidget').filter(); PF('detailDialogWidget').hide()");
+        }
+     }
+
+    private boolean isValidSelected() {
+        if (StringUtils.isBlank(selected.getKey()) || 
+            StringUtils.isBlank(selected.getValue())) {
+            setMessage("Schlüssel und Wert dürfen nicht leer sein");
+            return false;
+        }
+        return true;
+    }
+    
+    public Label getSelected() {
+        return selected;
+    }
+
+    public void setSelected(Label selected) {
+        this.selected = selected;
     }
     
     private void setMessage(String msg) {

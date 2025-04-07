@@ -15,51 +15,47 @@
     </ui:define>
 
     <ui:define name="content">
-        <div class="card">
-            <h:form id="mainForm">
-                <div class="ui-fluid formgrid grid">
-                    <comp:inputElement>
-                        <p:autoComplete id="camera" var="cameras" dropdown="true" 
-                            value="#{diagramBean.content.camera}"
-                            completeMethod="#{diagramBean.completeCamera}"
-                            itemLabel="#{cameras}" itemValue="#{cameras}"
-                            scrollHeight="250" required="true">
-                            <p:ajax event="change" listener="#{diagramBean.changeAction}" />
-                        </p:autoComplete>
-                        <p:outputLabel for="camera" value="Kamera" />
-                        <p:message id="cameraMsg" for="camera" display="tooltip"/>
-                    </comp:inputElement>
-                    <comp:inputElement>
-                        <p:selectOneMenu id="diagram" required="true"
-                                        value="#{diagramBean.content.diagram}">
-                            <f:selectItems value="#{diagramBean.diagramValues}" var="diagram" 
-                                itemLabel="#{diagram.name}" itemValue="#{diagram}"/>
-                            <f:converter converterId="diagramConverter"/>
-                        </p:selectOneMenu>
-                        <p:outputLabel for="diagram" value="Diagrammtyp" />
-                        <p:message id="diagramMsg" for="diagram" display="tooltip"/>
-                    </comp:inputElement>
-                    <comp:inputElement styleClass="field col-12 md:col-12">
-                        <p:autoComplete id="lens" var="lenses" dropdown="true" 
-                            value="#{diagramBean.content.lens}" required="true"
-                            completeMethod="#{diagramBean.completeLens}"
-                            itemLabel="#{lenses}" itemValue="#{lenses}" 
-                            scrollHeight="250">
-                        </p:autoComplete>
-                        <p:outputLabel for="lens" value="Objektiv" />
-                        <p:message id="lensMsg" for="lens" display="tooltip"/>
-                    </comp:inputElement>
-                </div>
-                <div class="command">
-                    <p:commandButton styleClass="di-button" id="execute" 
-                        value="Diagramm generieren" update="@form"
-                        action="#{diagramBean.execute()}"/>
-                </div>
-                <p:panel id="graphic" rendered="#{not empty diagramBean.model}">
-                    <di:diagram model="#{diagramBean.model}"/>
-                </p:panel>
-            </h:form>
+        <div class="ui-fluid formgrid grid">
+            <comp:inputElement>
+                <p:autoComplete id="camera" var="cameras" dropdown="true" 
+                    value="#{diagramBean.content.camera}"
+                    completeMethod="#{diagramBean.completeCamera}"
+                    itemLabel="#{cameras}" itemValue="#{cameras}"
+                    scrollHeight="250" required="true">
+                    <p:ajax event="change" listener="#{diagramBean.changeAction}" />
+                </p:autoComplete>
+                <p:outputLabel for="camera" value="#{di:label('search.camera')}" />
+                <p:message id="cameraMsg" for="camera" display="tooltip"/>
+            </comp:inputElement>
+            <comp:inputElement>
+                <p:selectOneMenu id="diagram" required="true"
+                                value="#{diagramBean.content.diagram}">
+                    <f:selectItems value="#{diagramBean.diagramValues}" var="diagram" 
+                        itemLabel="#{diagram.name}" itemValue="#{diagram}"/>
+                    <f:converter converterId="diagramConverter"/>
+                </p:selectOneMenu>
+                <p:outputLabel for="diagram" value="#{di:label('diagram.type')}" />
+                <p:message id="diagramMsg" for="diagram" display="tooltip"/>
+            </comp:inputElement>
+            <comp:inputElement styleClass="field col-12 md:col-12">
+                <p:autoComplete id="lens" var="lenses" dropdown="true" 
+                    value="#{diagramBean.content.lens}" required="true"
+                    completeMethod="#{diagramBean.completeLens}"
+                    itemLabel="#{lenses}" itemValue="#{lenses}" 
+                    scrollHeight="250">
+                </p:autoComplete>
+                <p:outputLabel for="lens" value="#{di:label('search.lens')}" />
+                <p:message id="lensMsg" for="lens" display="tooltip"/>
+            </comp:inputElement>
         </div>
+        <div class="command">
+            <p:commandButton styleClass="di-button" id="execute" 
+                value="Diagramm generieren" update="@form"
+                action="#{diagramBean.execute()}"/>
+        </div>
+        <p:panel id="graphic" rendered="#{not empty diagramBean.model}">
+            <di:diagram model="#{diagramBean.model}"/>
+        </p:panel>
     </ui:define>
 
 </ui:composition>

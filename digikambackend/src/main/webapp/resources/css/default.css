@@ -113,3 +113,6 @@ div.top {
     z-index: 1;
 }
 
+body .ui-datatable .ui-datatable-data>tr>td {
+    padding: 0.3rem 0.3rem;
+}

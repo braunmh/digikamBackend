@@ -133,7 +133,7 @@ public class SolrUpdateTest {
 
         String sql = 
             """
-            select * from ImageFull f where f.lens = 'LAOWA 90mm f/2,8 2x Ultra Macro APO'
+            select * from ImageFull f
             """;
         // skipped 89476 'location'='176.29444444444442,68.56194444444445'
         List<ImageFull> source = em.createNativeQuery(sql, ImageFull.class).getResultList();
