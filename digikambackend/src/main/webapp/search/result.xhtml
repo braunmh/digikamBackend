@@ -29,6 +29,10 @@
                                     <h:graphicImage height="32" alt="Details" value="#{resource['image/info-circle.svg']}"/>
                                     <f:setPropertyActionListener target="#{mediaDetailBean.media}" value="#{img}"/>
                                 </p:commandLink>
+                                <p:commandLink id="edit" value="" >
+                                    <h:graphicImage height="32" alt="Edit" value="#{resource['image/edit.svg']}"/>
+                                    <f:setPropertyActionListener target="#{mediaDetailBean.imageToUpdate}" value="#{img}"/>
+                                </p:commandLink>
                             </div>
                         </ui:repeat>
                         <br style="clear: left"/>

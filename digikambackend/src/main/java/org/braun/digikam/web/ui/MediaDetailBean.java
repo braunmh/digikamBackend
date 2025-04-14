@@ -19,6 +19,7 @@ import org.braun.digikam.backend.model.Media;
 import org.braun.digikam.web.model.CatAperture;
 import org.braun.digikam.web.model.CatExposure;
 import org.primefaces.PrimeFaces;
+import org.primefaces.model.DialogFrameworkOptions;
 
 /**
  *
@@ -35,6 +36,8 @@ public class MediaDetailBean implements Serializable {
     private transient DateTimeFormatter isoDate = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
 
     private Media media;
+    
+    private Media imageToUpdate;
 
     @Inject
     private ImageFacade facade;
@@ -98,6 +101,24 @@ public class MediaDetailBean implements Serializable {
     public void setMedia(Media media) {
         this.media = media;
         details = null;
+    }
+
+    public Media getImageToUpdate() {
+        return imageToUpdate;
+    }
+
+    public void setImageToUpdate(Media imageToUpdate) {
+        this.imageToUpdate = imageToUpdate;
+        DialogFrameworkOptions options = DialogFrameworkOptions.builder()
+                .modal(true)
+                .closable(true)
+                .build();
+
+        String target = "/admin/imageEditDialog";
+        PrimeFaces.current().dialog().openDynamic(target, options,
+                new ParameterBuilder()
+                        .add("imageId", imageToUpdate.getId())
+                        .build());
     }
 
     public void closeDialog() {
