@@ -76,11 +76,11 @@ public class HouseKeepingFacade {
 
     private static final String GET_STATISTICS = 
             """
-            select 1 id, 'image' name,  count(*) count from ImageMetadata
-            union select 3, 'video' property,  count(*) count from VideoMetadata
-            union select 2, 'image_size', sum(fileSize) from Images i inner join ImageMetadata im on i.id = im.imageid
-            union select 4, 'video_size', sum(fileSize) from Images i inner join VideoMetadata vm on i.id = vm.imageid
-            union select 5, 'keyword', count(*) from Tags
+            select 1 id, 'statistics.images' name,  count(*) count from ImageMetadata
+            union select 3, 'statistics.videos' property,  count(*) count from VideoMetadata
+            union select 2, 'statistics.imagessize', sum(fileSize) from Images i inner join ImageMetadata im on i.id = im.imageid
+            union select 4, 'statistics.videosize', sum(fileSize) from Images i inner join VideoMetadata vm on i.id = vm.imageid
+            union select 5, 'search.keywords', count(*) from Tags
             order by 1""";
     
     @PersistenceContext(unitName = "digikam")
@@ -120,13 +120,31 @@ public class HouseKeepingFacade {
         
         List<StatAuthorView> creators = imageCopyrightFacade.findAuthorCameraStatistic();
         Set<String> cntCreators = creators.stream().map(c -> c.getId().getCreator()).collect(Collectors.toSet());
-        result.addGlobalItem(new StatGlobal().order(6).name("Urheber").count(cntCreators.size()));
+        result.addGlobalItem(new StatGlobal().order(6).name("search.creator").count((long)cntCreators.size()));
         
-        for (StatAuthorView creator : creators) {
+        if (!creators.isEmpty()) {
+            String lastCreator = creators.get(0).getId().getCreator();
+            int lastCreatorCnt = 0;
+            for (StatAuthorView creator : creators) {
+                if (lastCreator.equals(creator.getId().getCreator())) {
+                    lastCreatorCnt = lastCreatorCnt + creator.getCount();
+                } else {
+                    result.addCreatorsItem(new StatCreator()
+                            .creator(lastCreator)
+                            .count(lastCreatorCnt)
+                            .camera("gesamt"));
+                    lastCreator = creator.getId().getCreator();
+                    lastCreatorCnt = creator.getCount();
+                }
+                result.addCreatorsItem(new StatCreator()
+                        .creator(creator.getId().getCreator())
+                        .count(creator.getCount())
+                        .camera(creator.getId().getMake() + ", " + creator.getId().getModel()));
+            }
             result.addCreatorsItem(new StatCreator()
-                    .creator(creator.getId().getCreator())
-                    .count(creator.getCount())
-                    .camera(creator.getId().getMake() + ", " + creator.getId().getModel()));
+                    .creator(lastCreator)
+                    .count(lastCreatorCnt)
+                    .camera("gesamt"));
         }
         return result;
     }

@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:di="http://org.braun.digikam"
+      xmlns:comp="http://xmlns.jcp.org/jsf/composite/comp">
+    <h:head>
+        <title>Bildeigenschaften ändern</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet name="default.css" library="css"/>
+        <h:outputStylesheet name="primeflex3.css" library="css"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </h:head>
+    <h:body>
+        <f:view id="view">
+            <f:metadata>
+                <f:viewParam name="imageId" value="#{imageEditBean.imageId}"/>
+                <f:viewAction action="#{imageEditBean.load()}"/>
+            </f:metadata>
+            <h:form id="form">
+                <div class="ui-fluid formgrid grid">
+                    <comp:inputElement>
+                        <p:autoComplete id="keywords" var="keyword" dropdown="true" 
+                            multiple="true" value="#{imageEditBean.model.keywords}"
+                            completeMethod="#{imageEditBean.completeKeyword}"
+                            itemLabel="#{keyword.name}" itemValue="#{keyword}"
+                            scrollHeight="250"
+                            styleClass="ui-inputwrapper-filled">
+                            <f:converter converterId="keywordConverter"/>
+                        </p:autoComplete>
+                        <p:outputLabel for="keywords" value="#{di:label('search.keywords')}" />
+                        <p:message id="keywordMsg" for="keywords" display="tooltip"/>
+                    </comp:inputElement>
+                    <comp:inputElement>
+                        <p:autoComplete id="creator" var="creators" dropdown="true" 
+                            value="#{imageEditBean.model.creator}"
+                            completeMethod="#{imageEditBean.completeCreator}"
+                            itemLabel="#{creators}" itemValue="#{creators}"
+                            scrollHeight="250">
+                        </p:autoComplete>
+                        <p:outputLabel for="creator" value="#{di:label('search.creator')}" />
+                    </comp:inputElement>
+                    <comp:inputElement>
+                        <p:selectOneMenu id="rating"
+                                        value="#{imageEditBean.model.ratingFrom}">
+                            <f:selectItems value="#{imageEditBean.ratingValues}" 
+                                           var="rating" itemLabel="#{rating.name}" itemValue="#{rating}"/>
+                            <f:converter converterId="ratingConverter"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel for="@previous" value="#{di:label('search.rating')}" />
+                    </comp:inputElement>
+                    <comp:inputElement>
+                        <p:inputText id="title" value="#{imageEditBean.model.title}"/>
+                        <p:outputLabel for="@previous" value="#{di:label('image.title')}" />
+                    </comp:inputElement>
+                    <comp:inputElement>
+                        <p:inputTextarea id="description" value="#{imageEditBean.model.description}"/>
+                        <p:outputLabel for="@previous" value="#{di:label('image.description')}" />
+                    </comp:inputElement>
+                </div>
+                <div class="command">
+                    <p:commandButton styleClass="di-button" id="close" value="#{di:label('common.close')}" action="#{imageEditBean.close()}" immediate="true" update="@form"/>
+                    <p:commandButton styleClass="di-button" id="save" value="#{di:label('search.save')}" action="#{imageEditBean.save()}" update="@form"/>
+                </div>
+            </h:form>
+        </f:view>
+    </h:body>
+</html>

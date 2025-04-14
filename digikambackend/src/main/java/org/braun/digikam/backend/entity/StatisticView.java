@@ -31,7 +31,7 @@ public class StatisticView implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "count")
-    private int count;
+    private long count;
 
     public int getId() {
         return id;
@@ -49,11 +49,11 @@ public class StatisticView implements Serializable {
         this.name = name;
     }
 
-    public int getCount() {
+    public long getCount() {
         return count;
     }
 
-    public void setCount(int count) {
+    public void setCount(long count) {
         this.count = count;
     }
 

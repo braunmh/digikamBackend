@@ -39,7 +39,7 @@ public class StatGlobal   {
 
   public static final String JSON_PROPERTY_COUNT = "count";
   @JsonProperty(JSON_PROPERTY_COUNT)
-  private Integer count;
+  private Long count;
 
   public StatGlobal order(Integer order) {
     this.order = order;
@@ -81,7 +81,7 @@ public class StatGlobal   {
     this.name = name;
   }
 
-  public StatGlobal count(Integer count) {
+  public StatGlobal count(Long count) {
     this.count = count;
     return this;
   }
@@ -93,11 +93,11 @@ public class StatGlobal   {
   @JsonProperty(value = "count")
   @ApiModelProperty(required = true, value = "")
   @NotNull 
-  public Integer getCount() {
+  public Long getCount() {
     return count;
   }
 
-  public void setCount(Integer count) {
+  public void setCount(Long count) {
     this.count = count;
   }
 
