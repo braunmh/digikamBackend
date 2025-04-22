@@ -1,11 +1,13 @@
 package org.braun.digikam.web.ui;
 
+import jakarta.faces.event.PreRenderViewEvent;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.braun.digikam.backend.CreatorFactory;
@@ -18,7 +20,9 @@ import org.braun.digikam.backend.model.ImageInternal;
 import org.braun.digikam.backend.model.Keyword;
 import org.braun.digikam.web.model.CatRating;
 import org.braun.digikam.web.model.ImageEditModel;
+import org.hsqldb.result.ResultMetaData;
 import org.primefaces.PrimeFaces;
+import org.primefaces.model.DialogFrameworkOptions;
 
 /**
  *
@@ -26,7 +30,7 @@ import org.primefaces.PrimeFaces;
  */
 @Named(value = "imageEditBean")
 @ViewScoped
-public class ImageEditBean implements Serializable {
+public class ImageEditBean implements DialogBean, Serializable {
 
     private static final Logger LOG = LogManager.getLogger();
 
@@ -49,11 +53,28 @@ public class ImageEditBean implements Serializable {
         return null;
     }
 
-    public void init() {
+    public static void openDialog(long imageId) {
+        DialogFrameworkOptions options = DialogFrameworkOptions.builder()
+               .contentHeight("650px")
+               .modal(true).fitViewport(true)
+               .responsive(true)
+               .resizable(false)
+               .draggable(false)
+               .styleClass("")
+               .iframeStyleClass("")
+               .closeOnEscape(true)
+               .build();
+        PrimeFaces.current().dialog().openDynamic("/admin/imageEditDialog", options, 
+                DialogParameters.builder()
+                .parameter(DialogParameters.Parameter.builder("imageId").add(imageId)).build());
+    }
+    
+    @Override
+    public void onload() {
         model = new ImageEditModel();
         ImageInternal imageInternal = getImageInternal();
         if (imageInternal != null) {
-            model.setRating(imageInternal.getRating());
+            model.setRating(CatRating.findById(imageInternal.getRating()));
             model.setTitle(imageInternal.getTitle());
             model.setDescription(imageInternal.getDescription());
             model.setCreator(imageInternal.getCreator());
@@ -72,6 +93,7 @@ public class ImageEditBean implements Serializable {
 
     public void setImageId(long imageId) {
         this.imageId = imageId;
+        onload();
     }
 
     public String save() {
@@ -82,7 +104,7 @@ public class ImageEditBean implements Serializable {
                     .id(k.getId()));
         }
         try {
-            imagesFacade.update(imageId, model.getTitle(), model.getDescription(), model.getRating(), tags, model.getCreator());
+            imagesFacade.update(imageId, model.getTitle(), model.getDescription(), model.getRating().getValue(), tags, model.getCreator());
         } catch (NotFoundException e) {
             LOG.error("Image with id {} not exists any more.", imageId);
         }
@@ -101,8 +123,8 @@ public class ImageEditBean implements Serializable {
         return NodeFactory.getInstance().getKeywordByFullName(query.toLowerCase());
     }
 
-    public List<CatRating> getRatingValues() {
-        return CatRating.values;
+    public List<CatRating> completeRating(String query) {
+        return CatRating.values.stream().filter(r -> r.getName().contains(query)).toList();
     }
     
 }

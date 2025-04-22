@@ -36,4 +36,18 @@ public class CatRating extends Catalogue<Integer> {
         setValue(value);
         return this;
     }
+    
+    public static CatRating findById(int id) {
+        if (id < 0) {
+            return values.get(0).copy();
+        }
+        if (id > values.size()) {
+            id = values.size();
+        }
+        return values.get(id).copy();
+    }
+    
+    public CatRating copy() {
+        return new CatRating().id(getId()).name(getName()).value(getValue());
+    }
 }

@@ -152,6 +152,10 @@ public class ImageSearchBean implements Serializable {
         }
     }
     
+    public void setMedia(Media media) {
+        ImageEditBean.openDialog(media.getId());
+    }
+
     public SearchParameter getSearchParameter() {
         return searchParameter;
     }

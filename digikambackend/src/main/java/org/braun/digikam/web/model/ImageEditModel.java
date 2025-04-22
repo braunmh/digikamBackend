@@ -23,7 +23,7 @@ public class ImageEditModel implements Serializable {
     
     private String description;
     
-    private int rating;
+    private CatRating rating;
 
     public List<Keyword> getKeywords() {
         if (keywords == null) {
@@ -60,11 +60,11 @@ public class ImageEditModel implements Serializable {
         this.description = description;
     }
 
-    public int getRating() {
+    public CatRating getRating() {
         return rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(CatRating rating) {
         this.rating = rating;
     }
 }

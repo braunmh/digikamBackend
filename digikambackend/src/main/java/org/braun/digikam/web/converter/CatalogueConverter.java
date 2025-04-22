@@ -25,7 +25,7 @@ public abstract class CatalogueConverter<T extends Catalogue> implements Convert
             case 1 -> {
                 return result.get(0);
             }
-            default -> throw new ConverterException("Der Wert ist niocht eindeutig");
+            default -> throw new ConverterException("Der Wert ist nicht eindeutig");
         }
     }
 
