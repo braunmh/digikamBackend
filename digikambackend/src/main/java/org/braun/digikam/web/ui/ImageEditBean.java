@@ -1,26 +1,22 @@
 package org.braun.digikam.web.ui;
 
-import jakarta.faces.event.PreRenderViewEvent;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.braun.digikam.backend.CreatorFactory;
 import org.braun.digikam.backend.NodeFactory;
 import org.braun.digikam.backend.api.NotFoundException;
 import org.braun.digikam.backend.ejb.ImageFacade;
-import org.braun.digikam.backend.ejb.ImagesFacade;
 import org.braun.digikam.backend.entity.Tags;
 import org.braun.digikam.backend.model.ImageInternal;
 import org.braun.digikam.backend.model.Keyword;
 import org.braun.digikam.web.model.CatRating;
 import org.braun.digikam.web.model.ImageEditModel;
-import org.hsqldb.result.ResultMetaData;
 import org.primefaces.PrimeFaces;
 import org.primefaces.model.DialogFrameworkOptions;
 
@@ -36,9 +32,6 @@ public class ImageEditBean implements DialogBean, Serializable {
 
     @Inject
     private ImageFacade imageFacade;
-
-    @Inject
-    private ImagesFacade imagesFacade;
 
     private long imageId;
 
@@ -96,7 +89,7 @@ public class ImageEditBean implements DialogBean, Serializable {
         onload();
     }
 
-    public String save() {
+    public void save() {
         List<Tags> tags = new ArrayList<>();
         for (Keyword k : model.getKeywords()) {
             tags.add(new Tags()
@@ -104,15 +97,14 @@ public class ImageEditBean implements DialogBean, Serializable {
                     .id(k.getId()));
         }
         try {
-            imagesFacade.update(imageId, model.getTitle(), model.getDescription(), model.getRating().getValue(), tags, model.getCreator());
+            imageFacade.update(imageId, model.getTitle(), model.getDescription(), model.getRating().getValue(), tags, model.getCreator());
         } catch (NotFoundException e) {
             LOG.error("Image with id {} not exists any more.", imageId);
         }
-        return null;
     }
 
     public void close() {
-        PrimeFaces.current().dialog().closeDynamic("");
+        PrimeFaces.current().dialog().closeDynamic(true);
     }
     
     public List<String> completeCreator(String query) {

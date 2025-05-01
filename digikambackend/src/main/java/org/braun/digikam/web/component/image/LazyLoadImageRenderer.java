@@ -37,12 +37,18 @@ public class LazyLoadImageRenderer extends BaseRenderer {
       int width = getInt(image.getWidth());
       int height = getInt(image.getHeight());
 
+      boolean isQuerFormat = isQuerformat(image.getOrientation());
+      
+      int widthOriginal = (isQuerFormat)
+              ?getInt(image.getWidthOriginal())
+              :getInt(image.getHeightOriginal());
+      int heightOriginal = (isQuerFormat)
+              ?getInt(image.getHeightOriginal())
+              :getInt(image.getWidthOriginal());
       /*
-      int widthOriginal = (isQueryFormat)?getInt(image.getWidthOriginal()):getInt(image.getHeightOriginal());
-      int heightOriginal = (isQueryFormat)?getInt(image.getHeightOriginal()):getInt(image.getWidthOriginal());;
-       */
       int widthOriginal = getInt(image.getWidthOriginal());
       int heightOriginal = getInt(image.getHeightOriginal());
+       */
       
       if (heightOriginal > 0 && widthOriginal > 0) {
          if (width > 0) {
@@ -55,11 +61,11 @@ public class LazyLoadImageRenderer extends BaseRenderer {
          }
       }
       
-      if (!isQuerformat(image.getOrientation())) {
-          int theight = height;
-          height = width;
-          width = theight;
-      }
+//      if (!isQuerformat(image.getOrientation())) {
+//          int theight = height;
+//          height = width;
+//          width = theight;
+//      }
       
       if (!Util.isEmpty(image.getStyle()))
          writer.writeAttribute("style", image.getStyle(), "style");

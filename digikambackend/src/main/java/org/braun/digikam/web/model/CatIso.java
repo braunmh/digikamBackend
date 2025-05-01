@@ -42,4 +42,8 @@ public class CatIso extends Catalogue<Integer> {
         setValue(value);
         return this;
     }
+    
+    public CatIso copy() {
+        return new CatIso().id(getId()).name(getName()).value(getValue());
+    }
 }

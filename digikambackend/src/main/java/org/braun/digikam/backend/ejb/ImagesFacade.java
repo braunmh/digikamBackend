@@ -10,6 +10,7 @@ import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -72,13 +73,13 @@ public class ImagesFacade extends AbstractFacade<Images> {
         image.getCopyrights().add(ic);
     }
 
-    public final void update(long id, String title, String description, int rating, List<Tags> tags, String creator) throws NotFoundException {
+    public final void update(long id, String title, String description, Integer rating, List<Tags> tags, String creator) throws NotFoundException {
         Images images = find(id);
         if (images == null) {
             String msg = String.format("Image with id %s not found or exists anymore", id);
             throw new NotFoundException(404, msg);
         }
-
+        images.setModificationDate(new Date());
         ImageInformation information = getImageInformationFacade().findByImageId(id);
         if (null != information) {
             information.setRating(rating);

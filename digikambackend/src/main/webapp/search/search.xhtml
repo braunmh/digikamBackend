@@ -15,15 +15,34 @@
                 <comp:navigation/>
             </ui:define>
             <ui:define name="content">
+                <script type="text/javascript">
+                    function addStyleToAutoCompleteMultiple(widgetVar, styleClass) {
+                        var widget = PF(widgetVar);
+                        if (widget) {
+                            widget.jq[0].classList.add(styleClass);
+                        }
+                    }
+                    function removeStyleToAutoCompleteMultiple(widgetVar, styleClass) {
+                        var widget = PF(widgetVar);
+                        if (widget) {
+                            widget.jq[0].classList.remove(styleClass);
+                        }
+                    }
+                </script>
                 <div class="ui-fluid formgrid grid">
                     <comp:inputElement>
-                        <p:autoComplete id="keywords" var="keyword" dropdown="true" 
+                        <p:autoComplete id="keywords" var="keyword" dropdown="true" widgetVar="keywordWidget"
                                         multiple="true" value="#{imageSearchBean.searchParameter.keywords}"
                                         completeMethod="#{imageSearchBean.completeKeyword}"
                                         itemLabel="#{keyword.name}" itemValue="#{keyword}"
                                         scrollHeight="250"
-                                        styleClass="ui-inputwrapper-filled">
+                                        onfocus="addStyleToAutoCompleteMultiple('keywordWidget', 'ui-inputwrapper-focus')"
+                                        onblur="removeStyleToAutoCompleteMultiple('keywordWidget', 'ui-inputwrapper-focus')"
+                                        styleClass="#{imageSearchBean.searchParameter.keywords.isEmpty() ? '' : 'ui-inputwrapper-filled'}">
                             <f:converter converterId="keywordConverter"/>
+                            <p:ajax event="itemSelect" update="keywords"/>
+                            <p:ajax event="itemUnselect" update="keywords"/>
+                            <p:ajax event="change" update="keywords"/>
                         </p:autoComplete>
                         <p:outputLabel for="keywords" value="#{di:label('search.keywords')}" />
                         <p:message id="keywordMsg" for="keywords" display="tooltip"/>
@@ -43,7 +62,7 @@
                                         completeMethod="#{imageSearchBean.completeCamera}"
                                         itemLabel="#{cameras}" itemValue="#{cameras}"
                                         scrollHeight="250">
-                            <p:ajax event="change" listener="#{imageSearchBean.changeAction}" />
+                            <p:ajax event="change" listener="#{imageSearchBean.changeAction}"/>
                         </p:autoComplete>
                         <p:outputLabel for="camera" value="#{di:label('search.camera')}" />
                     </comp:inputElement>
@@ -56,14 +75,31 @@
                         </p:selectOneMenu>
                         <p:outputLabel for="orientation" value="Format" />
                     </comp:inputElement>
-                    <comp:inputElement styleClass="field col-12 md:col-12">
+                    <comp:inputElement>
                         <p:autoComplete id="lens" var="lenses" dropdown="true" 
                                         value="#{imageSearchBean.searchParameter.lens}"
                                         completeMethod="#{imageSearchBean.completeLens}"
+                                        minQueryLength="2"
                                         itemLabel="#{lenses}" itemValue="#{lenses}" 
                                         scrollHeight="250">
                         </p:autoComplete>
                         <p:outputLabel for="lens" value="#{di:label('search.lens')}" />
+                    </comp:inputElement>
+                    <comp:inputElement>
+                        <p:autoComplete id="descTitle" var="descTitle" dropdown="false" widgetVar="descTitleWidget"
+                                        multiple="true" value="#{imageSearchBean.searchParameter.descTitle}"
+                                        completeMethod="#{imageSearchBean.completeDescTitle}"
+                                        itemLabel="#{descTitle}" itemValue="#{descTitle}"
+                                        scrollHeight="250"
+                                        onfocus="addStyleToAutoCompleteMultiple('descTitleWidget', 'ui-inputwrapper-focus')"
+                                        onblur="removeStyleToAutoCompleteMultiple('descTitleWidget', 'ui-inputwrapper-focus')"
+                                        styleClass="#{imageSearchBean.searchParameter.descTitle.isEmpty() ? '' : 'ui-inputwrapper-filled'}">
+                            <p:ajax event="itemSelect" update="descTitle"/>
+                            <p:ajax event="itemUnselect" update="descTitle"/>
+                            <p:ajax event="change" update="descTitle"/>
+                        </p:autoComplete>
+                        <p:outputLabel for="descTitle" value="#{di:label('image.descTitle')}" />
+                        <p:message id="descTitleMsg" for="descTitle" display="tooltip"/>
                     </comp:inputElement>
                     <comp:inputPair>
                         <comp:inputElementLeft>

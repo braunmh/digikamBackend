@@ -18,7 +18,7 @@ public class CatRating extends Catalogue<Integer> {
             new CatRating().id(4).value(4).name("****"),
             new CatRating().id(5).value(5).name("*****")
         );
-    
+
     @Override
     public CatRating id(int id) {
         setId(id);
@@ -37,8 +37,8 @@ public class CatRating extends Catalogue<Integer> {
         return this;
     }
     
-    public static CatRating findById(int id) {
-        if (id < 0) {
+    public static CatRating findById(Integer id) {
+        if (id == null || id < 0) {
             return values.get(0).copy();
         }
         if (id > values.size()) {

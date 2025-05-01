@@ -1,13 +1,16 @@
 package org.braun.digikam.backend.ejb;
 
+import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import java.util.Date;
 import org.braun.digikam.backend.entity.Thumbnail;
 
 /**
  *
  * @author mbraun
  */
+@Stateless
 public class ThumbnailFacade extends AbstractFacade<Thumbnail> {
     
     public ThumbnailFacade() {
@@ -24,5 +27,11 @@ public class ThumbnailFacade extends AbstractFacade<Thumbnail> {
 
     public void setEntityManger(EntityManager em) {
         this.em = em;
+    }
+    
+    public void updateModificationDate(long id) {
+        Thumbnail thumbnail = find(id);
+        thumbnail.setModificationDate(new Date());
+        merge(thumbnail);
     }
 }

@@ -51,9 +51,9 @@ public class CatExposure extends Catalogue<Double> {
         return this;
     }
     
-    public static String findNearest(double value) {
+    public static String findNearest(Double value) {
         CatExposure last = values.get(0);
-        if (value == 0) {
+        if (value == null || value == 0) {
             return last.getName();
         }
         
@@ -74,4 +74,10 @@ public class CatExposure extends Catalogue<Double> {
         }
         return last.getName();
     }
+
+    @Override
+    public CatExposure copy() {
+        return new CatExposure().id(getId()).name(getName()).value(getValue());
+    }
+    
 }

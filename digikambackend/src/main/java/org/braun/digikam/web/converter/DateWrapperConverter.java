@@ -26,7 +26,7 @@ public class DateWrapperConverter implements Converter<DateWrapper> {
             return new DateWrapper();
         }
         DateWrapper dateWrapper;
-        String[] parts = value.split(" ");
+        String[] parts = value.trim().split(" ");
         switch (parts.length) {
             case 1 -> {
                 String date = parseDate(parts[0]);

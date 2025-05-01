@@ -83,6 +83,9 @@ public class ImageSolr extends AbstractSolr {
     
     @Field int format;
     
+    @Field
+    private String descTitle;
+    
     public ImageSolr() {
         type = 1;
     }
@@ -115,6 +118,13 @@ public class ImageSolr extends AbstractSolr {
         title = image.getTitle();
         type = 1;
         format = (width == null || height == null) ? 0 : (width > height) ? 0 : 90;
+        if (image.getTitle() != null && image.getDescription() != null) {
+            descTitle = image.getTitle() + " " + image.getDescription();
+        } else if (image.getTitle() != null) {
+            descTitle = image.getTitle();
+        } else if (image.getDescription() != null) {
+            descTitle = image.getDescription();
+        }
     }
 
     public ImageSolr(VideoInternal video) {
@@ -137,6 +147,13 @@ public class ImageSolr extends AbstractSolr {
         type = 2;
         width = video.getWidth();
         format = (width == null || height == null) ? 0 : (width > height) ? 0 : 90;
+        if (video.getTitle() != null && video.getDescription() != null) {
+            descTitle = video.getTitle() + " " + video.getDescription();
+        } else if (video.getTitle() != null) {
+            descTitle = video.getTitle();
+        } else if (video.getDescription() != null) {
+            descTitle = video.getDescription();
+        }
     }
 
     public ImageInternal getImageInternal() {
@@ -377,6 +394,14 @@ public class ImageSolr extends AbstractSolr {
 
     public void setFormat(int format) {
         this.format = format;
+    }
+
+    public String getDescTitle() {
+        return descTitle;
+    }
+
+    public void setDescTitle(String descTitle) {
+        this.descTitle = descTitle;
     }
 
 }

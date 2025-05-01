@@ -61,6 +61,9 @@ public class ImageEditModel implements Serializable {
     }
 
     public CatRating getRating() {
+        if (rating == null) {
+            rating = new CatRating();
+        }
         return rating;
     }
 

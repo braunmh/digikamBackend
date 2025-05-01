@@ -52,4 +52,11 @@ public class CatFocalLength extends Catalogue<Integer> {
         setValue(value);
         return this;
     }
+
+    @Override
+    public CatFocalLength copy() {
+        return new CatFocalLength().id(getId()).name(getName()).value(getValue());
+    }
+    
+    
 }

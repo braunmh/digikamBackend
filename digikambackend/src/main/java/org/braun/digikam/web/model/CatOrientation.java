@@ -33,4 +33,9 @@ public class CatOrientation extends Catalogue<String> {
         setValue(value);
         return this;
     }
+
+    @Override
+    public CatOrientation copy() {
+        return new CatOrientation().id(getId()).name(getName()).value(getValue());
+    }
 }

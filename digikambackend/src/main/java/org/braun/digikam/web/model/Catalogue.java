@@ -72,5 +72,6 @@ public abstract class Catalogue<T extends Comparable<T>> implements Serializable
     public boolean isEmpty() {
         return id == 0;
     }
-            
+        
+    public abstract Catalogue<T> copy();
 }

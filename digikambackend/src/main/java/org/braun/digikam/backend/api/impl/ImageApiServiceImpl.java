@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
 import java.util.ArrayList;
+import java.util.Collections;
 import org.braun.digikam.backend.CameraFactory;
 import org.braun.digikam.backend.NodeFactory;
 import org.braun.digikam.backend.api.*;
@@ -64,7 +65,7 @@ public class ImageApiServiceImpl extends ImageApiService {
             List<Media> result = facade.findImagesByImageAttributesSolr(
                 keywords, keywordsOr, creator, camera.getMake(), camera.getModel(), lens, orientation, 
                 dateFrom, dateTo, ratingFrom, ratingTo, isoFrom, isoTo, exposureTimeFrom, exposureTimeTo, 
-                apertureFrom, apertureTo, focalLengthFrom, focalLengthTo);
+                apertureFrom, apertureTo, focalLengthFrom, focalLengthTo, Collections.emptyList());
             return Response.ok().entity(result).build();
         } catch (ConditionParseException e) {
             throw new NotFoundException(404, e.getMessage());

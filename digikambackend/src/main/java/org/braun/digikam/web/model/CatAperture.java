@@ -45,25 +45,17 @@ public class CatAperture extends Catalogue<Double> {
         return this;
     }
     
-    public static String findNearest(double value) {
+    public static String findNearest(Double value) {
 //        CatAperture last = values.get(0);
-        if (value == 0) {
+        if (value == null || value == 0) {
             return values.get(0).getName();
         }
         return String.valueOf(value);
-        
-//        int i = 0;
-//        for (CatAperture ce : values) {
-//            if (i++ == 0) {
-//                continue;
-//            }
-//            if (value == ce.getValue()) {
-//                return ce.getName();
-//            } else if (value < ce.getValue()) {
-//                return last.getName();
-//            }
-//            last = ce;
-//        }
-//        return last.getName();
     }
+
+    @Override
+    public CatAperture copy() {
+        return new CatAperture().id(getId()).name(getName()).value(getValue());
+    }
+    
 }

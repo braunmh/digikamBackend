@@ -166,6 +166,18 @@ public class SolrQueryBuilder {
         return this;
     }
     
+    public SolrQueryBuilder addQuery(String fieldName, Collection<String> ids) {
+        if (ids == null || ids.isEmpty()) {
+            return this;
+        }
+        addOperator();
+        query.append(fieldName).append(":")
+            .append("(")
+            .append(String.join(" ", ids))
+            .append(")");
+        return this;
+    }
+    
     /**
      * Adds an Geo-Search
      * 

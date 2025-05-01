@@ -1,5 +1,6 @@
 package org.braun.digikam.backend.ejb;
 
+import jakarta.ejb.EJB;
 import org.braun.digikam.common.DateWrapper;
 import org.braun.digikam.backend.entity.ImageFull;
 import org.braun.digikam.backend.entity.ImageComments;
@@ -31,14 +32,19 @@ import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.Http2SolrClient;
+import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.client.solrj.response.TermsResponse.Term;
+import org.apache.solr.client.solrj.response.UpdateResponse;
 import org.braun.digikam.backend.NodeFactory;
 import org.braun.digikam.backend.api.NotFoundException;
+import org.braun.digikam.backend.entity.Tags;
 import org.braun.digikam.backend.entity.Thumbnail;
 import org.braun.digikam.backend.graphics.ExifUtil;
 import org.braun.digikam.backend.graphics.ImageUtil;
 import org.braun.digikam.backend.graphics.Orientation;
 import org.braun.digikam.backend.model.ImageInternal;
+import org.braun.digikam.backend.model.ImageSolr;
 import org.braun.digikam.backend.model.Keyword;
 import org.braun.digikam.backend.model.Media;
 import org.braun.digikam.backend.model.MediaSolr;
@@ -70,8 +76,11 @@ public class ImageFacade {
             + "i.lens, i.aperture, i.focalLength, i.focalLength35, i.exposureTime, i.sensitivity, i.creator, i.latitudeNumber, i.longitudeNumber "
             + "FROM ImageFull i";
 
-    @Inject
+    @EJB
     private ThumbnailFacade thumbnailFacade;
+    
+    @EJB
+    private ImagesFacade imagesFacade;
     
     @PersistenceContext(unitName = "digikam")
     private EntityManager em;
@@ -83,7 +92,7 @@ public class ImageFacade {
     }
 
     public byte[] getThumbnail(long id) throws NotFoundException {
-        Thumbnail thumb = thumbnailFacade.find(id);
+        Thumbnail thumb = getThumbnailFacade().find(id);
         if (thumb == null) {
             return new byte[0];
         } else {
@@ -160,7 +169,7 @@ public class ImageFacade {
             List<Long> keywords, Boolean keywordsOr, String creator, String make, String model, String lens, String orientation,
             String dateFrom, String dateTo, Integer ratingFrom, Integer ratingTo, Integer isoFrom, Integer isoTo,
             Double exposureTimeFrom, Double exposureTimeTo, Double apertureFrom, Double apertureTo,
-            Integer focalLengthFrom, Integer focalLengthTo) throws ConditionParseException {
+            Integer focalLengthFrom, Integer focalLengthTo, List<String> descTitle) throws ConditionParseException {
         try (SolrClient client = getSolrClient()) {
             final String solrCollection = Configuration.getInstance().getSolrCollection();
             Set<Integer> os = (orientation == null || orientation.isBlank()) ?
@@ -175,7 +184,7 @@ public class ImageFacade {
                     .addField("score")
                     .addField("height")
                     .addField("width")
-                    .addField("format")
+                    .addField("orientation")
                     .addQuery("type", 1) // for images
                     .addQuery("creator", creator)
                     .addQuery("make", make)
@@ -186,7 +195,8 @@ public class ImageFacade {
                     .addQuery("exposureTime", exposureTimeFrom, exposureTimeTo)
                     .addQuery("focalLength35", focalLengthFrom, focalLengthTo)
                     .addQuery("aperture", apertureFrom, apertureTo)
-                    .addQueryInt("format", os)
+                    .addQuery("descTitle", descTitle)
+                    .addQueryInt("orientation", os)
                     .addQuery("creationDate", new DateWrapper(dateFrom), new DateWrapper(dateTo));
             if (keywordsOr != null && keywordsOr) {
                 Set<Long> kr = new HashSet<>();
@@ -213,6 +223,27 @@ public class ImageFacade {
         } catch (IOException | SolrServerException e) {
             LOG.debug(e.getMessage(), e);
             throw new ConditionParseException(e.getMessage());
+        }
+    }
+    
+    public List<String> getSuggestions(String fieldName, String prefix) {
+        if (StringUtils.isBlank(prefix)) {
+            return Collections.emptyList();
+        }
+        try (SolrClient client = getSolrClient()) {
+            SolrQuery query = new SolrQuery();
+            query.setRequestHandler("/terms");
+            query.setTerms(true);
+            query.setTermsLimit(20);
+            query.setTermsPrefix(prefix.toLowerCase().trim());
+            query.setTermsMinCount(1);
+            query.addTermsField(fieldName);
+            QueryRequest request = new QueryRequest(query);
+            List<Term> terms = request.process(client, Configuration.getInstance().getSolrCollection()).getTermsResponse().getTerms(fieldName);
+            return terms.stream().map(t -> t.getTerm()).toList();
+        } catch (IOException | SolrServerException e) {
+            LOG.error(e.getMessage(), e);
+            return Collections.emptyList();
         }
     }
 
@@ -357,6 +388,21 @@ public class ImageFacade {
         }
         return result;
     }
+    
+    public final void update(long id, String title, String description, Integer rating, List<Tags> tags, String creator) throws NotFoundException {
+        getImagesFacade().update(id, title, description, rating, tags, creator);
+        try (SolrClient client = getSolrClient()) {
+            final String solrCollection = Configuration.getInstance().getSolrCollection();
+            ImageInternal imageInternal = getMetadata(id);
+            ImageSolr imageSolr = new ImageSolr(imageInternal);
+            final UpdateResponse response = client.addBean(solrCollection, imageSolr);
+            client.commit(solrCollection);
+        } catch (IOException | SolrServerException e) {
+            LOG.error("Update Solr-Index failed", e);
+            return;
+        }
+        getThumbnailFacade().updateModificationDate(id);
+    }
 
     private FileInputStream getImageFile(String root, String path, String name) throws NotFoundException {
         File file = new File(root + path + "/" + name);
@@ -415,4 +461,19 @@ public class ImageFacade {
         int amp = value.indexOf('&');
         return (amp > 0) ? value.substring(0, amp) : value;
     }
+
+    public ImagesFacade getImagesFacade() {
+        if (imagesFacade == null) {
+            imagesFacade = Util.Cdi.lookup(ImagesFacade.class);
+        }
+        return imagesFacade;
+    }
+
+    public ThumbnailFacade getThumbnailFacade() {
+        if (thumbnailFacade == null) {
+            thumbnailFacade = Util.Cdi.lookup(ThumbnailFacade.class);
+        }
+        return thumbnailFacade;
+    }
+    
 }

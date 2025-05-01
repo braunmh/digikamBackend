@@ -40,5 +40,11 @@ public class CatDiagram extends Catalogue<String> {
         setValue(value);
         return this;
     }
+
+    @Override
+    public CatDiagram copy() {
+        return new CatDiagram().id(getId()).name(getName()).value(getValue());
+    }
+    
     
 }

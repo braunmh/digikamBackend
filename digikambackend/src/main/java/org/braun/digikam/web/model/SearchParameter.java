@@ -61,6 +61,8 @@ public class SearchParameter implements Serializable {
     private boolean ascending;
     
     private List<Media> result;
+    
+    private List<String> descTitle;
 
     public void isValid() throws ValidationException {
         if (camera == null || camera.isBlank()) {
@@ -89,7 +91,7 @@ public class SearchParameter implements Serializable {
         if (isEmpty(creator) && isEmpty(make) && isEmpty(model) && isEmpty(lens) && isEmpty(format)
         && getRating().isEmpty() && getIso().isEmpty() && getExposureTime().isEmpty()
         && getAperture().isEmpty() && getDate().isEmpty() && getFocalLength().isEmpty()
-        && getKeywords().isEmpty()) {
+        && getKeywords().isEmpty() && getDescTitle().isEmpty()) {
             throw new ValidationException(null, "Es muss mindestens ein Suchparameter angegeben werden.");
         }
         if (!getRating().isValid()) {
@@ -195,6 +197,17 @@ public class SearchParameter implements Serializable {
 
     public void setKeywords(List<Keyword> keywords) {
         this.keywords = keywords;
+    }
+
+    public List<String> getDescTitle() {
+        if (descTitle == null) {
+            descTitle = new ArrayList<>();
+        }
+        return descTitle;
+    }
+
+    public void setDescTitle(List<String> descTitle) {
+        this.descTitle = descTitle;
     }
     
     public List<Media> getResult() {

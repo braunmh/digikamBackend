@@ -25,13 +25,14 @@
                                               widthOriginal="#{img.width}" heightOriginal="#{img.height}"/> 
                             </h:outputLink>
                             <br/>
-                            <p:commandLink id="detail" value="" update="mainForm:detailTable"
-                                           oncomplete="PF('detailDialog').show()">
+                            <p:commandLink id="detail" value="" update="mainForm:detailDialog"
+                                           oncomplete="PF('detailDialogWidget').show()">
                                 <h:graphicImage styleClass="icon" alt="Details" value="#{resource['image/info-circle.svg']}"/>
                                 <f:setPropertyActionListener target="#{mediaDetailBean.media}" value="#{img}"/>
                             </p:commandLink>
-                            <p:commandLink id="edit" value="" process="@this" update="mainForm:detailTable"
-                                           oncomplete="PF('imageEditDialog').show()">
+
+                            <p:commandLink id="edit" value="" process="@this" update="mainForm:imageEditDialog"
+                                           oncomplete="PF('imageEditDialogWidget').show()">
                                 <h:graphicImage styleClass="icon" alt="Ändern" value="#{resource['image/edit-circle.svg']}"/>
                                 <f:setPropertyActionListener target="#{imageEditBean.imageId}" value="#{img.id}"/>
                             </p:commandLink>
@@ -39,8 +40,8 @@
                     </ui:repeat>
                     <br style="clear: left"/>
                 </ui:repeat>
-                <h:panelGroup id="detailTable">
-                    <p:dialog modal="true" widgetVar="detailDialog">
+                <p:panel id="dialogs">
+                    <p:dialog modal="true" widgetVar="detailDialogWidget" id="detailDialog">
                         <h:dataTable var="entry" value="#{mediaDetailBean.details}">
                             <h:column>
                                 <h:outputText value="#{entry.name}"/>
@@ -50,13 +51,14 @@
                             </h:column>
                         </h:dataTable>
                         <div style="text-align: right">
-                            <p:commandButton value="Schliessen" oncomplete="PF('detailDialog').hide()" /> 
+                            <p:commandButton value="Schliessen" oncomplete="PF('detailDialogWidget').hide()" /> 
                         </div>
                     </p:dialog>
-                    <p:dialog modal="true" widgetVar="imageEditDialog">
+                    <p:dialog modal="true" widgetVar="imageEditDialogWidget" blockScroll="true" id="imageEditDialog"
+                              header="Id: #{imageEditBean.imageId}">
                         <p:panel rendered="#{not empty imageEditBean.model}">
                         <div class="ui-fluid formgrid grid">
-                            <comp:inputElement>
+                            <comp:inputElement styleClass="field md:col-12 col-12">
                                 <p:autoComplete id="keywords" var="keyword" dropdown="true" 
                                                 multiple="true" value="#{imageEditBean.model.keywords}"
                                                 completeMethod="#{imageEditBean.completeKeyword}"
@@ -96,12 +98,12 @@
                             </comp:inputElement>
                         </div>
                         <div class="command">
-                            <p:commandButton styleClass="di-button" id="close" value="#{di:label('common.close')}" oncomplete="PF('imageEditDialog').hide()"/>
-                            <p:commandButton styleClass="di-button" id="save" value="#{di:label('common.save')}" action="#{imageEditBean.save()}" update="@form"/>
+                            <p:commandButton styleClass="di-button" id="close" value="#{di:label('common.close')}" oncomplete="PF('imageEditDialogWidget').hide()"/>
+                            <p:commandButton styleClass="di-button" id="save" value="#{di:label('common.save')}" action="#{imageEditBean.save()}" oncomplete="PF('imageEditDialogWidget').hide()"/>
                         </div>
                         </p:panel>
                     </p:dialog>
-                </h:panelGroup>
+                </p:panel>
             </ui:define>
         </ui:composition>
     </body>

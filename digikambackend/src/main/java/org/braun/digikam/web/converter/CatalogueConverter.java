@@ -23,7 +23,7 @@ public abstract class CatalogueConverter<T extends Catalogue> implements Convert
         switch (result.size()) {
             case 0 -> throw new ConverterException("Der wert existiert nicht");
             case 1 -> {
-                return result.get(0);
+                return (T) result.get(0).copy();
             }
             default -> throw new ConverterException("Der Wert ist nicht eindeutig");
         }

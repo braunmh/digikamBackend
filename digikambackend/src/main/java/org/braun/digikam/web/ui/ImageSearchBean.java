@@ -85,7 +85,8 @@ public class ImageSearchBean implements Serializable {
                     getSearchParameter().getAperture().getFrom(), 
                     getSearchParameter().getAperture().getTo(), 
                     getSearchParameter().getFocalLength().getFrom(), 
-                    getSearchParameter().getFocalLength().getTo());
+                    getSearchParameter().getFocalLength().getTo(),
+                    getSearchParameter().getDescTitle());
             if (result.isEmpty()) {
                 FacesContext.getCurrentInstance().addMessage(
                     null, 
@@ -152,10 +153,16 @@ public class ImageSearchBean implements Serializable {
         }
     }
     
+    private Media media;
+    
     public void setMedia(Media media) {
-        ImageEditBean.openDialog(media.getId());
+        this.media = media;
     }
 
+    public void openEditDialog() {
+        ImageEditBean.openDialog(media.getId());
+    }
+    
     public SearchParameter getSearchParameter() {
         return searchParameter;
     }
@@ -179,6 +186,10 @@ public class ImageSearchBean implements Serializable {
     public void changeAction(AjaxBehaviorEvent event) {
         LOG.info("Values changed by autocomplete.ajax. ClientId: {}, Id: {}", 
             event.getComponent().getClientId(), event.getComponent().getId());
+    }
+    
+    public List<String> completeDescTitle(String query) {
+        return facade.getSuggestions("descTitle", query);
     }
     
     public List<CatFocalLength> getFocalLengthValues() {
