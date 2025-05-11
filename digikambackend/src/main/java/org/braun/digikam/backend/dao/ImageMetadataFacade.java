@@ -1,4 +1,4 @@
-package org.braun.digikam.backend.ejb;
+package org.braun.digikam.backend.dao;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -160,7 +160,7 @@ public class ImageMetadataFacade extends AbstractFacade<ImageMetadata>  {
     }
  
     
-    void setEntityManager(EntityManager em) {
+    public void setEntityManager(EntityManager em) {
         this.em = em;
     }
 }

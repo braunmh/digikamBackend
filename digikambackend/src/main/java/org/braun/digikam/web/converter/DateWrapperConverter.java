@@ -71,16 +71,14 @@ public class DateWrapperConverter implements Converter<DateWrapper> {
         int month = 0;
         int day = 0;
         switch (parts.size()) {
-            case 1:
-                year = parseNumber(parts.get(0), 0, 9999, "Jahr");
-                break;
-            case 2:
+            case 1 -> year = parseNumber(parts.get(0), 0, 9999, "Jahr");
+            case 2 -> {
                 if (!parts.get(0).equals("-") && !parts.get(0).equals("--")) {
                     month = parseNumber(parts.get(0), 1, 12, "Monat");
                 }
                 year = parseNumber(parts.get(1), 0, 9999, "Jahr");
-                break;
-            case 3:
+            }
+            case 3 -> {
                 if (!parts.get(0).equals("-") && !parts.get(0).equals("--")) {
                     day = parseNumber(parts.get(0), 1, 31, "Tag");
                 }
@@ -99,9 +97,8 @@ public class DateWrapperConverter implements Converter<DateWrapper> {
                         throw new ConverterException("Diese Tagesangabe ist für diesen Monat nicht zulässig");
                     }
                 }
-                break;
-            default:
-                throw new ConverterException("Ungültige Datumangabe dd.mm.jjjj");
+            }
+            default -> throw new ConverterException("Ungültige Datumangabe dd.mm.jjjj");
         }
         if (year < 100) {
             Calendar today = Calendar.getInstance();

@@ -1,6 +1,7 @@
 package org.braun.digikam.web.model;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  *
@@ -62,6 +63,28 @@ public abstract class Catalogue<T extends Comparable<T>> implements Serializable
         }
         
         return value.compareTo(o.getValue());
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 79 * hash + Objects.hashCode(this.value);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Catalogue<?> other = (Catalogue<?>) obj;
+        return Objects.equals(this.value, other.value);
     }
 
     @Override

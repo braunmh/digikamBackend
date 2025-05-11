@@ -11,7 +11,7 @@ import jakarta.ws.rs.*;
 import jakarta.validation.constraints.*;
 import java.util.List;
 import org.braun.digikam.backend.CameraLensFactory;
-import org.braun.digikam.backend.ejb.ImageMetadataFacade;
+import org.braun.digikam.backend.dao.ImageMetadataFacade;
 import org.braun.digikam.backend.model.CameraLens;
 import org.braun.digikam.backend.util.Util;
 

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import jakarta.persistence.Basic;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -76,10 +77,11 @@ public class Images implements Serializable {
    @Column(name = "tagHash")
    private Long tagHash;
    
-   @OneToMany (mappedBy = "image") // mappedBy is the name of Attribute in class ImageComments; not the name of the column
+// mappedBy is the name of Attribute in class ImageComments; not the name of the column
+   @OneToMany (mappedBy = "image", cascade = CascadeType.ALL) 
    private Collection<ImageComments> comments;
 
-   @OneToMany (mappedBy = "image")
+   @OneToMany (mappedBy = "image", cascade = CascadeType.ALL)
    private Collection<ImageCopyright> copyrights;
    
    @ManyToMany

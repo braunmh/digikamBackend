@@ -1,4 +1,4 @@
-package org.braun.digikam.backend.ejb;
+package org.braun.digikam.backend.dao;
 
 import org.braun.digikam.backend.entity.ImageCopyright;
 import org.braun.digikam.backend.entity.Tags;
@@ -10,6 +10,8 @@ import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -73,7 +75,7 @@ public class ImagesFacade extends AbstractFacade<Images> {
         image.getCopyrights().add(ic);
     }
 
-    public final void update(long id, String title, String description, Integer rating, List<Tags> tags, String creator) throws NotFoundException {
+    public final void update(long id, String title, String description, Integer rating, List<Tags> tags, String creator, LocalDateTime creationDate) throws NotFoundException {
         Images images = find(id);
         if (images == null) {
             String msg = String.format("Image with id %s not found or exists anymore", id);
@@ -83,6 +85,7 @@ public class ImagesFacade extends AbstractFacade<Images> {
         ImageInformation information = getImageInformationFacade().findByImageId(id);
         if (null != information) {
             information.setRating(rating);
+            information.setCreationDate(Date.from(creationDate.toInstant(ZoneOffset.UTC)));
             getImageInformationFacade().merge(information);
         }
 

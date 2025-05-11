@@ -1,6 +1,7 @@
 package org.braun.digikam.web.model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
@@ -24,6 +25,8 @@ public class ImageEditModel implements Serializable {
     private String description;
     
     private CatRating rating;
+    
+    private LocalDateTime creationDate;
 
     public List<Keyword> getKeywords() {
         if (keywords == null) {
@@ -69,5 +72,13 @@ public class ImageEditModel implements Serializable {
 
     public void setRating(CatRating rating) {
         this.rating = rating;
+    }
+
+    public LocalDateTime getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
     }
 }

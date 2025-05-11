@@ -5,7 +5,6 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:di="http://org.braun.digikam"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:comp="http://xmlns.jcp.org/jsf/composite/comp"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <body>
 
@@ -25,85 +24,21 @@
                                               widthOriginal="#{img.width}" heightOriginal="#{img.height}"/> 
                             </h:outputLink>
                             <br/>
-                            <p:commandLink id="detail" value="" update="mainForm:detailDialog"
-                                           oncomplete="PF('detailDialogWidget').show()">
-                                <h:graphicImage styleClass="icon" alt="Details" value="#{resource['image/info-circle.svg']}"/>
-                                <f:setPropertyActionListener target="#{mediaDetailBean.media}" value="#{img}"/>
-                            </p:commandLink>
 
-                            <p:commandLink id="edit" value="" process="@this" update="mainForm:imageEditDialog"
-                                           oncomplete="PF('imageEditDialogWidget').show()">
+                            <p:commandLink id="detail" value="" process="@this" 
+                                           actionListener="#{imageSearchBean.openDetailDialog}">
+                                <f:attribute name="media" value="#{img}"/>
+                                <h:graphicImage styleClass="icon" alt="Details" value="#{resource['image/info-circle.svg']}"/>
+                            </p:commandLink>
+                            <p:commandLink id="edit" value="" process="@this" 
+                                           actionListener="#{imageSearchBean.openEditDialog}">
+                                <f:attribute name="media" value="#{img}"/>
                                 <h:graphicImage styleClass="icon" alt="Ändern" value="#{resource['image/edit-circle.svg']}"/>
-                                <f:setPropertyActionListener target="#{imageEditBean.imageId}" value="#{img.id}"/>
                             </p:commandLink>
                         </div>
                     </ui:repeat>
                     <br style="clear: left"/>
                 </ui:repeat>
-                <p:panel id="dialogs">
-                    <p:dialog modal="true" widgetVar="detailDialogWidget" id="detailDialog">
-                        <h:dataTable var="entry" value="#{mediaDetailBean.details}">
-                            <h:column>
-                                <h:outputText value="#{entry.name}"/>
-                            </h:column>
-                            <h:column>
-                                <h:outputText value="#{entry.value}"/>
-                            </h:column>
-                        </h:dataTable>
-                        <div style="text-align: right">
-                            <p:commandButton value="Schliessen" oncomplete="PF('detailDialogWidget').hide()" /> 
-                        </div>
-                    </p:dialog>
-                    <p:dialog modal="true" widgetVar="imageEditDialogWidget" blockScroll="true" id="imageEditDialog"
-                              header="Id: #{imageEditBean.imageId}">
-                        <p:panel rendered="#{not empty imageEditBean.model}">
-                        <div class="ui-fluid formgrid grid">
-                            <comp:inputElement styleClass="field md:col-12 col-12">
-                                <p:autoComplete id="keywords" var="keyword" dropdown="true" 
-                                                multiple="true" value="#{imageEditBean.model.keywords}"
-                                                completeMethod="#{imageEditBean.completeKeyword}"
-                                                itemLabel="#{keyword.name}" itemValue="#{keyword}"
-                                                scrollHeight="250"
-                                                styleClass="ui-inputwrapper-filled">
-                                    <f:converter converterId="keywordConverter"/>
-                                </p:autoComplete>
-                                <p:outputLabel for="keywords" value="#{di:label('search.keywords')}" />
-                                <p:message id="keywordMsg" for="keywords" display="tooltip"/>
-                            </comp:inputElement>
-                            <comp:inputElement>
-                                <p:autoComplete id="creator" var="creators" dropdown="true" 
-                                                value="#{imageEditBean.model.creator}"
-                                                completeMethod="#{imageEditBean.completeCreator}"
-                                                itemLabel="#{creators}" itemValue="#{creators}"
-                                                scrollHeight="250">
-                                </p:autoComplete>
-                                <p:outputLabel for="creator" value="#{di:label('search.creator')}" />
-                            </comp:inputElement>
-                            <comp:inputElement>
-                                <p:autoComplete id="rating" dropdown="true"
-                                                value="#{imageEditBean.model.rating}"
-                                                completeMethod="#{imageEditBean.completeRating}"
-                                                var="rating" itemLabel="#{rating.name}" itemValue="#{rating}">
-                                    <f:converter converterId="ratingConverter"/>
-                                </p:autoComplete>
-                                <p:outputLabel for="@previous" value="#{di:label('search.rating')}" />
-                            </comp:inputElement>
-                            <comp:inputElement>
-                                <p:inputText id="title" value="#{imageEditBean.model.title}"/>
-                                <p:outputLabel for="@previous" value="#{di:label('image.title')}" />
-                            </comp:inputElement>
-                            <comp:inputElement>
-                                <p:inputTextarea id="description" value="#{imageEditBean.model.description}"/>
-                                <p:outputLabel for="@previous" value="#{di:label('image.description')}" />
-                            </comp:inputElement>
-                        </div>
-                        <div class="command">
-                            <p:commandButton styleClass="di-button" id="close" value="#{di:label('common.close')}" oncomplete="PF('imageEditDialogWidget').hide()"/>
-                            <p:commandButton styleClass="di-button" id="save" value="#{di:label('common.save')}" action="#{imageEditBean.save()}" oncomplete="PF('imageEditDialogWidget').hide()"/>
-                        </div>
-                        </p:panel>
-                    </p:dialog>
-                </p:panel>
             </ui:define>
         </ui:composition>
     </body>

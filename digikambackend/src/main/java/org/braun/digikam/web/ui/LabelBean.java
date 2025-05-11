@@ -11,7 +11,7 @@ import java.util.Objects;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.braun.digikam.backend.ejb.LabelFacade;
+import org.braun.digikam.backend.dao.LabelFacade;
 import org.braun.digikam.backend.entity.Label;
 import org.braun.digikam.web.component.function.ResourceBundleWrapper;
 import org.omnifaces.cdi.ViewScoped;

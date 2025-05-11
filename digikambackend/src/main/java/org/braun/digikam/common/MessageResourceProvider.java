@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import org.braun.digikam.backend.ejb.LabelFacade;
+import org.braun.digikam.backend.dao.LabelFacade;
 import org.braun.digikam.backend.entity.Label;
 import org.braun.digikam.backend.util.Util;
 

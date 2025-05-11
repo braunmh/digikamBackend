@@ -12,10 +12,10 @@
         <param-name>org.omnifaces.EXCEPTION_TYPES_TO_UNWRAP</param-name>
         <param-value>jakarta.ejb.EJBException,jakarta.persistence.RollbackException</param-value>
     </context-param>
-    <context-param>
+    <!--context-param>
         <param-name>org.omnifaces.EXCEPTION_TYPES_TO_IGNORE_IN_LOGGING</param-name>
         <param-value>jakarta.faces.application.ViewExpiredException</param-value>
-    </context-param>
+    </context-param-->
     <filter>
         <filter-name>ApiOriginFilter</filter-name>
         <filter-class>org.braun.digikam.backend.api.ApiOriginFilter</filter-class>

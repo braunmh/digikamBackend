@@ -1,4 +1,4 @@
-package org.braun.digikam.backend.ejb;
+package org.braun.digikam.backend.dao;
 
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;

@@ -1,5 +1,10 @@
 package org.braun.digikam.backend.ejb;
 
+import org.braun.digikam.backend.dao.ImageMetadataFacade;
+import org.braun.digikam.backend.dao.ThumbnailFacade;
+import org.braun.digikam.backend.dao.TagsFacade;
+import org.braun.digikam.backend.dao.ImagesFacade;
+import org.braun.digikam.backend.dao.ImageCopyrightFacade;
 import com.thebuzzmedia.exiftool.ExifTool;
 import com.thebuzzmedia.exiftool.ExifToolBuilder;
 import org.braun.digikam.backend.entity.Tags;
@@ -159,6 +164,9 @@ public class HouseKeepingFacade {
         long startTst = System.currentTimeMillis();
         List<ThumbnailToGenerate> resultImages = findImages();
         List<ThumbnailToGenerate> resultVideos = findVideos();
+        resultVideos.removeIf(t -> 
+                t.getName().toLowerCase().endsWith(".mp3") 
+                || t.getName().toLowerCase().endsWith(".wav"));
         List<Thumbnail> imagesToDelete = findImagesToDelete();
         
         if (resultImages.isEmpty() && resultVideos.isEmpty() && imagesToDelete.isEmpty()) {
@@ -316,10 +324,10 @@ public class HouseKeepingFacade {
     }
 
     private List<Thumbnail> findImagesToDelete() {
-       Query query = getEntityManager().createNativeQuery(
-               "select t.*"
-                + " from Thumbnail t left join Images i on t.imageid = i.id"
-                + " where i.id is null", Thumbnail.class);
+       Query query = getEntityManager().createNativeQuery("""
+            select t.* from ((Images i join Albums a on i.album = a.id) join AlbumRoots ar on ar.id = a.albumRoot)
+            right join Thumbnail t on i.id = t.imageid
+            where i.id is null""", Thumbnail.class);
        return query.getResultList();
     }
     

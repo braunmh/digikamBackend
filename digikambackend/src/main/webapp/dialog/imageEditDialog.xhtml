@@ -16,11 +16,12 @@
     <h:body>
         <f:view id="view">
             <f:metadata>
-                <f:viewParam name="imageId" value="#{imageEditBean.imageId}"/>
+                <f:viewParam name="mediaId" value="#{imageEditBean.mediaId}"/>
+                <f:viewParam name="image" value="#{imageEditBean.image}"/>
                 <f:viewAction action="#{imageEditBean.onload()}"/>
             </f:metadata>
             <h:form id="form">
-                <div class="ui-fluid formgrid grid">
+                <div class="ui-fluid formgrid grid" style="padding-top: 0.3rem">
                     <comp:inputElement styleClass="field md:col-12 col-12">
                         <p:autoComplete id="keywords" var="keyword" dropdown="true" 
                             multiple="true" value="#{imageEditBean.model.keywords}"
@@ -30,7 +31,7 @@
                             styleClass="ui-inputwrapper-filled">
                             <f:converter converterId="keywordConverter"/>
                         </p:autoComplete>
-                        <p:outputLabel for="keywords" value="#{di:label('search.keywords')}" />
+                        <p:outputLabel for="keywords" value="#{di:label('image.keywords')}" />
                         <p:message id="keywordMsg" for="keywords" display="tooltip"/>
                     </comp:inputElement>
                     <comp:inputElement>
@@ -40,16 +41,23 @@
                             itemLabel="#{creators}" itemValue="#{creators}"
                             scrollHeight="250">
                         </p:autoComplete>
-                        <p:outputLabel for="creator" value="#{di:label('search.creator')}" />
+                        <p:outputLabel for="creator" value="#{di:label('image.creator')}" />
+                    </comp:inputElement>
+                    <comp:inputElement>
+                        <p:inputText id="creationDate" value="#{imageEditBean.model.creationDate}">
+                            <f:converter converterId="localDateTimeConverter"/>
+                        </p:inputText>
+                        <p:outputLabel for="@previous" value="#{di:label('image.date')}" />
+                        <p:message id="creationDateMsg" for="creationDate" display="tooltip"/>
                     </comp:inputElement>
                     <comp:inputElement>
                         <p:autoComplete id="rating" dropdown="true"
                                         value="#{imageEditBean.model.rating}"
                                         completeMethod="#{imageEditBean.completeRating}"
-                                        var="rating" itemLabel="#{rating.name}" itemValue="#{rating}"/>
+                                        var="rating" itemLabel="#{rating.name}" itemValue="#{rating}">
                             <f:converter converterId="ratingConverter"/>
                         </p:autoComplete>
-                        <p:outputLabel for="@previous" value="#{di:label('search.rating')}" />
+                        <p:outputLabel for="@previous" value="#{di:label('image.rating')}" />
                     </comp:inputElement>
                     <comp:inputElement>
                         <p:inputText id="title" value="#{imageEditBean.model.title}"/>
@@ -61,8 +69,8 @@
                     </comp:inputElement>
                 </div>
                 <div class="command">
-                    <p:commandButton styleClass="di-button" id="close" value="#{di:label('common.close')}" action="#{imageEditBean.close()}" immediate="true" update="@form"/>
-                    <p:commandButton styleClass="di-button" id="save" value="#{di:label('search.save')}" action="#{imageEditBean.save()}" update="@form"/>
+                    <p:commandButton styleClass="di-button" id="close" value="#{di:label('common.close')}" action="#{imageEditBean.close()}" immediate="true" />
+                    <p:commandButton styleClass="di-button" id="save" value="#{di:label('common.save')}" action="#{imageEditBean.save()}"/>
                 </div>
             </h:form>
         </f:view>

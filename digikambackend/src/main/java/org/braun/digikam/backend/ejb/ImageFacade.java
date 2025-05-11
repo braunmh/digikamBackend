@@ -1,5 +1,7 @@
 package org.braun.digikam.backend.ejb;
 
+import org.braun.digikam.backend.dao.ThumbnailFacade;
+import org.braun.digikam.backend.dao.ImagesFacade;
 import jakarta.ejb.EJB;
 import org.braun.digikam.common.DateWrapper;
 import org.braun.digikam.backend.entity.ImageFull;
@@ -21,6 +23,7 @@ import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -389,8 +392,8 @@ public class ImageFacade {
         return result;
     }
     
-    public final void update(long id, String title, String description, Integer rating, List<Tags> tags, String creator) throws NotFoundException {
-        getImagesFacade().update(id, title, description, rating, tags, creator);
+    public final void update(long id, String title, String description, Integer rating, List<Tags> tags, String creator, LocalDateTime creationDate) throws NotFoundException {
+        getImagesFacade().update(id, title, description, rating, tags, creator, creationDate);
         try (SolrClient client = getSolrClient()) {
             final String solrCollection = Configuration.getInstance().getSolrCollection();
             ImageInternal imageInternal = getMetadata(id);
@@ -463,9 +466,9 @@ public class ImageFacade {
     }
 
     public ImagesFacade getImagesFacade() {
-        if (imagesFacade == null) {
-            imagesFacade = Util.Cdi.lookup(ImagesFacade.class);
-        }
+//        if (imagesFacade == null) {
+//            imagesFacade = Util.Cdi.lookup(ImagesFacade.class);
+//        }
         return imagesFacade;
     }
 

@@ -1,4 +1,4 @@
-package org.braun.digikam.backend.ejb;
+package org.braun.digikam.backend.dao;
 
 import org.braun.digikam.backend.entity.ImageInformation;
 import jakarta.ejb.Stateless;

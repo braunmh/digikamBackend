@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.validation.constraints.*;
+import java.time.LocalDateTime;
 
 /**
  * ImageUpdate
@@ -30,13 +31,14 @@ import jakarta.validation.constraints.*;
   ImageUpdate.JSON_PROPERTY_TITLE,
   ImageUpdate.JSON_PROPERTY_DESCRIPTION,
   ImageUpdate.JSON_PROPERTY_CREATOR,
-  ImageUpdate.JSON_PROPERTY_KEYWORDS
+  ImageUpdate.JSON_PROPERTY_KEYWORDS,
+  ImageUpdate.JSON_PROPERTY_CREATION_DATE
 })
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJerseyServerCodegen", date = "2024-03-20T12:51:17.342362153+01:00[Europe/Berlin]")
 public class ImageUpdate   {
   public static final String JSON_PROPERTY_IMAGE_ID = "imageId";
   @JsonProperty(JSON_PROPERTY_IMAGE_ID)
-  private Integer imageId;
+  private Long imageId;
 
   public static final String JSON_PROPERTY_RATING = "rating";
   @JsonProperty(JSON_PROPERTY_RATING)
@@ -56,9 +58,13 @@ public class ImageUpdate   {
 
   public static final String JSON_PROPERTY_KEYWORDS = "keywords";
   @JsonProperty(JSON_PROPERTY_KEYWORDS)
-  private List<Long> keywords;
+  private List<Long> keywords = new ArrayList<>();
 
-  public ImageUpdate imageId(Integer imageId) {
+  public static final String JSON_PROPERTY_CREATION_DATE = "creationDate";
+  @JsonProperty(JSON_PROPERTY_CREATION_DATE)
+  private LocalDateTime creationDate;
+
+  public ImageUpdate imageId(Long imageId) {
     this.imageId = imageId;
     return this;
   }
@@ -70,11 +76,11 @@ public class ImageUpdate   {
   @JsonProperty(value = "imageId")
   @ApiModelProperty(required = true, value = "")
   @NotNull 
-  public Integer getImageId() {
+  public Long getImageId() {
     return imageId;
   }
 
-  public void setImageId(Integer imageId) {
+  public void setImageId(Long imageId) {
     this.imageId = imageId;
   }
 
@@ -186,6 +192,26 @@ public class ImageUpdate   {
     this.keywords = keywords;
   }
 
+  public ImageUpdate creationDate(LocalDateTime creationDate) {
+    this.creationDate = creationDate;
+    return this;
+  }
+
+  /**
+   * Get creationDate
+   * @return creationDate
+   **/
+  @JsonProperty(value = "creationDate")
+  @ApiModelProperty(value = "")
+  
+  public LocalDateTime getCreationDate() {
+    return creationDate;
+  }
+
+  public void setCreationDate(LocalDateTime creationDate) {
+    this.creationDate = creationDate;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -201,12 +227,13 @@ public class ImageUpdate   {
         Objects.equals(this.title, imageUpdate.title) &&
         Objects.equals(this.description, imageUpdate.description) &&
         Objects.equals(this.creator, imageUpdate.creator) &&
-        Objects.equals(this.keywords, imageUpdate.keywords);
+        Objects.equals(this.keywords, imageUpdate.keywords) &&
+        Objects.equals(this.creationDate, imageUpdate.creationDate);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(imageId, rating, title, description, creator, keywords);
+    return Objects.hash(imageId, rating, title, description, creator, keywords, creationDate);
   }
 
   @Override
@@ -220,6 +247,7 @@ public class ImageUpdate   {
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    creator: ").append(toIndentedString(creator)).append("\n");
     sb.append("    keywords: ").append(toIndentedString(keywords)).append("\n");
+    sb.append("    creationDate: ").append(toIndentedString(creationDate)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -235,4 +263,3 @@ public class ImageUpdate   {
     return o.toString().replace("\n", "\n    ");
   }
 }
-

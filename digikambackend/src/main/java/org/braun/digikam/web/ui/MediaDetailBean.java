@@ -6,16 +6,15 @@ import jakarta.inject.Named;
 import java.io.Serializable;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.braun.digikam.backend.api.NotFoundException;
 import org.braun.digikam.backend.ejb.ImageFacade;
+import org.braun.digikam.backend.ejb.VideoFacade;
 import org.braun.digikam.backend.model.ImageInternal;
 import org.braun.digikam.backend.model.Media;
+import org.braun.digikam.backend.model.VideoInternal;
 import org.braun.digikam.web.model.CatAperture;
 import org.braun.digikam.web.model.CatExposure;
 import org.primefaces.PrimeFaces;
@@ -27,7 +26,7 @@ import org.primefaces.model.DialogFrameworkOptions;
  */
 @Named(value = "mediaDetailBean")
 @ViewScoped
-public class MediaDetailBean implements Serializable {
+public class MediaDetailBean implements DialogBean, Serializable {
 
     private static final Logger LOG = LogManager.getLogger();
 
@@ -35,127 +34,114 @@ public class MediaDetailBean implements Serializable {
 
     private transient DateTimeFormatter isoDate = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
 
-    private Media media;
+    private Long mediaId;
     
-    private Media imageToUpdate;
+    private boolean image;
+    
+    @Inject
+    private ImageFacade imageFacade;
 
     @Inject
-    private ImageFacade facade;
+    private VideoFacade videoFacade;
 
     public List<Detail> getDetails() {
-        onLoad();
+        onload();
         return details;
     }
 
-//    public void init() {
-//        DialogFrameworkOptions options = DialogFrameworkOptions.builder()
-//                .modal(true)
-//                .closable(true)
-//                .build();
-//
-//        String target = "/search/mediaDetail";
-//        PrimeFaces.current().dialog().openDynamic(target, options,
-//                new ParameterBuilder()
-//                        .add("mediaId", mediaId)
-//                        .add("image", image)
-//                        .build());
-//    }
-//
-
+    public static void openDialog(Media media) {
+        DialogFrameworkOptions options = DialogFrameworkOptions.builder()
+            .modal(true)
+            .fitViewport(true)
+            .responsive(true)
+            .resizable(true)
+            .draggable(false)
+            .closeOnEscape(true)
+            .build();
+        PrimeFaces.current().dialog().openDynamic("/dialog/mediaDetailDialog", options, 
+                DialogParameters.builder()
+                .parameter(DialogParameters.Parameter.builder("mediaId").add(media.getId()))
+                .parameter(DialogParameters.Parameter.builder("image").add(media.getImage()))
+                .build());
+    }
     
-    public void onLoad() {
+    @Override
+    public void onload() {
         if (details == null) {
             details = new ArrayList<>();
-            if (media != null && media.getImage()) {
+            if (mediaId != null) {
                 try {
-                    ImageInternal image = facade.getMetadata(media.getId());
-                    details.add(new Detail("Datum", isoDate.format(image.getCreationDate())));
-                    details.add(new Detail("id", image.getId()));
-                    details.add(new Detail("Name", image.getName()));
-                    details.add(new Detail("Titel", image.getTitle()));
-                    details.add(new Detail("Beschreibung", image.getDescription()));
-                    details.add(new Detail("Stichworte", String.join(", ", image.getKeywords().stream().map(k -> k.getName()).toList())));
-                    details.add(new Detail("Bewertung", image.getRating()));
-                    details.add(new Detail("Urheber", image.getCreator()));
-                    details.add(new Detail("Kamera", image.getMake() + " " + image.getModel()));
-                    details.add(new Detail("Objektiv", image.getLens()));
-                    details.add(new Detail("Brennweite", image.getFocalLength35()));
-                    details.add(new Detail("Höhe x Breite", "" + image.getHeight() + " x " + image.getWidth()));
-                    details.add(new Detail("Belichtungszeit", CatExposure.findNearest(image.getExposureTime())));
-                    details.add(new Detail("ISO", image.getIso()));
-                    details.add(new Detail("Blende", CatAperture.findNearest(image.getAperture())));
-                    details.add(new Detail("Breitengrad", String.valueOf(image.getLatitude()) + "°"));
-                    details.add(new Detail("Längengrad", String.valueOf(image.getLongitude()) + "°"));
+                    if (isImage()) {
+                        ImageInternal img = imageFacade.getMetadata(mediaId);
+                        details.add(new Detail("image.date", (img.getCreationDate() == null) ? "" : isoDate.format(img.getCreationDate())));
+                        details.add(new Detail("common.id", img.getId()));
+                        details.add(new Detail("image.name", img.getName()));
+                        details.add(new Detail("image.title", img.getTitle()));
+                        details.add(new Detail("image.description", img.getDescription()));
+                        details.add(new Detail("image.keywords", String.join(", ", img.getKeywords().stream().map(k -> k.getName()).toList())));
+                        details.add(new Detail("image.rating", img.getRating()));
+                        details.add(new Detail("image.creator", img.getCreator()));
+                        details.add(new Detail("image.camera", img.getMake() + " " + img.getModel()));
+                        details.add(new Detail("image.lens", img.getLens()));
+                        details.add(new Detail("image.focalLength", img.getFocalLength35()));
+                        details.add(new Detail("image.dimension", "" + img.getHeight() + " x " + img.getWidth()));
+                        details.add(new Detail("image.exposure", CatExposure.findNearest(img.getExposureTime())));
+                        details.add(new Detail("image.iso", img.getIso()));
+                        details.add(new Detail("image.aperture", CatAperture.findNearest(img.getAperture())));
+                        details.add(new Detail("image.latitude", String.valueOf(img.getLatitude()) + "°"));
+                        details.add(new Detail("image.longitude", String.valueOf(img.getLongitude()) + "°"));
+                    } else {
+                        VideoInternal vid = videoFacade.getMetadata(mediaId);
+                        details.add(new Detail("image.date", (vid.getCreationDate() == null) ? "" : isoDate.format(vid.getCreationDate())));
+                        details.add(new Detail("common.id", vid.getId()));
+                        details.add(new Detail("image.name", vid.getName()));
+                        details.add(new Detail("image.title", vid.getTitle()));
+                        details.add(new Detail("image.description", vid.getDescription()));
+                        details.add(new Detail("image.keywords", String.join(", ", vid.getKeywords().stream().map(k -> k.getName()).toList())));
+                        details.add(new Detail("image.rating", vid.getRating()));
+                        details.add(new Detail("image.creator", vid.getCreator()));
+                        details.add(new Detail("image.dimension", "" + vid.getHeight() + " x " + vid.getWidth()));
+                        details.add(new Detail("video.duration", formatDuration(vid.getDuration())));
+                        details.add(new Detail("image.latitude", String.valueOf(vid.getLatitude()) + "°"));
+                        details.add(new Detail("image.longitude", String.valueOf(vid.getLongitude()) + "°"));
+                    }
 
                 } catch (NotFoundException e) {
-                    LOG.error("Image with id={} not found", media.getId());
+                    LOG.error("Image with id={} not found", mediaId);
                 }
             }
         }
     }
 
-    public Media getMedia() {
-        return media;
+    public Long getMediaId() {
+        return mediaId;
     }
 
-    public void setMedia(Media media) {
-        this.media = media;
-        details = null;
+    public void setMediaId(Long mediaId) {
+        this.mediaId = mediaId;
     }
 
-    public Media getImageToUpdate() {
-        return imageToUpdate;
+    public boolean isImage() {
+        return image;
     }
 
-    public void setImageToUpdate(Media imageToUpdate) {
-        this.imageToUpdate = imageToUpdate;
-        DialogFrameworkOptions options = DialogFrameworkOptions.builder()
-                .modal(true)
-                .closable(true)
-                .build();
-
-        String target = "/admin/imageEditDialog";
-        PrimeFaces.current().dialog().openDynamic(target, options,
-                new ParameterBuilder()
-                        .add("imageId", imageToUpdate.getId())
-                        .build());
+    public void setImage(boolean image) {
+        this.image = image;
     }
 
     public void closeDialog() {
-        PrimeFaces.current().dialog().closeDynamic("");
+        PrimeFaces.current().dialog().closeDynamic(true);
     }
 
-    public class ParameterBuilder {
-
-        private final Map<String, List<String>> params;
-
-        public ParameterBuilder() {
-            params = new HashMap<>();
+    private String formatDuration(Integer duration)  {
+        if (duration == null) {
+            return "";
         }
-
-        public ParameterBuilder add(String name, boolean value) {
-            params.put(name, Arrays.asList(String.valueOf(value)));
-            return this;
-        }
-
-        public ParameterBuilder add(String name, long value) {
-            params.put(name, Arrays.asList(String.valueOf(value)));
-            return this;
-        }
-
-        public ParameterBuilder add(String name, String value) {
-            params.put(name, Arrays.asList(value));
-            return this;
-        }
-
-        public ParameterBuilder add(String name, List<String> values) {
-            params.put(name, values);
-            return this;
-        }
-
-        public Map<String, List<String>> build() {
-            return params;
-        }
+        int millisecondes = duration % 1000;
+        duration = duration / 1000;
+        int seconds = (duration == 0) ? 0 : duration % 60;
+        int minutes = (duration == 0) ? 0 : duration / 60;
+        return (String.format("%d:%02d.%03d Minuten", minutes, seconds, millisecondes));
     }
 
     public class Detail {

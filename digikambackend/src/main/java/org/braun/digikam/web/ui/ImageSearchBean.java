@@ -3,7 +3,10 @@ package org.braun.digikam.web.ui;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
+import jakarta.faces.component.UIComponent;
+import jakarta.faces.component.UIInput;
 import jakarta.faces.context.FacesContext;
+import jakarta.faces.event.ActionEvent;
 import jakarta.faces.event.AjaxBehaviorEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -22,6 +25,7 @@ import org.braun.digikam.backend.CreatorFactory;
 import org.braun.digikam.backend.NodeFactory;
 import org.braun.digikam.backend.api.NotFoundException;
 import org.braun.digikam.backend.ejb.ImageFacade;
+import org.braun.digikam.backend.ejb.VideoFacade;
 import org.braun.digikam.backend.model.ImageInternal;
 import org.braun.digikam.backend.model.Keyword;
 import org.braun.digikam.backend.model.Media;
@@ -53,7 +57,9 @@ public class ImageSearchBean implements Serializable {
     private final transient DateTimeFormatter isoDate = DateTimeFormatter.ofPattern("MM.yyyy");
     
     @Inject
-    private ImageFacade facade;
+    private ImageFacade imageFacade;
+    
+    @Inject VideoFacade videoFacade;
     
     @PostConstruct
     public void init() {
@@ -66,27 +72,37 @@ public class ImageSearchBean implements Serializable {
         try {
             getSearchParameter().isValid();
             List<Long> keywords = getSearchParameter().getKeywords().stream().map(k -> k.getId()).collect(Collectors.toList());
-            List<Media> result = facade.findImagesByImageAttributesSolr(
-                    keywords, 
-                    getSearchParameter().isKeywordsOr(), 
-                    getSearchParameter().getCreator(), 
-                    getSearchParameter().getMake(), 
-                    getSearchParameter().getModel(), 
-                    getSearchParameter().getLens(), 
-                    getSearchParameter().getOrientation().getValue(), 
-                    getSearchParameter().getDate().getFrom().getUncompleteDateTime().toString(), 
-                    getSearchParameter().getDate().getTo().getUncompleteDateTime().toString(), 
-                    getSearchParameter().getRating().getFrom(), 
-                    getSearchParameter().getRating().getTo(), 
-                    getSearchParameter().getIso().getFrom(), 
-                    getSearchParameter().getIso().getTo(), 
-                    getSearchParameter().getExposureTime().getFrom(), 
-                    getSearchParameter().getExposureTime().getTo(), 
-                    getSearchParameter().getAperture().getFrom(), 
-                    getSearchParameter().getAperture().getTo(), 
-                    getSearchParameter().getFocalLength().getFrom(), 
-                    getSearchParameter().getFocalLength().getTo(),
-                    getSearchParameter().getDescTitle());
+            List<Media> result = (getSearchParameter().isVideo()) ? 
+                    videoFacade.findByVideosAttributesSolr(
+                        keywords, 
+                        getSearchParameter().isKeywordsOr(), 
+                        getSearchParameter().getCreator(),
+                        getSearchParameter().getOrientation().getValue(),
+                        getSearchParameter().getDate().getFrom().getUncompleteDateTime().toString(), 
+                        getSearchParameter().getDate().getTo().getUncompleteDateTime().toString(), 
+                        getSearchParameter().getRating().getFrom(), 
+                        getSearchParameter().getRating().getTo()) :
+                    imageFacade.findImagesByImageAttributesSolr(
+                        keywords, 
+                        getSearchParameter().isKeywordsOr(), 
+                        getSearchParameter().getCreator(), 
+                        getSearchParameter().getMake(), 
+                        getSearchParameter().getModel(), 
+                        getSearchParameter().getLens(), 
+                        getSearchParameter().getOrientation().getValue(), 
+                        getSearchParameter().getDate().getFrom().getUncompleteDateTime().toString(), 
+                        getSearchParameter().getDate().getTo().getUncompleteDateTime().toString(), 
+                        getSearchParameter().getRating().getFrom(), 
+                        getSearchParameter().getRating().getTo(), 
+                        getSearchParameter().getIso().getFrom(), 
+                        getSearchParameter().getIso().getTo(), 
+                        getSearchParameter().getExposureTime().getFrom(), 
+                        getSearchParameter().getExposureTime().getTo(), 
+                        getSearchParameter().getAperture().getFrom(), 
+                        getSearchParameter().getAperture().getTo(), 
+                        getSearchParameter().getFocalLength().getFrom(), 
+                        getSearchParameter().getFocalLength().getTo(),
+                        getSearchParameter().getDescTitle());
             if (result.isEmpty()) {
                 FacesContext.getCurrentInstance().addMessage(
                     null, 
@@ -146,21 +162,23 @@ public class ImageSearchBean implements Serializable {
     
     public ImageInternal getMetadata(long imageId) {
         try {
-            return facade.getMetadata(imageId);
+            return imageFacade.getMetadata(imageId);
         } catch (NotFoundException e) {
             LOG.error(e.getMessage());
             return null;
         }
     }
     
-    private Media media;
-    
-    public void setMedia(Media media) {
-        this.media = media;
+    public void openDetailDialog(ActionEvent event) {
+        MediaDetailBean.openDialog(getMediaFromEvent(event));
     }
-
-    public void openEditDialog() {
-        ImageEditBean.openDialog(media.getId());
+    
+    public void openEditDialog(ActionEvent event) {
+        ImageEditBean.openDialog(getMediaFromEvent(event));
+    }
+    
+    private Media getMediaFromEvent(ActionEvent event) {
+        return (Media) event.getComponent().getAttributes().get("media");
     }
     
     public SearchParameter getSearchParameter() {
@@ -183,13 +201,24 @@ public class ImageSearchBean implements Serializable {
         return CameraLensFactory.getInstance().getLensByCameraAndLens(searchParameter.getCamera(), query);
     }
     
+    public void blurAction(AjaxBehaviorEvent event) {
+        LOG.info("BlurAction");
+    }
+
+    public void toogleVideo(AjaxBehaviorEvent event) {
+        UIComponent component = event.getComponent();
+        if (component instanceof UIInput inputComponent) {
+            getSearchParameter().setVideo((Boolean) inputComponent.getValue());
+        }
+    }
+    
     public void changeAction(AjaxBehaviorEvent event) {
         LOG.info("Values changed by autocomplete.ajax. ClientId: {}, Id: {}", 
             event.getComponent().getClientId(), event.getComponent().getId());
     }
     
     public List<String> completeDescTitle(String query) {
-        return facade.getSuggestions("descTitle", query);
+        return imageFacade.getSuggestions("descTitle", query);
     }
     
     public List<CatFocalLength> getFocalLengthValues() {

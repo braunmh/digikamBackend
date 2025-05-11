@@ -1,4 +1,4 @@
-package org.braun.digikam.backend.ejb;
+package org.braun.digikam.backend.dao;
 
 import org.braun.digikam.backend.entity.Tags;
 import jakarta.ejb.Stateless;
@@ -26,7 +26,7 @@ public class TagsFacade extends AbstractFacade<Tags> {
         super(Tags.class);
     }
     
-    void setEntityManager(EntityManager em) {
+    public void setEntityManager(EntityManager em) {
         this.em = em;
     }
     

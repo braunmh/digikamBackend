@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import org.braun.digikam.backend.NodeFactory;
 import org.braun.digikam.backend.api.*;
-import org.braun.digikam.backend.ejb.ImageInformationFacade;
-import org.braun.digikam.backend.ejb.ImagesFacade;
+import org.braun.digikam.backend.dao.ImageInformationFacade;
+import org.braun.digikam.backend.dao.ImagesFacade;
 import org.braun.digikam.backend.entity.Tags;
 import org.braun.digikam.backend.ejb.VideoFacade;
 import org.braun.digikam.backend.model.ImageUpdate;
@@ -66,7 +66,7 @@ public class VideoApiServiceImpl extends VideoApiService {
             tags.add(new Tags().name(NodeFactory.getInstance().getKeywordById(tagId).getName()).id(tagId));
         }
         facade.update(imageUpdate.getImageId(), imageUpdate.getTitle(), imageUpdate.getDescription(), imageUpdate.getRating(),
-             tags, imageUpdate.getCreator());
+             tags, imageUpdate.getCreator(), imageUpdate.getCreationDate());
         return Response.ok().build();
     }
 

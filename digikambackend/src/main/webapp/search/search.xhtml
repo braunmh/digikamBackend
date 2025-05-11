@@ -5,10 +5,9 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:di="http://org.braun.digikam"
-      xmlns:comp="http://xmlns.jcp.org/jsf/composite/comp">
-
+      xmlns:comp="http://xmlns.jcp.org/jsf/composite/comp"
+      >
     <body>
-
         <ui:composition template="./../common.xhtml">
             <ui:param name="title" value="Bilder suchen"/>
             <ui:define name="navigation">
@@ -44,7 +43,7 @@
                             <p:ajax event="itemUnselect" update="keywords"/>
                             <p:ajax event="change" update="keywords"/>
                         </p:autoComplete>
-                        <p:outputLabel for="keywords" value="#{di:label('search.keywords')}" />
+                        <p:outputLabel for="keywords" value="#{di:label('image.keywords')}" />
                         <p:message id="keywordMsg" for="keywords" display="tooltip"/>
                     </comp:inputElement>
                     <comp:inputElement>
@@ -54,20 +53,22 @@
                                         itemLabel="#{creators}" itemValue="#{creators}"
                                         scrollHeight="250">
                         </p:autoComplete>
-                        <p:outputLabel for="creator" value="#{di:label('search.creator')}" />
+                        <p:outputLabel for="creator" value="#{di:label('image.creator')}" />
                     </comp:inputElement>
                     <comp:inputElement>
-                        <p:autoComplete id="camera" var="cameras" dropdown="true" 
-                                        value="#{imageSearchBean.searchParameter.camera}"
-                                        completeMethod="#{imageSearchBean.completeCamera}"
-                                        itemLabel="#{cameras}" itemValue="#{cameras}"
-                                        scrollHeight="250">
+                        <p:autoComplete id="camera" var="cameras" dropdown="true"
+                            disabled="#{imageSearchBean.searchParameter.video}"
+                            value="#{imageSearchBean.searchParameter.camera}"
+                            completeMethod="#{imageSearchBean.completeCamera}"
+                            itemLabel="#{cameras}" itemValue="#{cameras}"
+                            scrollHeight="250">
                             <p:ajax event="change" listener="#{imageSearchBean.changeAction}"/>
                         </p:autoComplete>
-                        <p:outputLabel for="camera" value="#{di:label('search.camera')}" />
+                        <p:outputLabel for="camera" value="#{di:label('image.camera')}" />
                     </comp:inputElement>
                     <comp:inputElement>
                         <p:selectOneMenu id="orientation" 
+                                         disabled="#{imageSearchBean.searchParameter.video}"
                                          value="#{imageSearchBean.searchParameter.orientation}">
                             <f:selectItems value="#{imageSearchBean.orientationValues}" var="orientation" 
                                            itemLabel="#{orientation.name}" itemValue="#{orientation}"/>
@@ -77,13 +78,14 @@
                     </comp:inputElement>
                     <comp:inputElement>
                         <p:autoComplete id="lens" var="lenses" dropdown="true" 
+                                        disabled="#{imageSearchBean.searchParameter.video}"
                                         value="#{imageSearchBean.searchParameter.lens}"
                                         completeMethod="#{imageSearchBean.completeLens}"
                                         minQueryLength="2"
                                         itemLabel="#{lenses}" itemValue="#{lenses}" 
                                         scrollHeight="250">
                         </p:autoComplete>
-                        <p:outputLabel for="lens" value="#{di:label('search.lens')}" />
+                        <p:outputLabel for="lens" value="#{di:label('image.lens')}" />
                     </comp:inputElement>
                     <comp:inputElement>
                         <p:autoComplete id="descTitle" var="descTitle" dropdown="false" widgetVar="descTitleWidget"
@@ -107,7 +109,7 @@
                                 <f:converter converterId="dateWrapperConverter"/>
                                 <p:ajax update="dateFromMsg @this" event="change"/>
                             </p:inputText>
-                            <p:outputLabel for="dateFrom" value="#{di:label('search.date')} #{di:label('search.rangeFrom')}" />
+                            <p:outputLabel for="dateFrom" value="#{di:label('image.date')} #{di:label('search.rangeFrom')}" />
                             <p:message id="dateFromMsg" for="dateFrom" display="tooltip"/>
                         </comp:inputElementLeft>
                         <comp:inputElementRight>
@@ -127,7 +129,7 @@
                                                var="rating" itemLabel="#{rating.name}" itemValue="#{rating}"/>
                                 <f:converter converterId="ratingConverter"/>
                             </p:selectOneMenu>
-                            <p:outputLabel for="@previous" value="#{di:label('search.rating')} #{di:label('search.rangeFrom')}" />
+                            <p:outputLabel for="@previous" value="#{di:label('image.rating')} #{di:label('search.rangeFrom')}" />
                         </comp:inputElementLeft>
                         <comp:inputElementRight>
                             <p:selectOneMenu id="ratingTo"
@@ -142,15 +144,17 @@
                     <comp:inputPair>
                         <comp:inputElementLeft>
                             <p:selectOneMenu id="isoFrom"
+                                             disabled="#{imageSearchBean.searchParameter.video}"
                                              value="#{imageSearchBean.searchParameter.isoFrom}">
                                 <f:selectItems value="#{imageSearchBean.isoValues}" 
                                                var="entry" itemLabel="#{entry.name}" itemValue="#{entry}"/>
                                 <f:converter converterId="isoConverter"/>
                             </p:selectOneMenu>
-                            <p:outputLabel for="@previous" value="#{di:label('search.iso')} #{di:label('search.rangeFrom')}" />
+                            <p:outputLabel for="@previous" value="#{di:label('image.iso')} #{di:label('search.rangeFrom')}" />
                         </comp:inputElementLeft>
                         <comp:inputElementRight>
                             <p:selectOneMenu id="isoTo"
+                                             disabled="#{imageSearchBean.searchParameter.video}"
                                              value="#{imageSearchBean.searchParameter.isoTo}">
                                 <f:selectItems value="#{imageSearchBean.isoValues}" 
                                                var="entry" itemLabel="#{entry.name}" itemValue="#{entry}"/>
@@ -162,15 +166,17 @@
                     <comp:inputPair>
                         <comp:inputElementLeft>
                             <p:selectOneMenu id="apertureFrom"
+                                             disabled="#{imageSearchBean.searchParameter.video}"
                                              value="#{imageSearchBean.searchParameter.apertureFrom}">
                                 <f:selectItems value="#{imageSearchBean.apertureValues}" 
                                                var="entry" itemLabel="#{entry.name}" itemValue="#{entry}"/>
                                 <f:converter converterId="apertureConverter"/>
                             </p:selectOneMenu>
-                            <p:outputLabel for="@previous" value="#{di:label('search.aperture')} #{di:label('search.rangeFrom')}" />
+                            <p:outputLabel for="@previous" value="#{di:label('image.aperture')} #{di:label('search.rangeFrom')}" />
                         </comp:inputElementLeft>
                         <comp:inputElementRight>
                             <p:selectOneMenu id="apertureTo"
+                                             disabled="#{imageSearchBean.searchParameter.video}"
                                              value="#{imageSearchBean.searchParameter.apertureTo}">
                                 <f:selectItems value="#{imageSearchBean.apertureValues}" 
                                                var="entry" itemLabel="#{entry.name}" itemValue="#{entry}"/>
@@ -182,15 +188,17 @@
                     <comp:inputPair>
                         <comp:inputElementLeft>
                             <p:selectOneMenu id="focalLengthFrom"
+                                             disabled="#{imageSearchBean.searchParameter.video}"
                                              value="#{imageSearchBean.searchParameter.focalLengthFrom}">
                                 <f:selectItems value="#{imageSearchBean.focalLengthValues}" 
                                                var="entry" itemLabel="#{entry.name}" itemValue="#{entry}"/>
                                 <f:converter converterId="focalLengthConverter"/>
                             </p:selectOneMenu>
-                            <p:outputLabel for="@previous" value="#{di:label('search.focalLength')} #{di:label('search.rangeFrom')}" />
+                            <p:outputLabel for="@previous" value="#{di:label('image.focalLength')} #{di:label('search.rangeFrom')}" />
                         </comp:inputElementLeft>
                         <comp:inputElementRight>
                             <p:selectOneMenu id="focalLengthTo"
+                                             disabled="#{imageSearchBean.searchParameter.video}"
                                              value="#{imageSearchBean.searchParameter.focalLengthTo}">
                                 <f:selectItems value="#{imageSearchBean.focalLengthValues}" 
                                                var="entry" itemLabel="#{entry.name}" itemValue="#{entry}"/>
@@ -202,15 +210,17 @@
                     <comp:inputPair>
                         <comp:inputElementLeft>
                             <p:selectOneMenu id="exposureFrom"
+                                             disabled="#{imageSearchBean.searchParameter.video}"
                                              value="#{imageSearchBean.searchParameter.exposureFrom}">
                                 <f:selectItems value="#{imageSearchBean.exposureValues}" 
                                                var="entry" itemLabel="#{entry.name}" itemValue="#{entry}"/>
                                 <f:converter converterId="exposureConverter"/>
                             </p:selectOneMenu>
-                            <p:outputLabel for="@previous" value="#{di:label('search.exposure')} #{di:label('search.rangeFrom')}" />
+                            <p:outputLabel for="@previous" value="#{di:label('image.exposure')} #{di:label('search.rangeFrom')}" />
                         </comp:inputElementLeft>
                         <comp:inputElementRight>
                             <p:selectOneMenu id="exposureTo"
+                                             disabled="#{imageSearchBean.searchParameter.video}"
                                              value="#{imageSearchBean.searchParameter.exposureTo}">
                                 <f:selectItems value="#{imageSearchBean.exposureValues}" 
                                                var="entry" itemLabel="#{entry.name}" itemValue="#{entry}"/>
@@ -221,14 +231,15 @@
                     </comp:inputPair>
                 </div>
                 <div class="command">
+                    <p:selectBooleanCheckbox id="video" value="#{imageSearchBean.searchParameter.video}" itemLabel="#{di:label('search.video')}">
+                        <p:ajax listener="#{imageSearchBean.toogleVideo}" update="@form"/>
+                    </p:selectBooleanCheckbox>
                     <p:selectBooleanCheckbox value="#{imageSearchBean.searchParameter.keywordsOr}" itemLabel="#{di:label('search.or')}"/>
                     <p:selectBooleanCheckbox value="#{imageSearchBean.searchParameter.ascending}" itemLabel="Aufsteigend"/>
                     <p:commandButton styleClass="di-button" id="reset" value="#{di:label('common.reset')}" action="#{imageSearchBean.init()}" immediate="true" update="@form"/>
                     <p:commandButton styleClass="di-button" id="execute" value="#{di:label('search.search')}" action="#{imageSearchBean.execute()}" update="@form"/>
                 </div>
             </ui:define>
-
         </ui:composition>
-
     </body>
 </html>

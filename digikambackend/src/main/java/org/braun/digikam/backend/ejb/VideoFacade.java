@@ -1,5 +1,8 @@
 package org.braun.digikam.backend.ejb;
 
+import org.braun.digikam.backend.dao.ThumbnailFacade;
+import org.braun.digikam.backend.dao.ImagesFacade;
+import jakarta.ejb.EJB;
 import org.braun.digikam.common.DateWrapper;
 import org.braun.digikam.backend.entity.ImageComments;
 import org.braun.digikam.backend.entity.VideoFull;
@@ -20,6 +23,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -32,11 +36,14 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.Http2SolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.client.solrj.response.UpdateResponse;
 import org.braun.digikam.backend.NodeFactory;
 import org.braun.digikam.backend.api.NotFoundException;
 import static org.braun.digikam.backend.ejb.ImageFacade.LANDSCAPE;
 import static org.braun.digikam.backend.ejb.ImageFacade.PORTAIT;
+import org.braun.digikam.backend.entity.Tags;
 import org.braun.digikam.backend.graphics.ExifUtil;
+import org.braun.digikam.backend.model.ImageSolr;
 import org.braun.digikam.backend.model.Keyword;
 import org.braun.digikam.backend.model.Media;
 import org.braun.digikam.backend.model.MediaSolr;
@@ -71,6 +78,12 @@ public class VideoFacade {
     @PersistenceContext(unitName = "digikam")
     private EntityManager em;
 
+    @EJB
+    private ThumbnailFacade thumbnailFacade;
+    
+    @EJB
+    private ImagesFacade imagesFacade;
+    
     public InputStream getVideo(long id) throws NotFoundException {
         VideoFull image = getVideoFull(id);
         FileInputStream imageStream = getImageFile(image.getRoot(), image.getRelativePath(), image.getName());
@@ -231,12 +244,26 @@ public class VideoFacade {
         return result;
     }
 
+    public final void update(long id, String title, String description, Integer rating, List<Tags> tags, String creator, LocalDateTime creationDate) throws NotFoundException {
+        getImagesFacade().update(id, title, description, rating, tags, creator, creationDate);
+        try (SolrClient client = getSolrClient()) {
+            final String solrCollection = Configuration.getInstance().getSolrCollection();
+            VideoInternal videoInternal = getMetadata(id);
+            ImageSolr imageSolr = new ImageSolr(videoInternal);
+            final UpdateResponse response = client.addBean(solrCollection, imageSolr);
+            client.commit(solrCollection);
+        } catch (IOException | SolrServerException e) {
+            LOG.error("Update Solr-Index failed", e);
+            return;
+        }
+        getThumbnailFacade().updateModificationDate(id);
+    }
     public VideoInternal getMetadata(long id) throws NotFoundException {
         VideoFull videoFull = getVideoFull(id);
         return getMetadata(videoFull);
     }
 
-    private VideoInternal getMetadata(VideoFull videoFull) {
+    public VideoInternal getMetadata(VideoFull videoFull) {
         VideoInternal video = new VideoInternal()
             .id(videoFull.getId())
             .name(videoFull.getName())
@@ -247,6 +274,7 @@ public class VideoFacade {
             .creator(videoFull.getCreator())
             .height(videoFull.getHeight())
             .width(videoFull.getWidth())
+            .duration(getInt(videoFull.getDuration()))
             .latitude(videoFull.getLatitudeNumber())
             .longitude(videoFull.getLongitudeNumber())
             .rating(videoFull.getRating())
@@ -324,6 +352,18 @@ public class VideoFacade {
         query.setParameter(1, imageId);
         return query.getResultList();
     }
+    
+    private Integer getInt(String v) {
+        if (v == null) {
+            return null;
+        }
+        try {
+            return Integer.valueOf(v);
+        } catch (NumberFormatException e) {
+            LOG.error("Converting to Integer. Value: {}", v);
+            return null;
+        }
+    }
 
     protected EntityManager getEntityManager() {
         return em;
@@ -337,4 +377,19 @@ public class VideoFacade {
         int amp = value.indexOf('&');
         return (amp > 0) ? value.substring(0, amp) : value;
     }
+
+    public ImagesFacade getImagesFacade() {
+        if (imagesFacade == null) {
+            imagesFacade = Util.Cdi.lookup(ImagesFacade.class);
+        }
+        return imagesFacade;
+    }
+
+    public ThumbnailFacade getThumbnailFacade() {
+        if (thumbnailFacade == null) {
+            thumbnailFacade = Util.Cdi.lookup(ThumbnailFacade.class);
+        }
+        return thumbnailFacade;
+    }
+    
 }

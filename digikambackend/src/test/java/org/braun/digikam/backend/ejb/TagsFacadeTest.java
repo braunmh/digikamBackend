@@ -1,5 +1,9 @@
 package org.braun.digikam.backend.ejb;
 
+import org.braun.digikam.backend.dao.TagsFacade;
+import org.braun.digikam.backend.dao.AlbumsFacade;
+import org.braun.digikam.backend.dao.ImageMetadataFacade;
+import org.braun.digikam.backend.dao.ImagesFacade;
 import org.braun.digikam.backend.entity.Albums;
 import org.braun.digikam.backend.entity.Tags;
 import org.braun.digikam.backend.entity.Images;

@@ -7,7 +7,7 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
 import org.braun.digikam.backend.CameraFactory;
 import org.braun.digikam.backend.api.*;
-import org.braun.digikam.backend.ejb.ImageMetadataFacade;
+import org.braun.digikam.backend.dao.ImageMetadataFacade;
 import org.braun.digikam.backend.model.Camera;
 import org.braun.digikam.backend.util.Util;
 

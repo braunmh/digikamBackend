@@ -7,7 +7,7 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
 import org.braun.digikam.backend.CreatorFactory;
 import org.braun.digikam.backend.api.*;
-import org.braun.digikam.backend.ejb.ImageCopyrightFacade;
+import org.braun.digikam.backend.dao.ImageCopyrightFacade;
 import org.braun.digikam.backend.model.Creator;
 import org.braun.digikam.backend.util.Util;
 

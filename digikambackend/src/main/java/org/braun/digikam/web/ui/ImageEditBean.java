@@ -12,9 +12,12 @@ import org.braun.digikam.backend.CreatorFactory;
 import org.braun.digikam.backend.NodeFactory;
 import org.braun.digikam.backend.api.NotFoundException;
 import org.braun.digikam.backend.ejb.ImageFacade;
+import org.braun.digikam.backend.ejb.VideoFacade;
 import org.braun.digikam.backend.entity.Tags;
 import org.braun.digikam.backend.model.ImageInternal;
 import org.braun.digikam.backend.model.Keyword;
+import org.braun.digikam.backend.model.Media;
+import org.braun.digikam.backend.model.VideoInternal;
 import org.braun.digikam.web.model.CatRating;
 import org.braun.digikam.web.model.ImageEditModel;
 import org.primefaces.PrimeFaces;
@@ -33,60 +36,97 @@ public class ImageEditBean implements DialogBean, Serializable {
     @Inject
     private ImageFacade imageFacade;
 
-    private long imageId;
+    @Inject
+    private VideoFacade videoFacade;
+
+    private long mediaId;
+    
+    private boolean image;
 
     private ImageEditModel model;
 
     private ImageInternal getImageInternal() {
         try {
-            return imageFacade.getMetadata(imageId);
+            return imageFacade.getMetadata(mediaId);
         } catch (NotFoundException e) {
-            LOG.error("Image width id {} not found.", imageId);
+            LOG.error("Image width id {} not found.", mediaId);
         }
         return null;
     }
 
-    public static void openDialog(long imageId) {
+    private VideoInternal getVideoInternal() {
+        try {
+            return videoFacade.getMetadata(mediaId);
+        } catch (NotFoundException e) {
+            LOG.error("Image width id {} not found.", mediaId);
+        }
+        return null;
+    }
+
+    public static void openDialog(Media media) {
         DialogFrameworkOptions options = DialogFrameworkOptions.builder()
                .contentHeight("650px")
-               .modal(true).fitViewport(true)
+               .modal(true)
+               .fitViewport(true)
                .responsive(true)
                .resizable(false)
                .draggable(false)
-               .styleClass("")
-               .iframeStyleClass("")
+//               .styleClass("")
+//               .iframeStyleClass("")
                .closeOnEscape(true)
                .build();
-        PrimeFaces.current().dialog().openDynamic("/admin/imageEditDialog", options, 
+        PrimeFaces.current().dialog().openDynamic("/dialog/imageEditDialog", options, 
                 DialogParameters.builder()
-                .parameter(DialogParameters.Parameter.builder("imageId").add(imageId)).build());
+                .parameter(DialogParameters.Parameter.builder("mediaId").add(media.getId()))
+                .parameter(DialogParameters.Parameter.builder("image").add(media.getImage()))
+                .build());
     }
     
     @Override
     public void onload() {
         model = new ImageEditModel();
-        ImageInternal imageInternal = getImageInternal();
-        if (imageInternal != null) {
-            model.setRating(CatRating.findById(imageInternal.getRating()));
-            model.setTitle(imageInternal.getTitle());
-            model.setDescription(imageInternal.getDescription());
-            model.setCreator(imageInternal.getCreator());
-            model.getKeywords().addAll(imageInternal.getKeywords());
+        if (isImage()) {
+            ImageInternal imageInternal = getImageInternal();
+            if (imageInternal != null) {
+                model.setRating(CatRating.findById(imageInternal.getRating()));
+                model.setTitle(imageInternal.getTitle());
+                model.setDescription(imageInternal.getDescription());
+                model.setCreator(imageInternal.getCreator());
+                model.getKeywords().addAll(imageInternal.getKeywords());
+                model.setCreationDate(imageInternal.getCreationDate());
+            }
+        } else {
+            VideoInternal videoInternal = getVideoInternal();
+            if (videoInternal != null) {
+                model.setRating(CatRating.findById(videoInternal.getRating()));
+                model.setTitle(videoInternal.getTitle());
+                model.setDescription(videoInternal.getDescription());
+                model.setCreator(videoInternal.getCreator());
+                model.getKeywords().addAll(videoInternal.getKeywords());
+                model.setCreationDate(videoInternal.getCreationDate());
+            }
         }
-
     }
 
     public ImageEditModel getModel() {
         return model;
     }
 
-    public long getImageId() {
-        return imageId;
+    public long getMediaId() {
+        return mediaId;
     }
 
-    public void setImageId(long imageId) {
-        this.imageId = imageId;
+    public void setMediaId(long mediaId) {
+        this.mediaId = mediaId;
         onload();
+    }
+
+    public boolean isImage() {
+        return image;
+    }
+
+    public void setImage(boolean image) {
+        this.image = image;
     }
 
     public void save() {
@@ -96,13 +136,24 @@ public class ImageEditBean implements DialogBean, Serializable {
                     .name(NodeFactory.getInstance().getKeywordById(k.getId()).getName())
                     .id(k.getId()));
         }
+        
         try {
-            imageFacade.update(imageId, model.getTitle(), model.getDescription(), model.getRating().getValue(), tags, model.getCreator());
+            if (isImage()) {
+                imageFacade.update(mediaId, model.getTitle(), model.getDescription(), 
+                    model.getRating().getValue(), tags, 
+                    model.getCreator(), model.getCreationDate());
+            } else {
+                videoFacade.update(mediaId, model.getTitle(), model.getDescription(), 
+                    model.getRating().getValue(), tags, 
+                    model.getCreator(), model.getCreationDate());
+            }
+            close();
         } catch (NotFoundException e) {
-            LOG.error("Image with id {} not exists any more.", imageId);
+            LOG.error("Image with id {} not exists any more.", mediaId);
         }
     }
 
+    @Override
     public void close() {
         PrimeFaces.current().dialog().closeDynamic(true);
     }

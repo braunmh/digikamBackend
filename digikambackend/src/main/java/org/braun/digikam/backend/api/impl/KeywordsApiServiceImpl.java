@@ -8,7 +8,7 @@ import jakarta.ws.rs.core.SecurityContext;
 import org.braun.digikam.backend.NodeFactory;
 import org.braun.digikam.backend.api.KeywordsApiService;
 import org.braun.digikam.backend.api.NotFoundException;
-import org.braun.digikam.backend.ejb.TagsFacade;
+import org.braun.digikam.backend.dao.TagsFacade;
 import org.braun.digikam.backend.model.Keyword;
 import org.braun.digikam.backend.util.Util;
 public class KeywordsApiServiceImpl extends KeywordsApiService {

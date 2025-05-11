@@ -9,9 +9,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.braun.digikam.backend.ejb.ImageCopyrightFacade;
-import org.braun.digikam.backend.ejb.ImageMetadataFacade;
-import org.braun.digikam.backend.ejb.TagsFacade;
+import org.braun.digikam.backend.dao.ImageCopyrightFacade;
+import org.braun.digikam.backend.dao.ImageMetadataFacade;
+import org.braun.digikam.backend.dao.TagsFacade;
 import org.braun.digikam.backend.util.Configuration;
 import org.braun.digikam.backend.util.Util;
 

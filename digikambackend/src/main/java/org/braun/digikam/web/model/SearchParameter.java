@@ -63,6 +63,8 @@ public class SearchParameter implements Serializable {
     private List<Media> result;
     
     private List<String> descTitle;
+    
+    private boolean video = false;
 
     public void isValid() throws ValidationException {
         if (camera == null || camera.isBlank()) {
@@ -392,6 +394,14 @@ public class SearchParameter implements Serializable {
 
     public void setAscending(boolean ascending) {
         this.ascending = ascending;
+    }
+
+    public boolean isVideo() {
+        return video;
+    }
+
+    public void setVideo(boolean video) {
+        this.video = video;
     }
 
 }

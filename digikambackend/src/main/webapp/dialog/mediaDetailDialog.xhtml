@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:di="http://org.braun.digikam"
+      xmlns:comp="http://xmlns.jcp.org/jsf/composite/comp">
+    <h:head>
+        <title>Bildeigenschaften anzeigen</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet name="default.css" library="css"/>
+        <h:outputStylesheet name="primeflex3.css" library="css"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </h:head>
+    <h:body>
+        <f:view id="view">
+            <f:metadata>
+                <f:viewParam name="mediaId" value="#{mediaDetailBean.mediaId}"/>
+                <f:viewParam name="image" value="#{mediaDetailBean.image}"/>
+                <f:viewAction action="#{mediaDetailBean.onload()}"/>
+            </f:metadata>
+            <h:form id="form">
+                <h:dataTable var="entry" value="#{mediaDetailBean.details}">
+                    <h:column class="top">
+                        <h:outputText value="#{di:label(entry.name)}"/>
+                    </h:column>
+                    <h:column class="top">
+                        <h:outputText value="#{entry.value}"/>
+                    </h:column>
+                </h:dataTable>
+                <div style="text-align: right">
+                    <p:commandButton styleClass="di-button" id="close" 
+                        value="#{di:label('common.close')}" 
+                        action="#{mediaDetailBean.close()}" immediate="true" />
+                </div>
+            </h:form>
+        </f:view>
+    </h:body>
+</html>
