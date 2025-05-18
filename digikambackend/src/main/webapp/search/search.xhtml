@@ -230,14 +230,20 @@
                         </comp:inputElementRight>
                     </comp:inputPair>
                 </div>
-                <div class="command">
+                <div class="ui-fluid formgrid grid">
+                    <comp:inputElement>
                     <p:selectBooleanCheckbox id="video" value="#{imageSearchBean.searchParameter.video}" itemLabel="#{di:label('search.video')}">
                         <p:ajax listener="#{imageSearchBean.toogleVideo}" update="@form"/>
                     </p:selectBooleanCheckbox>
                     <p:selectBooleanCheckbox value="#{imageSearchBean.searchParameter.keywordsOr}" itemLabel="#{di:label('search.or')}"/>
                     <p:selectBooleanCheckbox value="#{imageSearchBean.searchParameter.ascending}" itemLabel="Aufsteigend"/>
-                    <p:commandButton styleClass="di-button" id="reset" value="#{di:label('common.reset')}" action="#{imageSearchBean.init()}" immediate="true" update="@form"/>
-                    <p:commandButton styleClass="di-button" id="execute" value="#{di:label('search.search')}" action="#{imageSearchBean.execute()}" update="@form"/>
+                    </comp:inputElement>
+                    <comp:inputElement>
+                        <div style="flex-flow: row; text-align: right;">
+                            <p:commandButton styleClass="di-button" style="width: auto" id="reset" value="#{di:label('common.reset')}" action="#{imageSearchBean.init()}" immediate="true" update="@form"/>
+                    <p:commandButton styleClass="di-button" style="width: auto" id="execute" value="#{di:label('search.search')}" action="#{imageSearchBean.execute()}" update="@form"/>
+                        </div>
+                    </comp:inputElement>
                 </div>
             </ui:define>
         </ui:composition>

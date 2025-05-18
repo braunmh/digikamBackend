@@ -49,15 +49,18 @@ public class MediaDetailBean implements DialogBean, Serializable {
         return details;
     }
 
-    public static void openDialog(Media media) {
+    public static void openDialog(Media media, int innerWidth) {
         DialogFrameworkOptions options = DialogFrameworkOptions.builder()
             .modal(true)
             .fitViewport(true)
             .responsive(true)
             .resizable(true)
-            .draggable(false)
+            .draggable(false).contentWidth("490px")
             .closeOnEscape(true)
             .build();
+        if (innerWidth < 640) {
+            options.setContentWidth(String.valueOf(innerWidth) + "px");
+        }
         PrimeFaces.current().dialog().openDynamic("/dialog/mediaDetailDialog", options, 
                 DialogParameters.builder()
                 .parameter(DialogParameters.Parameter.builder("mediaId").add(media.getId()))

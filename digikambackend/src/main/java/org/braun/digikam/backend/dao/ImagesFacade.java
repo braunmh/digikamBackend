@@ -12,6 +12,7 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -85,7 +86,7 @@ public class ImagesFacade extends AbstractFacade<Images> {
         ImageInformation information = getImageInformationFacade().findByImageId(id);
         if (null != information) {
             information.setRating(rating);
-            information.setCreationDate(Date.from(creationDate.toInstant(ZoneOffset.UTC)));
+            information.setCreationDate(getDate(creationDate));
             getImageInformationFacade().merge(information);
         }
 
@@ -116,6 +117,17 @@ public class ImagesFacade extends AbstractFacade<Images> {
         images.getComments().add(imageComments);
     }
 
+    /**
+     * 
+     * @param ldt DateTime without TimeZone
+     * @return absolute Date without any Timezone-Information
+     */
+    private Date getDate(LocalDateTime ldt) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(ldt.getYear(), ldt.getMonthValue()-1, ldt.getDayOfMonth(), ldt.getHour(), ldt.getMinute(), ldt.getSecond());
+        return cal.getTime();
+    }
+    
     public Images findByNameAndAlbum(String name, int albumId) {
         TypedQuery<Images> query = getEntityManager().createNamedQuery("Images.findByNameAndAlbumId", Images.class);
         query.setParameter("name", name);

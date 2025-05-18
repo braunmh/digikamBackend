@@ -86,7 +86,7 @@ public class VideoApi  {
     @jakarta.ws.rs.GET
     @Path("/stream/{videoId}")
     
-    @Produces({ "application/octet-stream" })
+    @Produces({"video/mp4", "video/mpeg", "video/webm", "video/ogg"})
     @io.swagger.annotations.ApiOperation(value = "", notes = "", response = File.class, tags={ "video", })
     @io.swagger.annotations.ApiResponses(value = {
         @io.swagger.annotations.ApiResponse(code = 200, message = "the content of an video as stream", response = File.class)

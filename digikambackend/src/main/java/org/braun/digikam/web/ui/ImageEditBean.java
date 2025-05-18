@@ -63,18 +63,18 @@ public class ImageEditBean implements DialogBean, Serializable {
         return null;
     }
 
-    public static void openDialog(Media media) {
+    public static void openDialog(Media media, int innerWidth) {
         DialogFrameworkOptions options = DialogFrameworkOptions.builder()
-               .contentHeight("650px")
                .modal(true)
                .fitViewport(true)
                .responsive(true)
                .resizable(false)
                .draggable(false)
-//               .styleClass("")
-//               .iframeStyleClass("")
                .closeOnEscape(true)
                .build();
+        if (innerWidth < 640) {
+            options.setContentWidth(String.valueOf(innerWidth) + "px");
+        }
         PrimeFaces.current().dialog().openDynamic("/dialog/imageEditDialog", options, 
                 DialogParameters.builder()
                 .parameter(DialogParameters.Parameter.builder("mediaId").add(media.getId()))

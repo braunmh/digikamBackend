@@ -1,6 +1,12 @@
 package org.braun.digikam.web.converter;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.temporal.TemporalAccessor;
+import java.util.Calendar;
+import java.util.Date;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -9,7 +15,7 @@ import org.junit.jupiter.api.Test;
  */
 public class LocalDateTimeConverterTest {
     
-    @Test
+    //@Test
     public void testLocalTime()  {
         long duration = 205483;
         long millisecondes = duration % 1000;
@@ -19,15 +25,12 @@ public class LocalDateTimeConverterTest {
         System.out.println(String.format("%d:%02d.%03d Minuten", minutes, seconds, millisecondes));
     }
     
+    @Test
     public void testConverter() {
-        LocalDateTime ldt = LocalDateTime.of(2004, 1, 11, 23, 32, 0);
-        LocalDateTimeConverter ldtc = new LocalDateTimeConverter();
-        String fDateTime = (ldtc.getAsString(null, null, ldt));
-        System.out.println(ldtc.getAsObject(null, null, fDateTime));
-        System.out.println(ldtc.getAsObject(null, null, "1.4.58"));
-        System.out.println(ldtc.getAsObject(null, null, "1.4.58 13"));
-        System.out.println(ldtc.getAsObject(null, null, "1.4.11 13"));
-        System.out.println(ldtc.getAsObject(null, null, "1.4.11  13:54"));
-        System.out.println(ldtc.getAsString(null, null, ldtc.getAsObject(null, null, "1.4.11 13:54:07")));
+        LocalDateTime ldt = LocalDateTime.of(2021, 9, 5, 17, 25, 01);
+        Calendar cal = Calendar.getInstance();
+        cal.set(ldt.getYear(), ldt.getMonthValue()-1, ldt.getDayOfMonth(), ldt.getHour(), ldt.getMinute(), ldt.getSecond());
+        Date date = cal.getTime();
+        System.out.println(date);
     }
 }

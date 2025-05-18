@@ -19,7 +19,7 @@
                     <h2><h:outputText value="#{epm.date}"/></h2>
                     <ui:repeat id="month" var="img" value="#{epm.entries}">
                         <div class="image">
-                            <h:outputLink value="#{request.contextPath}/rest/image/#{img.id}" target="_blank">
+                            <h:outputLink value="#{request.contextPath}/rest/#{(img.image)?'image':'video/stream'}/#{img.id}" target="_blank">
                                 <di:lazyImage imageId="#{img.id}" id="image" width="#{sessionUserBean.imageWidth}" orientation="#{img.orientation}"
                                               widthOriginal="#{img.width}" heightOriginal="#{img.height}"/> 
                             </h:outputLink>

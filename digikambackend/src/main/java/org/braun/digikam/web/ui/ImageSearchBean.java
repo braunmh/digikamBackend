@@ -56,6 +56,8 @@ public class ImageSearchBean implements Serializable {
     private List<EntryPerMonth> entriesPerMonth;
     private final transient DateTimeFormatter isoDate = DateTimeFormatter.ofPattern("MM.yyyy");
     
+    @Inject SessionUserBean sessionUserBean;
+    
     @Inject
     private ImageFacade imageFacade;
     
@@ -170,11 +172,11 @@ public class ImageSearchBean implements Serializable {
     }
     
     public void openDetailDialog(ActionEvent event) {
-        MediaDetailBean.openDialog(getMediaFromEvent(event));
+        MediaDetailBean.openDialog(getMediaFromEvent(event), sessionUserBean.getInnerWidth());
     }
     
     public void openEditDialog(ActionEvent event) {
-        ImageEditBean.openDialog(getMediaFromEvent(event));
+        ImageEditBean.openDialog(getMediaFromEvent(event), sessionUserBean.getInnerWidth());
     }
     
     private Media getMediaFromEvent(ActionEvent event) {

@@ -46,6 +46,7 @@
                     <comp:inputElement>
                         <p:inputText id="creationDate" value="#{imageEditBean.model.creationDate}">
                             <f:converter converterId="localDateTimeConverter"/>
+                            <p:ajax update="creationDateMsg @this" event="change"/>
                         </p:inputText>
                         <p:outputLabel for="@previous" value="#{di:label('image.date')}" />
                         <p:message id="creationDateMsg" for="creationDate" display="tooltip"/>

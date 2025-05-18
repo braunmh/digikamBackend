@@ -85,7 +85,7 @@ public class HouseKeepingFacade {
             union select 3, 'statistics.videos' property,  count(*) count from VideoMetadata
             union select 2, 'statistics.imagessize', sum(fileSize) from Images i inner join ImageMetadata im on i.id = im.imageid
             union select 4, 'statistics.videosize', sum(fileSize) from Images i inner join VideoMetadata vm on i.id = vm.imageid
-            union select 5, 'search.keywords', count(*) from Tags
+            union select 5, 'image.keywords', count(*) from Tags
             order by 1""";
     
     @PersistenceContext(unitName = "digikam")
@@ -125,7 +125,7 @@ public class HouseKeepingFacade {
         
         List<StatAuthorView> creators = imageCopyrightFacade.findAuthorCameraStatistic();
         Set<String> cntCreators = creators.stream().map(c -> c.getId().getCreator()).collect(Collectors.toSet());
-        result.addGlobalItem(new StatGlobal().order(6).name("search.creator").count((long)cntCreators.size()));
+        result.addGlobalItem(new StatGlobal().order(6).name("image.creator").count((long)cntCreators.size()));
         
         if (!creators.isEmpty()) {
             String lastCreator = creators.get(0).getId().getCreator();
