@@ -40,6 +40,7 @@ import org.braun.digikam.web.model.MediaDateComparator;
 import org.braun.digikam.web.model.MediaScoreComparator;
 import org.braun.digikam.web.model.SearchParameter;
 import org.braun.digikam.web.model.ValidationException;
+import org.primefaces.PrimeFaces;
 
 /**
  *
@@ -177,6 +178,23 @@ public class ImageSearchBean implements Serializable {
     
     public void openEditDialog(ActionEvent event) {
         ImageEditBean.openDialog(getMediaFromEvent(event), sessionUserBean.getInnerWidth());
+    }
+    
+    public void openLocationDialog(ActionEvent event) {
+        try {
+            ImageInternal img = imageFacade.getMetadata(getMediaFromEvent(event).getId());
+            if (img.getLatitude() != null && img.getLongitude() != null) {
+                //String locationUrlg = String.format("https://www.google.com/maps/search/?api=1&query=%s%%2C%s", img.getLatitude(), img.getLongitude());
+                String locationUrl = String.format("https://www.openstreetmap.org/?mlat=%s&mlon=%s", img.getLatitude(), img.getLongitude());
+                PrimeFaces.current().executeScript("window.open('" + locationUrl + "', 'map');");
+            } else {
+                FacesContext.getCurrentInstance().addMessage(
+                null, 
+                new FacesMessage(FacesMessage.SEVERITY_INFO, "Das Bild besitzt keine Geo-Daten.", ""));
+            }
+        } catch (NotFoundException e) {
+            LOG.error(e.getMessage());
+        }
     }
     
     private Media getMediaFromEvent(ActionEvent event) {

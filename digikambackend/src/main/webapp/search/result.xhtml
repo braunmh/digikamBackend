@@ -7,14 +7,12 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <body>
-
         <ui:composition template="./../common.xhtml">
             <ui:param name="title" value="Suchergebnisse"/>
             <ui:define name="navigation">
                 <h:link outcome="/search/search" value="zurück" styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left buttom"/>
             </ui:define>
             <ui:define name="content">
-                <h:outputScript library="jakarta.faces" name="jsf.js" target="head" />
                 <ui:repeat id="all" var="epm" value="#{imageSearchBean.entriesPerMonth}">
                     <h2><h:outputText value="#{epm.date}"/></h2>
                     <ui:repeat id="month" var="img" value="#{epm.entries}">
@@ -34,6 +32,11 @@
                                            actionListener="#{imageSearchBean.openEditDialog}">
                                 <f:attribute name="media" value="#{img}"/>
                                 <h:graphicImage styleClass="icon" alt="Ändern" value="#{resource['image/edit-circle.svg']}"/>
+                            </p:commandLink>
+                            <p:commandLink id="location" value="" process="@this" 
+                                           actionListener="#{imageSearchBean.openLocationDialog}">
+                                <f:attribute name="media" value="#{img}"/>
+                                <h:graphicImage styleClass="icon" alt="Ändern" value="#{resource['image/map.svg']}"/>
                             </p:commandLink>
                         </div>
                     </ui:repeat>
