@@ -44,4 +44,8 @@ public class ImageCopyrightFacade extends AbstractFacade<ImageCopyright> {
         Query query = getEntityManager().createNativeQuery(FIND_AUTHOR_CAMERA_STATISTIC, StatAuthorView.class);
         return query.getResultList();
     }
+    
+    public void setEntityManager(EntityManager em) {
+        this.em = em;
+    }
 }

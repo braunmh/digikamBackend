@@ -19,6 +19,7 @@ import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.PersistenceException;
 import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import java.io.File;
@@ -362,8 +363,9 @@ public class ImageFacade {
         query.setParameter("id", id);
         try {
             return query.getSingleResult();
-        } catch (NoResultException e) {
+        } catch (PersistenceException e) {
             String msg = String.format("Image with id %s not found or exists anymore", id);
+            LOG.info(e.getMessage());
             LOG.info("msg");
             throw new NotFoundException(404, msg);
         }
@@ -466,9 +468,6 @@ public class ImageFacade {
     }
 
     public ImagesFacade getImagesFacade() {
-//        if (imagesFacade == null) {
-//            imagesFacade = Util.Cdi.lookup(ImagesFacade.class);
-//        }
         return imagesFacade;
     }
 
@@ -478,5 +477,13 @@ public class ImageFacade {
         }
         return thumbnailFacade;
     }
-    
+
+    public void setThumbnailFacade(ThumbnailFacade thumbnailFacade) {
+        this.thumbnailFacade = thumbnailFacade;
+    }
+
+    public void setImagesFacade(ImagesFacade imagesFacade) {
+        this.imagesFacade = imagesFacade;
+    }
+
 }

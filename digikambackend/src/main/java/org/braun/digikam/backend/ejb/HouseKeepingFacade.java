@@ -22,6 +22,7 @@ import jakarta.json.JsonObject;
 import jakarta.json.JsonReader;
 import jakarta.json.JsonValue;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import jakarta.transaction.HeuristicMixedException;
@@ -79,17 +80,17 @@ public class HouseKeepingFacade {
 
     private static final Logger LOG = LogManager.getLogger();
 
-    private static final String GET_STATISTICS = 
-            """
+    private static final String GET_STATISTICS
+            = """
             select 1 id, 'statistics.images' name,  count(*) count from ImageMetadata
             union select 3, 'statistics.videos' property,  count(*) count from VideoMetadata
             union select 2, 'statistics.imagessize', sum(fileSize) from Images i inner join ImageMetadata im on i.id = im.imageid
             union select 4, 'statistics.videosize', sum(fileSize) from Images i inner join VideoMetadata vm on i.id = vm.imageid
             union select 5, 'image.keywords', count(*) from Tags
             order by 1""";
-    
+
     @PersistenceContext(unitName = "digikam")
-    private EntityManager em;
+    private EntityManager entityManager;
 
     @Resource
     private EJBContext context;
@@ -103,11 +104,11 @@ public class HouseKeepingFacade {
     private ImagesFacade imagesFacade;
 
     @Inject
-    private ImageMetadataFacade imageMetadataFacade; 
+    private ImageMetadataFacade imageMetadataFacade;
 
     @Inject
     private ImageCopyrightFacade imageCopyrightFacade;
-    
+
     @Inject
     private ThumbnailFacade thumbnailFacade;
 
@@ -118,15 +119,15 @@ public class HouseKeepingFacade {
         Query query = getEntityManager().createNativeQuery(GET_STATISTICS, StatisticView.class);
         Statistic result = new Statistic();
         List<StatisticView> temp = query.getResultList();
-        
+
         for (StatisticView v : temp) {
             result.addGlobalItem(new StatGlobal().order(v.getId()).count(v.getCount()).name(v.getName()));
         }
-        
+
         List<StatAuthorView> creators = imageCopyrightFacade.findAuthorCameraStatistic();
         Set<String> cntCreators = creators.stream().map(c -> c.getId().getCreator()).collect(Collectors.toSet());
-        result.addGlobalItem(new StatGlobal().order(6).name("image.creator").count((long)cntCreators.size()));
-        
+        result.addGlobalItem(new StatGlobal().order(6).name("image.creator").count((long) cntCreators.size()));
+
         if (!creators.isEmpty()) {
             String lastCreator = creators.get(0).getId().getCreator();
             int lastCreatorCnt = 0;
@@ -153,37 +154,94 @@ public class HouseKeepingFacade {
         }
         return result;
     }
-    
+
     @Asynchronous
     public Future<Integer> generateTumbnailsTagImages() {
         int generated = 0;
         try {
-        if (!StatusFactory.getInstance().aquireTumbnailGenerationStatusBussy()) {
-            return new AsyncResult<>(generated);
+            if (!StatusFactory.getInstance().aquireTumbnailGenerationStatusBussy()) {
+                return new AsyncResult<>(generated);
+            }
+            long startTst = System.currentTimeMillis();
+            List<ThumbnailToGenerate> resultImages = findImages();
+            List<ThumbnailToGenerate> resultVideos = findVideos();
+            resultVideos.removeIf(t
+                    -> t.getName().toLowerCase().endsWith(".mp3")
+                    || t.getName().toLowerCase().endsWith(".wav"));
+            List<Thumbnail> imagesToDelete = findImagesToDelete();
+
+            if (resultImages.isEmpty() && resultVideos.isEmpty() && imagesToDelete.isEmpty()) {
+                return new AsyncResult<>(generated);
+            }
+            UserTransaction userTransaction = context.getUserTransaction();
+            final String solrCollection = Configuration.getInstance().getSolrCollection();
+            try (SolrClient client = getSolrClient()) {
+                handleImages(resultImages, client, new CommonTransaction(userTransaction), solrCollection);
+                userTransaction.begin();
+                for (ThumbnailToGenerate thumb : resultVideos) {
+                    LOG.info("Thumbnail-Generation for video {} started", thumb.getPath());
+                    try {
+                        videoFacade.getThumbnail(thumb.getId()); // generates Thumbnail if not exist
+                    } catch (NotFoundException e) {
+                        LOG.info("Thumbnail-Generation for video {} skipped", thumb.getPath());
+                    }
+                    ImageSolr video = new ImageSolr(videoFacade.getMetadata(thumb.getId()));
+                    final UpdateResponse response = client.addBean(solrCollection, video);
+                    generated++;
+                    if (generated % 5 == 0) {
+                        userTransaction.commit();
+                        client.commit(solrCollection);
+                        userTransaction.begin();
+                    }
+                }
+                for (Thumbnail thum : imagesToDelete) {
+                    client.deleteById(solrCollection, String.valueOf(thum.getImageid()));
+                    thumbnailFacade.remove(thum);
+                    if (generated % 50 == 0) {
+                        userTransaction.commit();
+                        client.commit(solrCollection);
+                        userTransaction.begin();
+                    }
+                }
+                client.commit(solrCollection);
+            } catch (NotSupportedException | SystemException | RollbackException
+                    | HeuristicMixedException | HeuristicRollbackException | IOException e) {
+                LOG.error("Thumbnail-Generation and tagging failed", e);
+            } catch (Exception e) {
+                LOG.error("Thumbnail-Generation and tagging failed", e);
+            } finally {
+                try {
+                    userTransaction.commit();
+                } catch (RollbackException | HeuristicRollbackException | HeuristicMixedException | SystemException e) {
+                    LOG.info(e);
+                }
+            }
+            NodeFactory.getInstance().refresh(tagsFacade.findAll());
+            LOG.info("Thumbnail-Generation and tagging {} Images took {} seconds",
+                    generated, (System.currentTimeMillis() - startTst) / 1000);
+        } catch (IllegalStateException | SecurityException e) {
+            LOG.error("Thumbnail-Generation ended with error.", e);
+        } finally {
+            StatusFactory.getInstance().aquireTumbnailGenerationStatusDone();
         }
-        long startTst = System.currentTimeMillis();
-        List<ThumbnailToGenerate> resultImages = findImages();
-        List<ThumbnailToGenerate> resultVideos = findVideos();
-        resultVideos.removeIf(t -> 
-                t.getName().toLowerCase().endsWith(".mp3") 
-                || t.getName().toLowerCase().endsWith(".wav"));
-        List<Thumbnail> imagesToDelete = findImagesToDelete();
-        
-        if (resultImages.isEmpty() && resultVideos.isEmpty() && imagesToDelete.isEmpty()) {
-            return new AsyncResult<>(generated);
+        return new AsyncResult<>(generated);
+    }
+
+    public int handleImages(List<ThumbnailToGenerate> resultImages, SolrClient client, CommonTransaction userTransaction, String solrCollection) {
+        if (resultImages.isEmpty()) {
+            return 0;
         }
         List<Node> nodes = NodeFactory.getInstance().list();
-        UserTransaction userTransaction = context.getUserTransaction();
-        final String solrCollection = Configuration.getInstance().getSolrCollection();
-        try (SolrClient client = getSolrClient(); 
-                JsonReader reader = Json.createReader(this.getClass().getClassLoader().getResourceAsStream("org/braun/digikam/backend/override_labels.json"));
-                ExifTool exifTool = new ExifToolBuilder().enableStayOpen().build();) {
+        int generated = 0;
+        try (JsonReader reader = Json.createReader(this.getClass().getClassLoader().getResourceAsStream("org/braun/digikam/backend/override_labels.json"));
+            ExifTool exifTool = new ExifToolBuilder().enableStayOpen().build();) {
+            
+            userTransaction.begin();
             Map<String, String> autoKeywords = new HashMap<>();
             JsonObject jo = reader.readObject();
             for (Map.Entry<String, JsonValue> entry : jo.entrySet()) {
                 autoKeywords.put(entry.getKey(), entry.getValue().toString());
             }
-            userTransaction.begin();
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ByteArrayOutputStream taggedImage;
             for (ThumbnailToGenerate thumbToGenerate : resultImages) {
@@ -244,54 +302,18 @@ public class HouseKeepingFacade {
                     userTransaction.begin();
                 }
             }
-
-            for (ThumbnailToGenerate thumb : resultVideos) {
-                LOG.info("Thumbnail-Generation for video {} started", thumb.getPath());
-                try {
-                    videoFacade.getThumbnail(thumb.getId()); // generates Thumbnail if not exist
-                } catch (NotFoundException e) {
-                    LOG.info("Thumbnail-Generation for video {} skipped", thumb.getPath());
-                }
-                ImageSolr video = new ImageSolr(videoFacade.getMetadata(thumb.getId()));
-                final UpdateResponse response = client.addBean(solrCollection, video);
-                generated++;
-                if (generated % 5 == 0) {
-                    userTransaction.commit();
-                    client.commit(solrCollection);
-                    userTransaction.begin();
-                }
-            }
-            for (Thumbnail thum : imagesToDelete) {
-                client.deleteById(solrCollection, String.valueOf(thum.getImageid()));
-                thumbnailFacade.remove(thum);
-                if (generated % 50 == 0) {
-                    userTransaction.commit();
-                    client.commit(solrCollection);
-                    userTransaction.begin();
-                }
-            }
-            client.commit(solrCollection);
-        } catch (NotSupportedException | SystemException | RollbackException
-                | HeuristicMixedException | HeuristicRollbackException | IOException e) {
-            LOG.error("Thumbnail-Generation and tagging failed", e);
+        } catch (NotFoundException e) {
+            LOG.error(e.getMessage());
         } catch (Exception e) {
-            LOG.error("Thumbnail-Generation and tagging failed", e);
+            LOG.error(e);
         } finally {
             try {
                 userTransaction.commit();
-            } catch (RollbackException | HeuristicRollbackException | HeuristicMixedException | SystemException e) {
-                LOG.info(e);
+            } catch (Exception e) {
+                LOG.error(e);
             }
         }
-        NodeFactory.getInstance().refresh(tagsFacade.findAll());
-        LOG.info("Thumbnail-Generation and tagging {} Images took {} seconds",
-                generated, (System.currentTimeMillis() - startTst) / 1000);
-        } catch (IllegalStateException | SecurityException e) {
-          LOG.error("Thumbnail-Generation ended with error.", e);
-        } finally {
-            StatusFactory.getInstance().aquireTumbnailGenerationStatusDone();
-        }
-        return new AsyncResult<>(generated);
+        return generated;
     }
 
     private SolrClient getSolrClient() {
@@ -324,15 +346,15 @@ public class HouseKeepingFacade {
     }
 
     private List<Thumbnail> findImagesToDelete() {
-       Query query = getEntityManager().createNativeQuery("""
+        Query query = getEntityManager().createNativeQuery("""
             select t.* from ((Images i join Albums a on i.album = a.id) join AlbumRoots ar on ar.id = a.albumRoot)
             right join Thumbnail t on i.id = t.imageid
             where i.id is null""", Thumbnail.class);
-       return query.getResultList();
+        return query.getResultList();
     }
-    
+
     private EntityManager getEntityManager() {
-        return em;
+        return entityManager;
     }
 
     private Tags lookupTag(List<Node> nodes, String tagTree) {
@@ -428,6 +450,38 @@ public class HouseKeepingFacade {
             return name + " (" + weight + ")";
         }
 
+    }
+
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
+
+    public void setVideoFacade(VideoFacade videoFacade) {
+        this.videoFacade = videoFacade;
+    }
+
+    public void setImageFacade(ImageFacade imageFacade) {
+        this.imageFacade = imageFacade;
+    }
+
+    public void setImagesFacade(ImagesFacade imagesFacade) {
+        this.imagesFacade = imagesFacade;
+    }
+
+    public void setImageMetadataFacade(ImageMetadataFacade imageMetadataFacade) {
+        this.imageMetadataFacade = imageMetadataFacade;
+    }
+
+    public void setImageCopyrightFacade(ImageCopyrightFacade imageCopyrightFacade) {
+        this.imageCopyrightFacade = imageCopyrightFacade;
+    }
+
+    public void setThumbnailFacade(ThumbnailFacade thumbnailFacade) {
+        this.thumbnailFacade = thumbnailFacade;
+    }
+
+    public void setTagsFacade(TagsFacade tagsFacade) {
+        this.tagsFacade = tagsFacade;
     }
 
 }
