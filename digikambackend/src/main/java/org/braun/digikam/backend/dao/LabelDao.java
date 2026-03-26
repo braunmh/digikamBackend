@@ -16,9 +16,9 @@ import org.braun.digikam.backend.entity.Label;
  * @author mbraun
  */
 @Stateless
-public class LabelFacade extends AbstractFacade<Label> {
+public class LabelDao extends AbstractDao<Label> {
 
-    public LabelFacade() {
+    public LabelDao() {
         super(Label.class);
     }
 

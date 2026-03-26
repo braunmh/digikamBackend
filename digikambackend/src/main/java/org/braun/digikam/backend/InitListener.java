@@ -9,9 +9,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.braun.digikam.backend.dao.ImageCopyrightFacade;
-import org.braun.digikam.backend.dao.ImageMetadataFacade;
-import org.braun.digikam.backend.dao.TagsFacade;
+import org.braun.digikam.backend.dao.ImageCopyrightDao;
+import org.braun.digikam.backend.dao.ImageMetadataDao;
+import org.braun.digikam.backend.dao.TagsDao;
 import org.braun.digikam.backend.util.Configuration;
 import org.braun.digikam.backend.util.Util;
 
@@ -25,13 +25,13 @@ public class InitListener implements ServletContextListener {
     private static final Logger LOG = LogManager.getLogger();
     
     @EJB
-    private TagsFacade tagsFacade;
+    private TagsDao tagsFacade;
     
     @EJB
-    private ImageMetadataFacade imageMetadataFacade;
+    private ImageMetadataDao imageMetadataFacade;
     
     @EJB
-    private ImageCopyrightFacade imageCopyrightFacade;
+    private ImageCopyrightDao imageCopyrightFacade;
     
     @Override
     public void contextInitialized(ServletContextEvent sce) {
@@ -46,15 +46,15 @@ public class InitListener implements ServletContextListener {
         }
         
         if (tagsFacade == null) {
-            tagsFacade = Util.EJB.lookup(TagsFacade.class);
+            tagsFacade = Util.EJB.lookup(TagsDao.class);
         }
         NodeFactory.getInstance().refresh(tagsFacade.findAll());
         if (imageCopyrightFacade == null) {
-            imageCopyrightFacade = Util.EJB.lookup(ImageCopyrightFacade.class);
+            imageCopyrightFacade = Util.EJB.lookup(ImageCopyrightDao.class);
         }
         CreatorFactory.getInstance().refresh(imageCopyrightFacade.findAllCreators());
         if (imageMetadataFacade == null) {
-            imageMetadataFacade = Util.EJB.lookup(ImageMetadataFacade.class);
+            imageMetadataFacade = Util.EJB.lookup(ImageMetadataDao.class);
         }
         CameraFactory.getInstance().refresh(imageMetadataFacade.findAllCameras());
         CameraLensFactory.getInstance().refresh(imageMetadataFacade.getAllCombinations());

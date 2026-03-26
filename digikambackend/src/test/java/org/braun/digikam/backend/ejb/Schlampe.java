@@ -1,9 +1,15 @@
 package org.braun.digikam.backend.ejb;
 
+import org.braun.digikam.backend.dao.LabelDao;
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonReader;
 import jakarta.json.JsonValue;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Persistence;
+import jakarta.persistence.spi.PersistenceUnitTransactionType;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -11,11 +17,17 @@ import java.io.IOException;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
+import org.braun.digikam.backend.entity.Label;
 import org.bytedeco.javacv.*;
+import org.eclipse.persistence.config.PersistenceUnitProperties;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -24,6 +36,7 @@ import org.junit.jupiter.api.Test;
  */
 public class Schlampe {
     
+    Logger LOG = Logger.getLogger(Schlampe.class.getName());
     //@Test
     public void idToken() {
         String ie = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjFlOWdkazcifQ.ewogImlzcyI6ICJodHRwOi8vc2VydmVyLmV4YW1wbGUuY29tIiwKICJzdWIiOiAiMjQ4Mjg5NzYxMDAxIiwKICJhdWQiOiAiczZCaGRSa3F0MyIsCiAibm9uY2UiOiAibi0wUzZfV3pBMk1qIiwKICJleHAiOiAxMzExMjgxOTcwLAogImlhdCI6IDEzMTEyODA5NzAKfQ.ggW8hZ1EuVLuxNuuIJKX_V8a_OMXzR0EHR9R6jgdqrOOF4daGU96Sr_P6qJp6IcmD3HP99Obi1PRs-cwh3LO-p146waJ8IhehcwL7F09JdijmBqkvPeB2T9CJNqeGpe-gccMg4vfKjkM8FcGvnzZUN4_KSP0aAp1tOJ1zZwgjxqGByKHiOtX7TpdQyHE5lcMiKPXfEIQILVq0pc_E2DzL7emopWoaoZTF_m0_N0YzFC6g6EJbOEoRoSK5hoDalrcvRYLSrQAZZKflyuVCyixEoV9GfNQC3_osjzw2PAithfubEEBLuVVk4XUVrWOLrLl0nx7RkKU8NXNHq-rvKMzqg";
@@ -59,7 +72,7 @@ public class Schlampe {
         System.out.println("root: " + root + ", relativePath: " + relativePath + ", name: " + name);
     }
     
-    @Test
+    //@Test
     public void testAblumRoots() {
         String root = "volumeid:?path=/data/pictures&fileuuid=73f31a67-17ee-48da-85c5-0fef54129c50";
         int begin = root.indexOf('?');
@@ -101,4 +114,50 @@ public class Schlampe {
         ImageIO.write(image, "jpg", new File("/data/videos/2018/20181013/00007_thumb.jpg"));
         grabber.stop();
     } 
+    //@Test
+    public void testLabelFacade() {
+        LabelDao labelFacade = new LabelDao();
+        labelFacade.setEnityManager(getEntityManager());
+        EntityTransaction transaction = null;
+        try {
+            transaction = getEntityManager().getTransaction();
+            transaction.begin();
+            Label label = new Label();
+            label.setKey("search.aperture");
+            label.setValue("Blende");
+            label.setLastModified(new Date());
+            label = labelFacade.createNew(label);
+            System.out.println(label);
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
+        } finally {
+            if (transaction != null) {
+                transaction.commit();
+            }
+        }
+        Date lastModified = labelFacade.getLastModified(Locale.ROOT);
+        System.out.println(lastModified);
+    }
+    
+    private EntityManager entityManager;
+    
+    protected EntityManager getEntityManager() {
+        if (entityManager == null) {
+        try {
+            final Map<String, Object> props = new HashMap<>();
+            props.put(PersistenceUnitProperties.TRANSACTION_TYPE, PersistenceUnitTransactionType.RESOURCE_LOCAL.name());
+            props.put(PersistenceUnitProperties.JDBC_DRIVER, "com.mysql.cj.jdbc.Driver");
+            props.put(PersistenceUnitProperties.JDBC_URL, "jdbc:mysql://192.168.0.219:3306/digikam4?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC");
+            props.put(PersistenceUnitProperties.JDBC_USER, "mbraun");
+            props.put(PersistenceUnitProperties.JDBC_PASSWORD, "gesa0403");
+            EntityManagerFactory emf = Persistence.createEntityManagerFactory("digikam", props);
+            entityManager = emf.createEntityManager();
+
+        } catch (Exception e) {
+            LOG.severe(e.getMessage());
+            return null;
+        }
+        }
+        return entityManager;
+    }
 }

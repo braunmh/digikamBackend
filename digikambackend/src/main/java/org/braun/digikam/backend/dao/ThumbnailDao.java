@@ -11,9 +11,9 @@ import org.braun.digikam.backend.entity.Thumbnail;
  * @author mbraun
  */
 @Stateless
-public class ThumbnailFacade extends AbstractFacade<Thumbnail> {
+public class ThumbnailDao extends AbstractDao<Thumbnail> {
     
-    public ThumbnailFacade() {
+    public ThumbnailDao() {
         super(Thumbnail.class);
     }
 

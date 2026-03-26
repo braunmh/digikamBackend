@@ -1,10 +1,10 @@
 package org.braun.digikam.backend.ejb;
 
-import org.braun.digikam.backend.dao.ImageMetadataFacade;
-import org.braun.digikam.backend.dao.ThumbnailFacade;
-import org.braun.digikam.backend.dao.TagsFacade;
-import org.braun.digikam.backend.dao.ImagesFacade;
-import org.braun.digikam.backend.dao.ImageCopyrightFacade;
+import org.braun.digikam.backend.dao.ImageMetadataDao;
+import org.braun.digikam.backend.dao.ThumbnailDao;
+import org.braun.digikam.backend.dao.TagsDao;
+import org.braun.digikam.backend.dao.ImagesDao;
+import org.braun.digikam.backend.dao.ImageCopyrightDao;
 import com.thebuzzmedia.exiftool.ExifTool;
 import com.thebuzzmedia.exiftool.ExifToolBuilder;
 import org.braun.digikam.backend.entity.Tags;
@@ -101,19 +101,19 @@ public class HouseKeepingFacade {
     private ImageFacade imageFacade;
 
     @Inject
-    private ImagesFacade imagesFacade;
+    private ImagesDao imagesFacade;
 
     @Inject
-    private ImageMetadataFacade imageMetadataFacade;
+    private ImageMetadataDao imageMetadataFacade;
 
     @Inject
-    private ImageCopyrightFacade imageCopyrightFacade;
+    private ImageCopyrightDao imageCopyrightFacade;
 
     @Inject
-    private ThumbnailFacade thumbnailFacade;
+    private ThumbnailDao thumbnailFacade;
 
     @Inject
-    private TagsFacade tagsFacade;
+    private TagsDao tagsFacade;
 
     public Statistic getStatistics() {
         Query query = getEntityManager().createNativeQuery(GET_STATISTICS, StatisticView.class);
@@ -176,7 +176,7 @@ public class HouseKeepingFacade {
             UserTransaction userTransaction = context.getUserTransaction();
             final String solrCollection = Configuration.getInstance().getSolrCollection();
             try (SolrClient client = getSolrClient()) {
-                handleImages(resultImages, client, new CommonTransaction(userTransaction), solrCollection);
+                generated = handleImages(resultImages, client, new CommonTransaction(userTransaction), solrCollection);
                 userTransaction.begin();
                 for (ThumbnailToGenerate thumb : resultVideos) {
                     LOG.info("Thumbnail-Generation for video {} started", thumb.getPath());
@@ -226,8 +226,11 @@ public class HouseKeepingFacade {
         }
         return new AsyncResult<>(generated);
     }
-
     public int handleImages(List<ThumbnailToGenerate> resultImages, SolrClient client, CommonTransaction userTransaction, String solrCollection) {
+        return handleImages(resultImages, client, userTransaction, solrCollection, true);
+    }
+    
+    public int handleImages(List<ThumbnailToGenerate> resultImages, SolrClient client, CommonTransaction userTransaction, String solrCollection, boolean generateThumbnails) {
         if (resultImages.isEmpty()) {
             return 0;
         }
@@ -255,7 +258,7 @@ public class HouseKeepingFacade {
                 if (imageInternal.getFocalLength() == null || imageInternal.getFocalLength() == 0) {
                     ExifData exifData = new ExifData(exifTool, imageFile);
                     ImageMetadata im = imageMetadataFacade.find(thumbToGenerate.getId());
-                    if (im != null) {
+                    if (im != null && exifData.getLens() != null) {
                         im.setLens(exifData.getLens());
                         im.setFocalLength(exifData.getFocalLength(im.getLens()));
                         im.setFocalLength35(exifData.getFocalLength35(im.getFocalLength(), im.getMake(), im.getModel()));
@@ -265,19 +268,21 @@ public class HouseKeepingFacade {
                         imageInternal.setLens(im.getLens());
                     }
                 }
-                try {
-                    baos.reset();
-                    ImageUtil.scaleImage(imageFile, baos, 1024, 1024, Orientation.angle0);
-                    taggedImage = ExifUtil.writeExifData(imageInternal, baos.toByteArray());
-                    if (thumbnail.getData() == null) {
-                        thumbnail.setData(taggedImage.toByteArray());
-                        thumbnailFacade.create(thumbnail);
-                    } else {
-                        thumbnail.setData(taggedImage.toByteArray());
-                        thumbnailFacade.merge(thumbnail);
+                if (generateThumbnails) {
+                    try {
+                        baos.reset();
+                        ImageUtil.scaleImage(imageFile, baos, 1024, 1024, Orientation.angle0);
+                        taggedImage = ExifUtil.writeExifData(imageInternal, baos.toByteArray());
+                        if (thumbnail.getData() == null) {
+                            thumbnail.setData(taggedImage.toByteArray());
+                            thumbnailFacade.create(thumbnail);
+                        } else {
+                            thumbnail.setData(taggedImage.toByteArray());
+                            thumbnailFacade.merge(thumbnail);
+                        }
+                    } catch (IOException e) {
+                        LOG.info("Thumbnail-Generation for image {} skipped. Msg: {}", thumbToGenerate.getId(), e.getMessage());
                     }
-                } catch (IOException e) {
-                    LOG.info("Thumbnail-Generation for image {} skipped. Msg: {}", thumbToGenerate.getId(), e.getMessage());
                 }
                 List<String> autoTags = getTags(imageFile, autoKeywords);
                 if (!autoTags.isEmpty()) {
@@ -464,23 +469,23 @@ public class HouseKeepingFacade {
         this.imageFacade = imageFacade;
     }
 
-    public void setImagesFacade(ImagesFacade imagesFacade) {
+    public void setImagesFacade(ImagesDao imagesFacade) {
         this.imagesFacade = imagesFacade;
     }
 
-    public void setImageMetadataFacade(ImageMetadataFacade imageMetadataFacade) {
+    public void setImageMetadataFacade(ImageMetadataDao imageMetadataFacade) {
         this.imageMetadataFacade = imageMetadataFacade;
     }
 
-    public void setImageCopyrightFacade(ImageCopyrightFacade imageCopyrightFacade) {
+    public void setImageCopyrightFacade(ImageCopyrightDao imageCopyrightFacade) {
         this.imageCopyrightFacade = imageCopyrightFacade;
     }
 
-    public void setThumbnailFacade(ThumbnailFacade thumbnailFacade) {
+    public void setThumbnailFacade(ThumbnailDao thumbnailFacade) {
         this.thumbnailFacade = thumbnailFacade;
     }
 
-    public void setTagsFacade(TagsFacade tagsFacade) {
+    public void setTagsFacade(TagsDao tagsFacade) {
         this.tagsFacade = tagsFacade;
     }
 

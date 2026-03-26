@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:of="http://omnifaces.org/functions"
+      xmlns:o="http://omnifaces.org/functions"
       >
 
     <body>
@@ -11,7 +11,7 @@
 
             <ui:define name="content">
                 <ul>
-                    <li>Date/time: #{of:formatDate(now, 'yyyy-MM-dd HH:mm:ss')}</li>
+                    <li>Date/time: #{o:formatDate(now, 'yyyy-MM-dd HH:mm:ss')}</li>
                     <li>User agent: #{header['user-agent']}</li>
                     <li>User IP: #{request.remoteAddr}</li>
                     <li>Request URI: #{requestScope['jakarta.servlet.error.request_uri']}</li>
@@ -21,7 +21,7 @@
                     <li>Exception message: #{requestScope['jakarta.servlet.error.message']}</li>
                     <li>Exception UUID: #{requestScope['org.omnifaces.exception_uuid']}</li>
                     <li>Stack trace:
-                        <pre>#{of:printStackTrace(requestScope['jakarta.servlet.error.exception'])}</pre>
+                        <pre>#{o:printStackTrace(requestScope['jakarta.servlet.error.exception'])}</pre>
                     </li>
                 </ul>            
             </ui:define>

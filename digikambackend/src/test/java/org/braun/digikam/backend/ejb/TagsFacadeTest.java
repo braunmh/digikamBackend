@@ -1,9 +1,9 @@
 package org.braun.digikam.backend.ejb;
 
-import org.braun.digikam.backend.dao.TagsFacade;
-import org.braun.digikam.backend.dao.AlbumsFacade;
-import org.braun.digikam.backend.dao.ImageMetadataFacade;
-import org.braun.digikam.backend.dao.ImagesFacade;
+import org.braun.digikam.backend.dao.TagsDao;
+import org.braun.digikam.backend.dao.AlbumsDao;
+import org.braun.digikam.backend.dao.ImageMetadataDao;
+import org.braun.digikam.backend.dao.ImagesDao;
 import org.braun.digikam.backend.entity.Albums;
 import org.braun.digikam.backend.entity.Tags;
 import org.braun.digikam.backend.entity.Images;
@@ -62,7 +62,7 @@ public class TagsFacadeTest {
         try {
             JsonReader reader = Json.createReader(new FileReader("/home/mbraun/.local/share/photils/override_labels.json"));
             JsonObject jo = reader.readObject();
-            TagsFacade tf = new TagsFacade();
+            TagsDao tf = new TagsDao();
             EntityManager em = getEntityManager();
             tf.setEntityManager(em);
             em.getTransaction().begin();
@@ -78,16 +78,16 @@ public class TagsFacadeTest {
         }
     }
     
-    private ImagesFacade imagesFacade;
-    private AlbumsFacade albumsFacade;
-    private TagsFacade tagsFacade;
+    private ImagesDao imagesFacade;
+    private AlbumsDao albumsFacade;
+    private TagsDao tagsFacade;
     private Map<String, Tags> tagsCached = new HashMap<>();
     private EntityManager em;
   
     @Test
     public void testNewAlgo() {
         em = getEntityManager();
-        tagsFacade = new TagsFacade();
+        tagsFacade = new TagsDao();
         tagsFacade.setEntityManager(em);
         NodeFactory.getInstance().refresh(tagsFacade.findAll());
         List<Node> nodes = NodeFactory.getInstance().list();
@@ -104,7 +104,7 @@ public class TagsFacadeTest {
     
     public void validateAutoTags() {
         em = getEntityManager();
-        tagsFacade = new TagsFacade();
+        tagsFacade = new TagsDao();
         tagsFacade.setEntityManager(em);
         List<PhotilsTag> result = new ArrayList<>();
         NodeFactory.getInstance().refresh(tagsFacade.findAll());
@@ -181,11 +181,11 @@ public class TagsFacadeTest {
         em = getEntityManager();
         String root = "/data/pictures/";
         String[] relPaths = new String[] {"2024/05/", "2024/06/"};
-        imagesFacade = new ImagesFacade();
+        imagesFacade = new ImagesDao();
         imagesFacade.setEnitityManager(em);
-        albumsFacade = new AlbumsFacade();
+        albumsFacade = new AlbumsDao();
         albumsFacade.setEnitityManager(em);
-        tagsFacade = new TagsFacade();
+        tagsFacade = new TagsDao();
         tagsFacade.setEntityManager(em);
         int cnt = 0;
         for (String relPath : relPaths) {
@@ -341,7 +341,7 @@ public class TagsFacadeTest {
     
     //@Test
     public void findAll() {
-        TagsFacade tf = new TagsFacade();
+        TagsDao tf = new TagsDao();
         EntityManager em = getEntityManager();
         tf.setEntityManager(em);
         List<Tags> list = tf.findAll();
@@ -350,7 +350,7 @@ public class TagsFacadeTest {
         for (Keyword k : result) {
             LOG.fine(k.getName());
         }
-        ImageMetadataFacade im = new ImageMetadataFacade();
+        ImageMetadataDao im = new ImageMetadataDao();
         im.setEntityManager(em);
         for (String lens : im.getLens("SONY", "SLT-A99V")) {
             LOG.fine(lens);

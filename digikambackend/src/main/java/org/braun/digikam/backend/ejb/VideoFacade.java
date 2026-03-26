@@ -1,7 +1,7 @@
 package org.braun.digikam.backend.ejb;
 
-import org.braun.digikam.backend.dao.ThumbnailFacade;
-import org.braun.digikam.backend.dao.ImagesFacade;
+import org.braun.digikam.backend.dao.ThumbnailDao;
+import org.braun.digikam.backend.dao.ImagesDao;
 import jakarta.ejb.EJB;
 import org.braun.digikam.common.DateWrapper;
 import org.braun.digikam.backend.entity.ImageComments;
@@ -79,10 +79,10 @@ public class VideoFacade {
     private EntityManager em;
 
     @EJB
-    private ThumbnailFacade thumbnailFacade;
+    private ThumbnailDao thumbnailFacade;
     
     @EJB
-    private ImagesFacade imagesFacade;
+    private ImagesDao imagesFacade;
     
     public InputStream getVideo(long id) throws NotFoundException {
         VideoFull image = getVideoFull(id);
@@ -378,16 +378,16 @@ public class VideoFacade {
         return (amp > 0) ? value.substring(0, amp) : value;
     }
 
-    public ImagesFacade getImagesFacade() {
+    public ImagesDao getImagesFacade() {
         if (imagesFacade == null) {
-            imagesFacade = Util.Cdi.lookup(ImagesFacade.class);
+            imagesFacade = Util.Cdi.lookup(ImagesDao.class);
         }
         return imagesFacade;
     }
 
-    public ThumbnailFacade getThumbnailFacade() {
+    public ThumbnailDao getThumbnailFacade() {
         if (thumbnailFacade == null) {
-            thumbnailFacade = Util.Cdi.lookup(ThumbnailFacade.class);
+            thumbnailFacade = Util.Cdi.lookup(ThumbnailDao.class);
         }
         return thumbnailFacade;
     }

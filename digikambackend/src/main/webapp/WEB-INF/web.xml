@@ -12,10 +12,30 @@
         <param-name>org.omnifaces.EXCEPTION_TYPES_TO_UNWRAP</param-name>
         <param-value>jakarta.ejb.EJBException,jakarta.persistence.RollbackException</param-value>
     </context-param>
+<!-- -->
+    <context-param>
+        <param-name>jakarta.faces.FACELETS_BUFFER_SIZE</param-name>
+        <param-value>50000000</param-value>
+    </context-param>
+<!-- 
+    <context-param>
+        <param-name>primefaces.CSP</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    <context-param>
+        <param-name>primefaces.CSP_POLICY</param-name>
+        <param-value>style-src 'self' 'unsafe-inline'; frame-ancestors 'self'; script-src 'self' 'unsafe-eval' 'unsafe-hashes' 'sha256-kbHtQyYDQKz4SWMQ8OHVol3EC0t3tHEJFPCSwNG9NxQ='</param-value>
+        <description>unsafe_hashes for using clipboard;</description>
+    </context-param>
+       -->
+<!--     -->
     <!--context-param>
         <param-name>org.omnifaces.EXCEPTION_TYPES_TO_IGNORE_IN_LOGGING</param-name>
         <param-value>jakarta.faces.application.ViewExpiredException</param-value>
     </context-param-->
+    <session-config>
+            <session-timeout>60</session-timeout>
+    </session-config>
     <filter>
         <filter-name>ApiOriginFilter</filter-name>
         <filter-class>org.braun.digikam.backend.api.ApiOriginFilter</filter-class>
@@ -36,6 +56,10 @@
     <welcome-file-list>
         <welcome-file>search/search.xhtml</welcome-file>
     </welcome-file-list>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/WEB-INF/errorpages/500.xhtml</location>
+    </error-page>
     <error-page>
         <error-code>500</error-code>
         <location>/WEB-INF/errorpages/500.xhtml</location>

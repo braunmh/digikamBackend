@@ -10,11 +10,11 @@ import jakarta.persistence.criteria.Root;
  *
  * @author mbraun
  */
-public abstract class AbstractFacade<T> {
+public abstract class AbstractDao<T> {
 
     private Class<T> entityClass;
 
-    public AbstractFacade(Class<T> entityClass) {
+    public AbstractDao(Class<T> entityClass) {
         this.entityClass = entityClass;
     }
 

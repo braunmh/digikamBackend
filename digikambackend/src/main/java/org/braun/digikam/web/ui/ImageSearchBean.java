@@ -57,7 +57,8 @@ public class ImageSearchBean implements Serializable {
     private List<EntryPerMonth> entriesPerMonth;
     private final transient DateTimeFormatter isoDate = DateTimeFormatter.ofPattern("MM.yyyy");
     
-    @Inject SessionUserBean sessionUserBean;
+    @Inject 
+    private SessionUserBean sessionUserBean;
     
     @Inject
     private ImageFacade imageFacade;

@@ -12,7 +12,7 @@ import java.util.List;
  * @author mbraun
  */
 @Stateless
-public class TagsFacade extends AbstractFacade<Tags> {
+public class TagsDao extends AbstractDao<Tags> {
 
     @PersistenceContext(unitName = "digikam")
     private EntityManager em;
@@ -22,7 +22,7 @@ public class TagsFacade extends AbstractFacade<Tags> {
         return em;
     }
 
-    public TagsFacade() {
+    public TagsDao() {
         super(Tags.class);
     }
     

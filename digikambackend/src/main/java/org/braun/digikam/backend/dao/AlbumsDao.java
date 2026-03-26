@@ -10,12 +10,12 @@ import java.util.List;
  *
  * @author mbraun
  */
-public class AlbumsFacade extends AbstractFacade<Albums> {
+public class AlbumsDao extends AbstractDao<Albums> {
 
     @PersistenceContext(unitName = "digikam")
     private EntityManager em;
     
-    public AlbumsFacade() {
+    public AlbumsDao() {
         super(Albums.class);
     }
 

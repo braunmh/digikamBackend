@@ -1,5 +1,9 @@
 package org.braun.digikam.web.model;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlSeeAlso;
+import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 
 /**
@@ -7,57 +11,52 @@ import java.io.Serializable;
  *
  * @author mbraun
  */
+@XmlType
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlSeeAlso({
+    RangeDate.class,
+    RangeInteger.class,
+    RangeDouble.class
+})
 public abstract class Range<TYPE extends Comparable<TYPE>> implements Serializable {
     
-    private TYPE from;
-    
-    private TYPE to;
-
     public Range() {
     }
     
     public Range(TYPE from, TYPE to) {
-        this.from = from;
-        this.to = to;
+        setFrom(from);
+        setTo(to);
     }
 
-    public TYPE getFrom() {
-        return from;
-    }
+    public abstract TYPE getFrom();
 
-    public void setFrom(TYPE from) {
-        this.from = from;
-    }
+    public abstract void setFrom(TYPE from);
 
-    public TYPE getTo() {
-        return to;
-    }
+    public abstract TYPE getTo();
 
-    public void setTo(TYPE to) {
-        this.to = to;
-    }
+    public abstract void setTo(TYPE to);
     
     public boolean isValid() {
-        if (from == null) {
+        if (getFrom() == null) {
             return true;
         }
-        if (to == null) {
+        if (getTo() == null) {
             return true;
         }
-        return from.compareTo(to) <= 0;
+        return getFrom().compareTo(getTo()) <= 0;
     }
     
     public Range<TYPE> from(TYPE value) {
-        from = value;
+        setFrom(value);
         return this;
     }
     
     public Range<TYPE> to(TYPE value) {
-        to = value;
+        setTo(value);
         return this;
     }
     
     public boolean isEmpty() {
-        return from == null && to == null;
+        return getFrom() == null && getTo() == null;
     } 
 }

@@ -12,9 +12,9 @@ import org.braun.digikam.backend.CreatorFactory;
 import org.braun.digikam.backend.NodeFactory;
 import org.braun.digikam.backend.StatusFactory;
 import org.braun.digikam.backend.ejb.HouseKeepingFacade;
-import org.braun.digikam.backend.dao.ImageCopyrightFacade;
-import org.braun.digikam.backend.dao.ImageMetadataFacade;
-import org.braun.digikam.backend.dao.TagsFacade;
+import org.braun.digikam.backend.dao.ImageCopyrightDao;
+import org.braun.digikam.backend.dao.ImageMetadataDao;
+import org.braun.digikam.backend.dao.TagsDao;
 import org.braun.digikam.backend.model.Statistic;
 import org.braun.digikam.common.LabelResourceBundle;
 import org.omnifaces.cdi.ViewScoped;
@@ -35,11 +35,11 @@ public class AdminBean implements Serializable {
     private HouseKeepingFacade houseKeepingFacade;
     
     @Inject
-    private ImageCopyrightFacade imageCopyrightFacade;
+    private ImageCopyrightDao imageCopyrightFacade;
     
-    @Inject private ImageMetadataFacade imageMetadatafacade;
+    @Inject private ImageMetadataDao imageMetadatafacade;
     
-    @Inject private TagsFacade tagsFacade;
+    @Inject private TagsDao tagsFacade;
     
     public boolean isBusy() {
         return StatusFactory.getInstance().getTumbnailGenerationStatus();

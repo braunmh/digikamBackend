@@ -12,7 +12,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.braun.digikam.backend.CameraFactory;
 import org.braun.digikam.backend.CameraLensFactory;
-import org.braun.digikam.backend.dao.ImageMetadataFacade;
+import org.braun.digikam.backend.dao.ImageMetadataDao;
 import org.braun.digikam.web.component.diagram.DiagramModel;
 import org.braun.digikam.web.component.diagram.Point;
 import org.braun.digikam.web.model.CatDiagram;
@@ -33,7 +33,7 @@ public class DiagramBean implements Serializable {
     private DiagramParameter content;
 
     @Inject
-    private ImageMetadataFacade imageMetadatafacade;
+    private ImageMetadataDao imageMetadatafacade;
 
     @Inject
     private SessionUserBean userBean;

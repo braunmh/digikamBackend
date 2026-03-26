@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import org.braun.digikam.backend.NodeFactory;
 import org.braun.digikam.backend.api.*;
-import org.braun.digikam.backend.dao.ImageInformationFacade;
-import org.braun.digikam.backend.dao.ImagesFacade;
+import org.braun.digikam.backend.dao.ImageInformationDao;
+import org.braun.digikam.backend.dao.ImagesDao;
 import org.braun.digikam.backend.entity.Tags;
 import org.braun.digikam.backend.ejb.VideoFacade;
 import org.braun.digikam.backend.model.ImageUpdate;
@@ -21,8 +21,8 @@ import org.braun.digikam.backend.util.Util;
 public class VideoApiServiceImpl extends VideoApiService {
 
     @Inject VideoFacade videoFacade;
-    @Inject private ImagesFacade imagesFacade;
-    @Inject private ImageInformationFacade informationFacade;
+    @Inject private ImagesDao imagesFacade;
+    @Inject private ImageInformationDao informationFacade;
     
     @Override
     public Response findVideosByAttributes(List<Long> keywords, String creator, String orientation,
@@ -53,14 +53,14 @@ public class VideoApiServiceImpl extends VideoApiService {
 
     @Override
     public Response rateVideo(@NotNull Long videoId, @NotNull Integer rating, SecurityContext securityContext) throws NotFoundException {
-        ImageInformationFacade facade = getInformationFacade();
+        ImageInformationDao facade = getInformationFacade();
         facade.updateRating(videoId, rating);
         return Response.ok().entity("Okay").build();
     }
 
     @Override
     public Response videoUpdate(ImageUpdate imageUpdate, SecurityContext securityContext) throws NotFoundException {
-        ImagesFacade facade = getImagesFacade();
+        ImagesDao facade = getImagesFacade();
         List<Tags> tags = new ArrayList<>();
         for (Long tagId : imageUpdate.getKeywords()) {
             tags.add(new Tags().name(NodeFactory.getInstance().getKeywordById(tagId).getName()).id(tagId));
@@ -83,16 +83,16 @@ public class VideoApiServiceImpl extends VideoApiService {
         return videoFacade;
     }
     
-    public ImagesFacade getImagesFacade() {
+    public ImagesDao getImagesFacade() {
         if (imagesFacade == null) {
-            imagesFacade = Util.Cdi.lookup(ImagesFacade.class);
+            imagesFacade = Util.Cdi.lookup(ImagesDao.class);
         }
         return imagesFacade;
     }
 
-    public ImageInformationFacade getInformationFacade() {
+    public ImageInformationDao getInformationFacade() {
         if (informationFacade == null) {
-            informationFacade = Util.Cdi.lookup(ImageInformationFacade.class);
+            informationFacade = Util.Cdi.lookup(ImageInformationDao.class);
         }
         return informationFacade;
     }

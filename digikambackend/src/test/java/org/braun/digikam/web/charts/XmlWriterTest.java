@@ -84,6 +84,7 @@ public class XmlWriterTest {
 
     private DiagramModel<Double> newIsoDiagram() {
         return new DiagramModel.Builder<Double>()
+                .axisXPoints(10)
                 .height(1000)
                 .width(1500)
                 .points(getPointsIso())
@@ -98,20 +99,22 @@ public class XmlWriterTest {
 
     private DiagramModel<Double> newApertureDiagram() {
         return new DiagramModel.Builder<Double>()
+                .axisXPoints(8)
                 .height(1000)
                 .width(1500)
                 .points(getPointsAperture())
-                .axisXDescription("f")
-                .axisXUnit("Blende")
+                .axisXDescription("Blende")
+                .axisXUnit("f")
                 .axisXFormat(n -> {
                     Double t = n * n;
-                    return String.valueOf(t.longValue());
+                    return String.format("%.1f", t);
                 })
                 .build();
     }
 
     private DiagramModel<Double> newExposureTimeDiagram() {
         return new DiagramModel.Builder<Double>()
+                .axisXPoints(10)
                 .height(1000)
                 .width(1500)
                 .points(getPointsExposureTime())

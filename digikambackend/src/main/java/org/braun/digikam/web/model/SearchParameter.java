@@ -1,5 +1,9 @@
 package org.braun.digikam.web.model;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,59 +15,89 @@ import org.braun.digikam.backend.model.Media;
  *
  * @author mbraun
  */
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class SearchParameter implements Serializable {
-    
+
+    @XmlElement
     private CatFocalLength focalLengthFrom;
+    @XmlElement
     private CatFocalLength focalLengthTo;
 
+    @XmlElement
     private CatExposure exposureFrom;
+    @XmlElement
     private CatExposure exposureTo;
     
+    @XmlElement
     private CatRating ratingFrom;
+    @XmlElement
     private CatRating ratingTo;
     
+    @XmlElement
     private CatIso isoFrom;
+    @XmlElement
     private CatIso isoTo;
     
+    @XmlElement
     private CatAperture apertureFrom;
+    @XmlElement
     private CatAperture apertureTo;
     
+    @XmlElement
     private CatOrientation orientation;
     
+    @XmlElement
     private String camera;
     
+    @XmlElement
     private String creator;
     
+    @XmlElement
     private String make;
     
+    @XmlElement
     private String model;
     
+    @XmlElement
     private String lens;
     
+    @XmlElement
     private RangeInteger rating;
     
+    @XmlElement
     private RangeInteger iso;
     
+    @XmlElement
     private RangeDouble exposureTime;
     
+    @XmlElement
     private RangeDouble aperture;
     
+    @XmlElement
     private RangeInteger focalLength;
     
+    @XmlElement
     private RangeDate date;
     
+    @XmlElement
     private List<Keyword> keywords;
     
+    @XmlElement
     private boolean keywordsOr;
     
+    @XmlElement
     private String format;
     
+    @XmlElement
     private boolean ascending;
     
     private List<Media> result;
     
+    @XmlElement
     private List<String> descTitle;
     
+    @XmlElement
     private boolean video = false;
 
     public void isValid() throws ValidationException {

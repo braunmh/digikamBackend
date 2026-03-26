@@ -12,8 +12,8 @@ import org.braun.digikam.backend.CameraFactory;
 import org.braun.digikam.backend.NodeFactory;
 import org.braun.digikam.backend.api.*;
 import org.braun.digikam.backend.ejb.ImageFacade;
-import org.braun.digikam.backend.dao.ImageInformationFacade;
-import org.braun.digikam.backend.dao.ImagesFacade;
+import org.braun.digikam.backend.dao.ImageInformationDao;
+import org.braun.digikam.backend.dao.ImagesDao;
 import org.braun.digikam.backend.entity.Tags;
 import org.braun.digikam.backend.model.Image;
 import org.braun.digikam.backend.model.ImageUpdate;
@@ -25,9 +25,9 @@ import org.braun.digikam.backend.util.Util;
 
 public class ImageApiServiceImpl extends ImageApiService {
 
-    @Inject private ImagesFacade imagesFacade;
+    @Inject private ImagesDao imagesFacade;
     @Inject private ImageFacade imageFacade;
-    @Inject private ImageInformationFacade informationFacade;
+    @Inject private ImageInformationDao informationFacade;
     
     /**
      *
@@ -130,7 +130,7 @@ public class ImageApiServiceImpl extends ImageApiService {
 
     @Override
     public Response rateImage(Long imageId, Integer rating, SecurityContext securityContext) throws NotFoundException {
-        ImageInformationFacade facade = getInformationFacade();
+        ImageInformationDao facade = getInformationFacade();
         facade.updateRating(imageId, rating);
         return Response.ok().entity("Okay").build();
     }
@@ -167,7 +167,7 @@ public class ImageApiServiceImpl extends ImageApiService {
      */
     @Override
     public Response imageUpdate(ImageUpdate imageUpdate, SecurityContext securityContext) throws NotFoundException {
-        ImagesFacade facade = getImagesFacade();
+        ImagesDao facade = getImagesFacade();
         List<Tags> tags = new ArrayList<>();
         for (Long tagId : imageUpdate.getKeywords()) {
             tags.add(new Tags().name(NodeFactory.getInstance().getKeywordById(tagId).getName()).id(tagId));
@@ -184,16 +184,16 @@ public class ImageApiServiceImpl extends ImageApiService {
         return imageFacade;
     }
 
-    public ImagesFacade getImagesFacade() {
+    public ImagesDao getImagesFacade() {
         if (imagesFacade == null) {
-            imagesFacade = Util.Cdi.lookup(ImagesFacade.class);
+            imagesFacade = Util.Cdi.lookup(ImagesDao.class);
         }
         return imagesFacade;
     }
 
-    public ImageInformationFacade getInformationFacade() {
+    public ImageInformationDao getInformationFacade() {
         if (informationFacade == null) {
-            informationFacade = Util.Cdi.lookup(ImageInformationFacade.class);
+            informationFacade = Util.Cdi.lookup(ImageInformationDao.class);
         }
         return informationFacade;
     }

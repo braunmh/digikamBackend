@@ -1,5 +1,9 @@
 package org.braun.digikam.web.model;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlType;
 import java.util.Arrays;
 import java.util.List;
 
@@ -7,6 +11,8 @@ import java.util.List;
  *
  * @author mbraun
  */
+@XmlType
+@XmlAccessorType(XmlAccessType.FIELD)
 public class CatExposure extends Catalogue<Double> {
     
     public static final List<CatExposure> values =
@@ -32,6 +38,19 @@ public class CatExposure extends Catalogue<Double> {
             new CatExposure().id(5).value(0.03125).name("32"),
             new CatExposure().id(5).value(0.00001).name("∞")
         );
+    
+    @XmlAttribute
+    private Double value;
+
+    @Override
+    public Double getValue() {
+        return value;
+    }
+
+    @Override
+    public void setValue(Double value) {
+        this.value = value;
+    }
     
     @Override
     public CatExposure id(int id) {

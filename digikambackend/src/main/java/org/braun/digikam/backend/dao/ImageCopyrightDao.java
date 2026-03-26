@@ -13,7 +13,7 @@ import org.braun.digikam.backend.entity.StatAuthorView;
  * @author mbraun
  */
 @Stateless
-public class ImageCopyrightFacade extends AbstractFacade<ImageCopyright> {
+public class ImageCopyrightDao extends AbstractDao<ImageCopyright> {
 
     private static final String FIND_CREATORS = "SELECT distinct i.value FROM ImageCopyright i where i.property = 'creator' order by i.value";
     private static final String FIND_AUTHOR_CAMERA_STATISTIC = 
@@ -26,7 +26,7 @@ public class ImageCopyrightFacade extends AbstractFacade<ImageCopyright> {
     @PersistenceContext(unitName = "digikam")
     private EntityManager em;
 
-    public ImageCopyrightFacade() {
+    public ImageCopyrightDao() {
         super(ImageCopyright.class);
     }
 

@@ -1,5 +1,9 @@
 package org.braun.digikam.web.model;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlType;
 import java.util.Arrays;
 import java.util.List;
 
@@ -7,6 +11,8 @@ import java.util.List;
  *
  * @author mbraun
  */
+@XmlType
+@XmlAccessorType(XmlAccessType.FIELD)
 public class CatDiagram extends Catalogue<String> {
 
     public static final int EXPOSURE_TIME = 1;
@@ -23,6 +29,19 @@ public class CatDiagram extends Catalogue<String> {
             new CatDiagram().id(ISO).value("iso").name("ISO")
         );
 
+    @XmlAttribute
+    private String value;
+
+    @Override
+    public String getValue() {
+        return value;
+    }
+
+    @Override
+    public void setValue(String value) {
+        this.value = value;
+    }
+    
     @Override
     public CatDiagram id(int id) {
         setId(id);

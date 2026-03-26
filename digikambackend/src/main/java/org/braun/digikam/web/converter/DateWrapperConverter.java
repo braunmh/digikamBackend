@@ -122,20 +122,17 @@ public class DateWrapperConverter implements Converter<DateWrapper> {
         int minute = -1;
         int second = -1;
         switch (parts.size()) {
-            case 1:
-                hour = parseNumber(parts.get(0), 0, 23, "Stunde");
-                break;
-            case 2:
+            case 1 -> hour = parseNumber(parts.get(0), 0, 23, "Stunde");
+            case 2 -> {
                 hour = parseNumber(parts.get(0), 0, 23, "Stunde");
                 minute = parseNumber(parts.get(1), 0, 59, "Minute");
-                break;
-            case 3:
+            }
+            case 3 -> {
                 hour = parseNumber(parts.get(0), 0, 23, "Stunde");
                 minute = parseNumber(parts.get(1), 0, 59, "Minute");
                 second = parseNumber(parts.get(2), 0, 59, "Sekunde");
-                break;
-            default:
-                throw new ConverterException("Ungültige Zeitangabe hh.mm.ss");
+            }
+            default -> throw new ConverterException("Ungültige Zeitangabe hh.mm.ss");
         }
         if (hour < 0 && minute >= 0) {
             throw new ConverterException("Minutenangaben ohne Stunden sind unzulässig.");

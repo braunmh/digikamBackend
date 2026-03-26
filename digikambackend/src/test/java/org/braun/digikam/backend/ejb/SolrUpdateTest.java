@@ -1,43 +1,29 @@
 package org.braun.digikam.backend.ejb;
 
-import org.braun.digikam.backend.dao.TagsFacade;
-import org.braun.digikam.backend.dao.ThumbnailFacade;
 import org.braun.digikam.common.DateWrapper;
 import org.braun.digikam.backend.entity.ImageFull;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.Persistence;
 import jakarta.persistence.Query;
-import jakarta.persistence.spi.PersistenceUnitTransactionType;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.Http2SolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.UpdateResponse;
 import org.braun.digikam.backend.NodeFactory;
-import org.braun.digikam.backend.dao.ImageCopyrightFacade;
-import org.braun.digikam.backend.dao.ImageInformationFacade;
-import org.braun.digikam.backend.dao.ImageMetadataFacade;
-import org.braun.digikam.backend.dao.ImagesFacade;
 import org.braun.digikam.backend.entity.ThumbnailToGenerate;
 import org.braun.digikam.backend.entity.VideoFull;
 import org.braun.digikam.backend.model.ImageSolr;
 import org.braun.digikam.backend.model.Media;
 import org.braun.digikam.backend.model.MediaSolr;
 import org.braun.digikam.backend.search.solr.SolrQueryBuilder;
-import org.eclipse.persistence.config.PersistenceUnitProperties;
 import org.junit.jupiter.api.Test;
 import org.locationtech.spatial4j.context.SpatialContext;
 import org.locationtech.spatial4j.context.SpatialContextFactory;
@@ -48,12 +34,9 @@ import org.locationtech.spatial4j.shape.Shape;
  *
  * @author mbraun
  */
-public class SolrUpdateTest {
+public class SolrUpdateTest extends BaseTest {
 
     Logger LOG = LogManager.getLogger();
-    private EntityManager em;
-    private TagsFacade tagsFacade;
-    private String solrCollection = "digikam1";
 
     //@Test
     public void testLocation() {
@@ -72,7 +55,7 @@ public class SolrUpdateTest {
     public void updateImages() {
         EntityTransaction userTransaction = null;
         try {
-            em = getEntityManager();
+            EntityManager em = getEntityManager();
             userTransaction = em.getTransaction();
             String sqlStatement = """
             SELECT i.id, substr(ar.identifier, 16) root, a.relativePath, i.name,
@@ -83,22 +66,14 @@ public class SolrUpdateTest {
             where (ii.creationDate between ?1 and ?2) 
             order by 3, 4"""; // createNativeQuery
             Query query = em.createNativeQuery(sqlStatement, ThumbnailToGenerate.class)
-                    .setParameter(1, newDate(2025, 5, 30, 0, 0, 0))
-                    .setParameter(2, newDate(2025, 5, 30, 23, 59, 59));
+                    .setParameter(1, newDate(2025, 6, 4, 0, 0, 0))
+                    .setParameter(2, newDate(2025, 6, 4, 23, 59, 59));
             List<ThumbnailToGenerate> result = query.getResultList();
 
-            HouseKeepingFacade houseKeepingFacade = new HouseKeepingFacade();
-            houseKeepingFacade.setEntityManager(em);
-            houseKeepingFacade.setThumbnailFacade(getThumbnailFacade(em));
-            houseKeepingFacade.setTagsFacade(getTagsFacade(em));
-            houseKeepingFacade.setImageCopyrightFacade(getImageCopyrightFacade(em));
-            houseKeepingFacade.setImageFacade(getImageFacade(em));
-            houseKeepingFacade.setImageMetadataFacade(getImageMetadataFacade(em));
-            houseKeepingFacade.setImagesFacade(getImagesFacade(em));
             
-            int cnt = 0;
+            int cnt;
             try (SolrClient client = getSolrClient()) {
-                cnt = houseKeepingFacade.handleImages(result, client, new CommonTransaction(userTransaction), solrCollection);
+                cnt = getHouseKeepingFacade(em).handleImages(result, client, new CommonTransaction(userTransaction), solrCollection, false);
             }
             System.out.println("Number of images handled: " + cnt);
         } catch (Exception e) {
@@ -112,73 +87,6 @@ public class SolrUpdateTest {
         return calendar.getTime();
     }
     
-    ImagesFacade imagesFacade;
-    ImagesFacade getImagesFacade(EntityManager em) {
-        if (imagesFacade == null) {
-            imagesFacade = new ImagesFacade();
-            imagesFacade.setEnitityManager(em);
-            imagesFacade.setImageInformationFacade(getImageInformationFacade(em));
-        }
-        return imagesFacade;
-    }
-    ImageInformationFacade imageInformationFacade; 
-    ImageInformationFacade getImageInformationFacade(EntityManager em) {
-        if (imageInformationFacade == null) {
-            imageInformationFacade = new ImageInformationFacade();
-            imageCopyrightFacade.setEntityManager(em);
-        }
-        return imageInformationFacade;
-    } 
-    ImageMetadataFacade imageMetadataFacade;
-    ImageMetadataFacade getImageMetadataFacade(EntityManager em) {
-        if (imageMetadataFacade == null) {
-            imageMetadataFacade = new ImageMetadataFacade();
-            imageMetadataFacade.setEntityManager(em);
-        }
-        return imageMetadataFacade;
-    }
-    
-    
-    TagsFacade getTagsFacade(EntityManager em) {
-        if (tagsFacade == null) {
-            tagsFacade = new TagsFacade();
-            tagsFacade.setEntityManager(em);
-            NodeFactory.getInstance().refresh(tagsFacade.findAll());
-        }
-        return tagsFacade;
-    }
-
-    ThumbnailFacade thumbnailFacade;
-
-    ThumbnailFacade getThumbnailFacade(EntityManager em) {
-        if (thumbnailFacade == null) {
-            thumbnailFacade = new ThumbnailFacade();
-            thumbnailFacade.setEntityManger(em);
-        }
-        return thumbnailFacade;
-    }
-    ImageCopyrightFacade imageCopyrightFacade;
-
-    ImageCopyrightFacade getImageCopyrightFacade(EntityManager em) {
-        if (imageCopyrightFacade == null) {
-            imageCopyrightFacade = new ImageCopyrightFacade();
-            imageCopyrightFacade.setEntityManager(em);
-        }
-        return imageCopyrightFacade;
-    }
-
-    ImageFacade imageFacade;
-
-    ImageFacade getImageFacade(EntityManager em) {
-        if (imageFacade == null) {
-            imageFacade = new ImageFacade();
-            imageFacade.setEntityManager(em);
-            imageFacade.setThumbnailFacade(getThumbnailFacade(em));
-            imageFacade.setImagesFacade(getImagesFacade(em));
-        }
-        return imageFacade;
-    }
-
     //@Test
     public void deleteAvis() {
         int deleted = 0;
@@ -212,7 +120,7 @@ public class SolrUpdateTest {
 
     //@Test
     public void updateImageTest() {
-        em = getEntityManager();
+        EntityManager em = getEntityManager();
 
         NodeFactory.getInstance().refresh(getTagsFacade(em).findAll());
 
@@ -248,11 +156,9 @@ public class SolrUpdateTest {
 
     //@Test
     public void updateVideoTest() {
-        em = getEntityManager();
+        EntityManager em = getEntityManager();
 
-        tagsFacade = new TagsFacade();
-        tagsFacade.setEntityManager(em);
-        NodeFactory.getInstance().refresh(tagsFacade.findAll());
+        NodeFactory.getInstance().refresh(getTagsFacade(em).findAll());
 
         VideoFacade videoFacade = new VideoFacade();
         videoFacade.setEntityManager(em);
@@ -291,10 +197,8 @@ public class SolrUpdateTest {
     // @Test
     public void testFind() {
         Date now = new Date();
-        em = getEntityManager();
-        tagsFacade = new TagsFacade();
-        tagsFacade.setEntityManager(em);
-        NodeFactory.getInstance().refresh(tagsFacade.findAll());
+        EntityManager em = getEntityManager();
+        NodeFactory.getInstance().refresh(getTagsFacade(em).findAll());
         try (SolrClient client = getSolrClient();) {
             SolrQuery query = new SolrQueryBuilder()
                     .addField("id")
@@ -320,26 +224,4 @@ public class SolrUpdateTest {
         }
     }
 
-    private SolrClient getSolrClient() {
-        final String solrUrl = "http://localhost:8983/solr";
-        return new Http2SolrClient.Builder(solrUrl).build();
-    }
-
-    protected EntityManager getEntityManager() {
-        try {
-            final Map<String, Object> props = new HashMap<>();
-            props.put(PersistenceUnitProperties.TRANSACTION_TYPE, PersistenceUnitTransactionType.RESOURCE_LOCAL.name());
-            props.put(PersistenceUnitProperties.JDBC_DRIVER, "com.mysql.cj.jdbc.Driver");
-            props.put(PersistenceUnitProperties.JDBC_URL, "jdbc:mysql://192.168.0.219:3306/digikam4?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC");
-            props.put(PersistenceUnitProperties.JDBC_USER, "mbraun");
-            props.put(PersistenceUnitProperties.JDBC_PASSWORD, "gesa0403");
-            props.put("eclipselink.id-validation", "NULL");
-            EntityManagerFactory emf = Persistence.createEntityManagerFactory("digikam", props);
-            return emf.createEntityManager();
-
-        } catch (Exception e) {
-            LOG.error(e.getMessage());
-            return null;
-        }
-    }
 }

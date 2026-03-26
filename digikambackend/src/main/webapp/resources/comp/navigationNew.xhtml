@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        <aside id="sidebar">
+            <nav class="side_navlinks">
+        <p:tree var="node" value="#{topicOverviewBean.root}">
+            <p:treeNode>
+                <h:outputText value="#{node.title}" rendered="#{not node.leaf}"/>
+                <p:commandLink rendered="#{node.leaf}">
+                    <p:link outcome="/topic/display" value="#{node.title}">
+                        <f:param name="id" value="#{node.id}"/>
+                    </p:link>
+                </p:commandLink>
+            </p:treeNode>
+        </p:tree>
+            </nav>
+        </aside>
+
+        <div id="topbar">
+            <div class="logo">
+                <a href="/digikam/search/search.xhtml"><span>Digikam</span></a>
+            </div>
+            <!--== Sidebar-Toggler ==-->
+            <div class="sidebar_toggler">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        <!--====== JavaScript ======-->
+        <script>
+            //<![CDATA[
+            /* Sidebar */
+
+            const sidebar = document.querySelector('#sidebar');
+            const sidebarToggler = document.querySelector('.sidebar_toggler');
+
+
+            // Toggling the Sidebar
+            sidebarToggler.addEventListener('click', () => {
+                sidebar.classList.toggle('show');
+            });
+
+
+            // Closing the Sidebar on clicking Outside and on the Sidebar-Links
+//            window.addEventListener('click', (e) => {
+//                if (e.target.id !== 'sidebar' && e.target.className !== 'sidebar_toggler') {
+//                    sidebar.classList.remove('show');
+//                }
+//            });
+            //]]></script>
+        </div>
+    </cc:implementation>
+</html>

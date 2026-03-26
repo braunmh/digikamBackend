@@ -1,5 +1,10 @@
 package org.braun.digikam.common;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlType;
+import java.io.Serializable;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -11,9 +16,12 @@ import org.braun.digikam.backend.BadRequestException;
  *
  * @author mbraun
  */
-public class DateWrapper implements Comparable<DateWrapper> {
+@XmlType
+@XmlAccessorType(XmlAccessType.FIELD)
+public class DateWrapper implements Comparable<DateWrapper>, Serializable {
 
-    private final UncompleteDateTime udt;
+    @XmlElement
+    private UncompleteDateTime udt;
 
     public DateWrapper() {
         this(null);
@@ -127,6 +135,14 @@ public class DateWrapper implements Comparable<DateWrapper> {
         return i == null || i == 0;
     }
 
+    public UncompleteDateTime getUdt() {
+        return udt;
+    }
+
+    public void setUdt(UncompleteDateTime udt) {
+        this.udt = udt;
+    }
+
     @Override
     public int compareTo(DateWrapper o) {
         if ((o == null || o.isEmpty()) && isEmpty()) {
@@ -140,4 +156,5 @@ public class DateWrapper implements Comparable<DateWrapper> {
         }
         return getUncompleteDateTime().toString().compareTo( o.getUncompleteDateTime().toString());
     }
+    
 }

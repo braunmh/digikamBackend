@@ -1,5 +1,10 @@
 package org.braun.digikam.web.model;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlSeeAlso;
+import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -8,14 +13,25 @@ import java.util.Objects;
  * @author mbraun
  * @param <T> Type of Value
  */
+@XmlType
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlSeeAlso({
+    CatAperture.class,
+    CatDiagram.class,
+    CatExposure.class,
+    CatFocalLength.class,
+    CatIso.class,
+    CatOrientation.class,
+    CatRating.class,
+})
 public abstract class Catalogue<T extends Comparable<T>> implements Serializable, Comparable<Catalogue<T>> {
     
+    @XmlElement
     private int id;
     
+    @XmlElement
     private String name;
     
-    private T value;
-
     public Catalogue() {
     }
 
@@ -39,36 +55,32 @@ public abstract class Catalogue<T extends Comparable<T>> implements Serializable
 
     public abstract Catalogue<T> name(String name);
     
-    public T getValue() {
-        return value;
-    }
+    public abstract T getValue();
 
-    public void setValue(T value) {
-        this.value = value;
-    }
+    public abstract void setValue(T value);
     
     public abstract Catalogue<T> value(T value);
     
     @Override
     public int compareTo(Catalogue<T> o) {
-        if (value == null && (o == null || o.getValue() == null)) {
+        if (getValue() == null && (o == null || o.getValue() == null)) {
             return 0;
         }
         if (o == null || o.getValue() == null) {
             return 1;
         }
         
-        if (value == null) {
+        if (getValue() == null) {
             return -1;
         }
         
-        return value.compareTo(o.getValue());
+        return getValue().compareTo(o.getValue());
     }
 
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 79 * hash + Objects.hashCode(this.value);
+        hash = 79 * hash + Objects.hashCode(getValue());
         return hash;
     }
 
@@ -84,12 +96,12 @@ public abstract class Catalogue<T extends Comparable<T>> implements Serializable
             return false;
         }
         final Catalogue<?> other = (Catalogue<?>) obj;
-        return Objects.equals(this.value, other.value);
+        return Objects.equals(this.getValue(), other.getValue());
     }
 
     @Override
     public String toString() {
-        return "Catalogue{" + "id=" + id + ", name=" + name + ", value=" + value + '}';
+        return "Catalogue{" + "id=" + id + ", name=" + name + ", value=" + getValue() + '}';
     }
 
     public boolean isEmpty() {

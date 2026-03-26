@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../common.xhtml"
+                xmlns:comp="http://xmlns.jcp.org/jsf/composite/comp"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="navigation">
+        <comp:navigation/>
+    </ui:define>
+
+    <ui:define name="content">
+        <h1>Übersicht</h1>
+        <p:tree var="node" value="#{topicOverviewBean.root}">
+            <p:treeNode>
+                <h:outputText value="#{node.title}" rendered="#{not node.leaf}"/>
+                <p:commandLink rendered="#{node.leaf}">
+                    <p:link outcome="/topic/display" value="#{node.title}">
+                        <f:param name="id" value="#{node.id}"/>
+                    </p:link>
+                </p:commandLink>
+            </p:treeNode>
+        </p:tree>
+    </ui:define>
+
+</ui:composition>

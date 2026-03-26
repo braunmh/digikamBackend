@@ -8,12 +8,12 @@ import jakarta.ws.rs.core.SecurityContext;
 import org.braun.digikam.backend.NodeFactory;
 import org.braun.digikam.backend.api.KeywordsApiService;
 import org.braun.digikam.backend.api.NotFoundException;
-import org.braun.digikam.backend.dao.TagsFacade;
+import org.braun.digikam.backend.dao.TagsDao;
 import org.braun.digikam.backend.model.Keyword;
 import org.braun.digikam.backend.util.Util;
 public class KeywordsApiServiceImpl extends KeywordsApiService {
     
-    @Inject private TagsFacade tagsFacade;
+    @Inject private TagsDao tagsFacade;
     
     @Override
     public Response findKeywordsByName(@NotNull String name, SecurityContext securityContext) throws NotFoundException {
@@ -22,14 +22,14 @@ public class KeywordsApiServiceImpl extends KeywordsApiService {
     }
     @Override
     public Response refreshKeywordsCache(SecurityContext securityContext) throws NotFoundException {
-        TagsFacade tagsFacade = getTagsFacade();
+        TagsDao tagsFacade = getTagsFacade();
         NodeFactory.getInstance().refresh(tagsFacade.findAll());
         return Response.ok().build();
     }
 
-    public TagsFacade getTagsFacade() {
+    public TagsDao getTagsFacade() {
         if (tagsFacade == null) {
-            tagsFacade = Util.Cdi.lookup(TagsFacade.class);
+            tagsFacade = Util.Cdi.lookup(TagsDao.class);
         }
         return tagsFacade;
     }

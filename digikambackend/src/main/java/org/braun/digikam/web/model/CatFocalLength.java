@@ -1,5 +1,9 @@
 package org.braun.digikam.web.model;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlType;
 import java.util.Arrays;
 import java.util.List;
 
@@ -7,6 +11,8 @@ import java.util.List;
  *
  * @author mbraun
  */
+@XmlType
+@XmlAccessorType(XmlAccessType.FIELD)
 public class CatFocalLength extends Catalogue<Integer> {
     
     public static final List<CatFocalLength> values =
@@ -34,6 +40,19 @@ public class CatFocalLength extends Catalogue<Integer> {
             new CatFocalLength().id(21).value(1000).name("1000 mm"),
             new CatFocalLength().id(22).value(15).name("∞")
         );
+    
+    @XmlAttribute
+    private Integer value;
+
+    @Override
+    public Integer getValue() {
+        return value;
+    }
+
+    @Override
+    public void setValue(Integer value) {
+        this.value = value;
+    }
     
     @Override
     public CatFocalLength id(int id) {

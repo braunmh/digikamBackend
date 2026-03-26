@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import org.braun.digikam.backend.dao.LabelFacade;
+import org.braun.digikam.backend.dao.LabelDao;
 import org.braun.digikam.backend.entity.Label;
 import org.braun.digikam.backend.util.Util;
 
@@ -16,7 +16,7 @@ import org.braun.digikam.backend.util.Util;
  */
 public class LabelResourceProvider implements ExtResourceProvider {
 
-    private LabelFacade facade;
+    private LabelDao facade;
     
     @Override
     public List<IExtResourceEntry> getAll(String basename, Locale locale) {
@@ -39,9 +39,9 @@ public class LabelResourceProvider implements ExtResourceProvider {
         return 60000; // 1 Minuten (10 * 60 * 1000)
     }
 
-    private LabelFacade getFacade() {
+    private LabelDao getFacade() {
         if (facade == null) {
-            facade = Util.Cdi.lookup(LabelFacade.class);
+            facade = Util.Cdi.lookup(LabelDao.class);
         }
         return facade;
     }

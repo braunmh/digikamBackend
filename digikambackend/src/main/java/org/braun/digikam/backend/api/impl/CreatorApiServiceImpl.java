@@ -7,13 +7,13 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
 import org.braun.digikam.backend.CreatorFactory;
 import org.braun.digikam.backend.api.*;
-import org.braun.digikam.backend.dao.ImageCopyrightFacade;
+import org.braun.digikam.backend.dao.ImageCopyrightDao;
 import org.braun.digikam.backend.model.Creator;
 import org.braun.digikam.backend.util.Util;
 
 public class CreatorApiServiceImpl extends CreatorApiService {
     
-    @Inject ImageCopyrightFacade facade;
+    @Inject ImageCopyrightDao facade;
     @Override
     public Response findCreatorsByName( @NotNull String name, SecurityContext securityContext) throws NotFoundException {
         List<Creator> creators = CreatorFactory.getInstance().findByName(name);
@@ -22,14 +22,14 @@ public class CreatorApiServiceImpl extends CreatorApiService {
     
     @Override
     public Response refreshCreatorCache(SecurityContext securityContext) throws NotFoundException {
-        ImageCopyrightFacade facade = getFacade();
+        ImageCopyrightDao facade = getFacade();
         CreatorFactory.getInstance().refresh(facade.findAllCreators());
         return Response.ok().build();
     }
 
-    public ImageCopyrightFacade getFacade() {
+    public ImageCopyrightDao getFacade() {
         if (facade == null) {
-            facade = Util.Cdi.lookup(ImageCopyrightFacade.class);
+            facade = Util.Cdi.lookup(ImageCopyrightDao.class);
         }
         return facade;
     }

@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:di="http://org.braun.digikam"
+      xmlns:comp="http://xmlns.jcp.org/jsf/composite/comp"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+
+        <ui:composition template="./../common.xhtml">
+
+            <ui:define name="navigation">
+                <comp:navigation/>
+            </ui:define>
+
+            <ui:define name="content">
+            <f:metadata>
+                <f:viewParam name="id" value="#{topicDisplayBean.id}"/>
+                <f:viewAction action="#{topicDisplayBean.onLoad()}"/>
+            </f:metadata>
+                <h1><h:outputText value="#{topicDisplayBean.view.title}"/></h1>
+                <p>Von <comp:outputDate value="#{topicDisplayBean.view.from}"/>
+                    bis <comp:outputDate value="#{topicDisplayBean.view.to}"/></p>
+                <h:outputText value="#{topicDisplayBean.view.description}" escape="false" />
+                <ui:repeat var="dayEntry" varStatus="dayEntryStatus" value="#{topicDisplayBean.view.entries}">
+                    <p id="section#{dayEntryStatus.index}" style="background-color: #2196f3"><comp:outputDate value="#{dayEntry.date}"/></p>
+                    <ui:repeat var="img" value="#{dayEntry.entries}">
+                        <div class="image" id="pic#{img.id}">
+                            <h:outputLink value="#{request.contextPath}/rest/#{(img.image)?'image':'video/stream'}/#{img.id}" target="_blank">
+                                <di:lazyImage imageId="#{img.id}" id="image" width="#{sessionUserBean.imageWidth}" orientation="#{img.orientation}"
+                                              widthOriginal="#{img.width}" heightOriginal="#{img.height}"/> 
+                            </h:outputLink>
+                            <br/>
+
+                            <p:commandLink id="detail" value="" process="@this" 
+                                           actionListener="#{topicDisplayBean.openDetailDialog}">
+                                <f:attribute name="media" value="#{img}"/>
+                                <h:graphicImage styleClass="icon" alt="Details" value="#{resource['image/info-circle.svg']}"/>
+                            </p:commandLink>
+                            <p:commandLink id="edit" value="" process="@this" 
+                                           actionListener="#{topicDisplayBean.openEditDialog}">
+                                <f:attribute name="media" value="#{img}"/>
+                                <h:graphicImage styleClass="icon" alt="Ändern" value="#{resource['image/edit-circle.svg']}"/>
+                            </p:commandLink>
+                            <p:commandLink id="location" value="" process="@this" 
+                                           actionListener="#{topicDisplayBean.openLocationDialog}">
+                                <f:attribute name="media" value="#{img}"/>
+                                <h:graphicImage styleClass="icon" alt="Ändern" value="#{resource['image/map.svg']}"/>
+                            </p:commandLink>
+                        </div>
+                    </ui:repeat>
+                    <br style="clear: left"/>
+                </ui:repeat>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

@@ -1,251 +1,253 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:di="http://org.braun.digikam"
-      xmlns:comp="http://xmlns.jcp.org/jsf/composite/comp"
-      >
-    <body>
-        <ui:composition template="./../common.xhtml">
-            <ui:param name="title" value="Bilder suchen"/>
-            <ui:define name="navigation">
-                <comp:navigation/>
-            </ui:define>
-            <ui:define name="content">
-                <script type="text/javascript">
-                    function addStyleToAutoCompleteMultiple(widgetVar, styleClass) {
-                        var widget = PF(widgetVar);
-                        if (widget) {
-                            widget.jq[0].classList.add(styleClass);
-                        }
-                    }
-                    function removeStyleToAutoCompleteMultiple(widgetVar, styleClass) {
-                        var widget = PF(widgetVar);
-                        if (widget) {
-                            widget.jq[0].classList.remove(styleClass);
-                        }
-                    }
-                </script>
-                <div class="ui-fluid formgrid grid">
-                    <comp:inputElement>
-                        <p:autoComplete id="keywords" var="keyword" dropdown="true" widgetVar="keywordWidget"
-                                        multiple="true" value="#{imageSearchBean.searchParameter.keywords}"
-                                        completeMethod="#{imageSearchBean.completeKeyword}"
-                                        itemLabel="#{keyword.name}" itemValue="#{keyword}"
-                                        scrollHeight="250"
-                                        onfocus="addStyleToAutoCompleteMultiple('keywordWidget', 'ui-inputwrapper-focus')"
-                                        onblur="removeStyleToAutoCompleteMultiple('keywordWidget', 'ui-inputwrapper-focus')"
-                                        styleClass="#{imageSearchBean.searchParameter.keywords.isEmpty() ? '' : 'ui-inputwrapper-filled'}">
-                            <f:converter converterId="keywordConverter"/>
-                            <p:ajax event="itemSelect" update="keywords"/>
-                            <p:ajax event="itemUnselect" update="keywords"/>
-                            <p:ajax event="change" update="keywords"/>
-                        </p:autoComplete>
-                        <p:outputLabel for="keywords" value="#{di:label('image.keywords')}" />
-                        <p:message id="keywordMsg" for="keywords" display="tooltip"/>
-                    </comp:inputElement>
-                    <comp:inputElement>
-                        <p:autoComplete id="creator" var="creators" dropdown="true" 
-                                        value="#{imageSearchBean.searchParameter.creator}"
-                                        completeMethod="#{imageSearchBean.completeCreator}"
-                                        itemLabel="#{creators}" itemValue="#{creators}"
-                                        scrollHeight="250">
-                        </p:autoComplete>
-                        <p:outputLabel for="creator" value="#{di:label('image.creator')}" />
-                    </comp:inputElement>
-                    <comp:inputElement>
-                        <p:autoComplete id="camera" var="cameras" dropdown="true"
-                            disabled="#{imageSearchBean.searchParameter.video}"
-                            value="#{imageSearchBean.searchParameter.camera}"
-                            completeMethod="#{imageSearchBean.completeCamera}"
-                            itemLabel="#{cameras}" itemValue="#{cameras}"
-                            scrollHeight="250">
-                            <p:ajax event="change" listener="#{imageSearchBean.changeAction}"/>
-                        </p:autoComplete>
-                        <p:outputLabel for="camera" value="#{di:label('image.camera')}" />
-                    </comp:inputElement>
-                    <comp:inputElement>
-                        <p:selectOneMenu id="orientation" 
-                                         disabled="#{imageSearchBean.searchParameter.video}"
-                                         value="#{imageSearchBean.searchParameter.orientation}">
-                            <f:selectItems value="#{imageSearchBean.orientationValues}" var="orientation" 
-                                           itemLabel="#{orientation.name}" itemValue="#{orientation}"/>
-                            <f:converter converterId="orientationConverter"/>
-                        </p:selectOneMenu>
-                        <p:outputLabel for="orientation" value="Format" />
-                    </comp:inputElement>
-                    <comp:inputElement>
-                        <p:autoComplete id="lens" var="lenses" dropdown="true" 
-                                        disabled="#{imageSearchBean.searchParameter.video}"
-                                        value="#{imageSearchBean.searchParameter.lens}"
-                                        completeMethod="#{imageSearchBean.completeLens}"
-                                        minQueryLength="2"
-                                        itemLabel="#{lenses}" itemValue="#{lenses}" 
-                                        scrollHeight="250">
-                        </p:autoComplete>
-                        <p:outputLabel for="lens" value="#{di:label('image.lens')}" />
-                    </comp:inputElement>
-                    <comp:inputElement>
-                        <p:autoComplete id="descTitle" var="descTitle" dropdown="false" widgetVar="descTitleWidget"
-                                        multiple="true" value="#{imageSearchBean.searchParameter.descTitle}"
-                                        completeMethod="#{imageSearchBean.completeDescTitle}"
-                                        itemLabel="#{descTitle}" itemValue="#{descTitle}"
-                                        scrollHeight="250"
-                                        onfocus="addStyleToAutoCompleteMultiple('descTitleWidget', 'ui-inputwrapper-focus')"
-                                        onblur="removeStyleToAutoCompleteMultiple('descTitleWidget', 'ui-inputwrapper-focus')"
-                                        styleClass="#{imageSearchBean.searchParameter.descTitle.isEmpty() ? '' : 'ui-inputwrapper-filled'}">
-                            <p:ajax event="itemSelect" update="descTitle"/>
-                            <p:ajax event="itemUnselect" update="descTitle"/>
-                            <p:ajax event="change" update="descTitle"/>
-                        </p:autoComplete>
-                        <p:outputLabel for="descTitle" value="#{di:label('image.descTitle')}" />
-                        <p:message id="descTitleMsg" for="descTitle" display="tooltip"/>
-                    </comp:inputElement>
-                    <comp:inputPair>
-                        <comp:inputElementLeft>
-                            <p:inputText id="dateFrom" value="#{imageSearchBean.searchParameter.date.from}" >
-                                <f:converter converterId="dateWrapperConverter"/>
-                                <p:ajax update="dateFromMsg @this" event="change"/>
-                            </p:inputText>
-                            <p:outputLabel for="dateFrom" value="#{di:label('image.date')} #{di:label('search.rangeFrom')}" />
-                            <p:message id="dateFromMsg" for="dateFrom" display="tooltip"/>
-                        </comp:inputElementLeft>
-                        <comp:inputElementRight>
-                            <p:inputText id="dateTo" value="#{imageSearchBean.searchParameter.date.to}">
-                                <f:converter converterId="dateWrapperConverter"/>
-                                <p:ajax update="dateToMsg @this" event="change"/>
-                            </p:inputText>
-                            <p:outputLabel for="dateTo" value="#{di:label('search.rangeTo')}" />
-                            <p:message id="dateToMsg" for="dateTo" display="tooltip"/>
-                        </comp:inputElementRight>
-                    </comp:inputPair>
-                    <comp:inputPair>
-                        <comp:inputElementLeft>
-                            <p:selectOneMenu id="ratingFrom"
-                                             value="#{imageSearchBean.searchParameter.ratingFrom}">
-                                <f:selectItems value="#{imageSearchBean.ratingValues}" 
-                                               var="rating" itemLabel="#{rating.name}" itemValue="#{rating}"/>
-                                <f:converter converterId="ratingConverter"/>
-                            </p:selectOneMenu>
-                            <p:outputLabel for="@previous" value="#{di:label('image.rating')} #{di:label('search.rangeFrom')}" />
-                        </comp:inputElementLeft>
-                        <comp:inputElementRight>
-                            <p:selectOneMenu id="ratingTo"
-                                             value="#{imageSearchBean.searchParameter.ratingTo}">
-                                <f:selectItems value="#{imageSearchBean.ratingValues}" 
-                                               var="rating" itemLabel="#{rating.name}" itemValue="#{rating}"/>
-                                <f:converter converterId="ratingConverter"/>
-                            </p:selectOneMenu>
-                            <p:outputLabel for="@previous" value="#{di:label('search.rangeTo')}" />
-                        </comp:inputElementRight>
-                    </comp:inputPair>
-                    <comp:inputPair>
-                        <comp:inputElementLeft>
-                            <p:selectOneMenu id="isoFrom"
-                                             disabled="#{imageSearchBean.searchParameter.video}"
-                                             value="#{imageSearchBean.searchParameter.isoFrom}">
-                                <f:selectItems value="#{imageSearchBean.isoValues}" 
-                                               var="entry" itemLabel="#{entry.name}" itemValue="#{entry}"/>
-                                <f:converter converterId="isoConverter"/>
-                            </p:selectOneMenu>
-                            <p:outputLabel for="@previous" value="#{di:label('image.iso')} #{di:label('search.rangeFrom')}" />
-                        </comp:inputElementLeft>
-                        <comp:inputElementRight>
-                            <p:selectOneMenu id="isoTo"
-                                             disabled="#{imageSearchBean.searchParameter.video}"
-                                             value="#{imageSearchBean.searchParameter.isoTo}">
-                                <f:selectItems value="#{imageSearchBean.isoValues}" 
-                                               var="entry" itemLabel="#{entry.name}" itemValue="#{entry}"/>
-                                <f:converter converterId="isoConverter"/>
-                            </p:selectOneMenu>
-                            <p:outputLabel for="@previous" value="#{di:label('search.rangeTo')}" />
-                        </comp:inputElementRight>
-                    </comp:inputPair>
-                    <comp:inputPair>
-                        <comp:inputElementLeft>
-                            <p:selectOneMenu id="apertureFrom"
-                                             disabled="#{imageSearchBean.searchParameter.video}"
-                                             value="#{imageSearchBean.searchParameter.apertureFrom}">
-                                <f:selectItems value="#{imageSearchBean.apertureValues}" 
-                                               var="entry" itemLabel="#{entry.name}" itemValue="#{entry}"/>
-                                <f:converter converterId="apertureConverter"/>
-                            </p:selectOneMenu>
-                            <p:outputLabel for="@previous" value="#{di:label('image.aperture')} #{di:label('search.rangeFrom')}" />
-                        </comp:inputElementLeft>
-                        <comp:inputElementRight>
-                            <p:selectOneMenu id="apertureTo"
-                                             disabled="#{imageSearchBean.searchParameter.video}"
-                                             value="#{imageSearchBean.searchParameter.apertureTo}">
-                                <f:selectItems value="#{imageSearchBean.apertureValues}" 
-                                               var="entry" itemLabel="#{entry.name}" itemValue="#{entry}"/>
-                                <f:converter converterId="apertureConverter"/>
-                            </p:selectOneMenu>
-                            <p:outputLabel for="@previous" value="#{di:label('search.rangeTo')}" />
-                        </comp:inputElementRight>
-                    </comp:inputPair>
-                    <comp:inputPair>
-                        <comp:inputElementLeft>
-                            <p:selectOneMenu id="focalLengthFrom"
-                                             disabled="#{imageSearchBean.searchParameter.video}"
-                                             value="#{imageSearchBean.searchParameter.focalLengthFrom}">
-                                <f:selectItems value="#{imageSearchBean.focalLengthValues}" 
-                                               var="entry" itemLabel="#{entry.name}" itemValue="#{entry}"/>
-                                <f:converter converterId="focalLengthConverter"/>
-                            </p:selectOneMenu>
-                            <p:outputLabel for="@previous" value="#{di:label('image.focalLength')} #{di:label('search.rangeFrom')}" />
-                        </comp:inputElementLeft>
-                        <comp:inputElementRight>
-                            <p:selectOneMenu id="focalLengthTo"
-                                             disabled="#{imageSearchBean.searchParameter.video}"
-                                             value="#{imageSearchBean.searchParameter.focalLengthTo}">
-                                <f:selectItems value="#{imageSearchBean.focalLengthValues}" 
-                                               var="entry" itemLabel="#{entry.name}" itemValue="#{entry}"/>
-                                <f:converter converterId="focalLengthConverter"/>
-                            </p:selectOneMenu>
-                            <p:outputLabel for="@previous" value="#{di:label('search.rangeTo')}" />
-                        </comp:inputElementRight>
-                    </comp:inputPair>
-                    <comp:inputPair>
-                        <comp:inputElementLeft>
-                            <p:selectOneMenu id="exposureFrom"
-                                             disabled="#{imageSearchBean.searchParameter.video}"
-                                             value="#{imageSearchBean.searchParameter.exposureFrom}">
-                                <f:selectItems value="#{imageSearchBean.exposureValues}" 
-                                               var="entry" itemLabel="#{entry.name}" itemValue="#{entry}"/>
-                                <f:converter converterId="exposureConverter"/>
-                            </p:selectOneMenu>
-                            <p:outputLabel for="@previous" value="#{di:label('image.exposure')} #{di:label('search.rangeFrom')}" />
-                        </comp:inputElementLeft>
-                        <comp:inputElementRight>
-                            <p:selectOneMenu id="exposureTo"
-                                             disabled="#{imageSearchBean.searchParameter.video}"
-                                             value="#{imageSearchBean.searchParameter.exposureTo}">
-                                <f:selectItems value="#{imageSearchBean.exposureValues}" 
-                                               var="entry" itemLabel="#{entry.name}" itemValue="#{entry}"/>
-                                <f:converter converterId="exposureConverter"/>
-                            </p:selectOneMenu>
-                            <p:outputLabel for="@previous" value="#{di:label('search.rangeTo')}" />
-                        </comp:inputElementRight>
-                    </comp:inputPair>
-                </div>
-                <div class="ui-fluid formgrid grid">
-                    <comp:inputElement>
-                    <p:selectBooleanCheckbox id="video" value="#{imageSearchBean.searchParameter.video}" itemLabel="#{di:label('search.video')}">
-                        <p:ajax listener="#{imageSearchBean.toogleVideo}" update="@form"/>
-                    </p:selectBooleanCheckbox>
-                    <p:selectBooleanCheckbox value="#{imageSearchBean.searchParameter.keywordsOr}" itemLabel="#{di:label('search.or')}"/>
-                    <p:selectBooleanCheckbox value="#{imageSearchBean.searchParameter.ascending}" itemLabel="Aufsteigend"/>
-                    </comp:inputElement>
-                    <comp:inputElement>
-                        <div style="flex-flow: row; text-align: right;">
-                            <p:commandButton styleClass="di-button" style="width: auto" id="reset" value="#{di:label('common.reset')}" action="#{imageSearchBean.init()}" immediate="true" update="@form"/>
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:di="http://org.braun.digikam"
+    xmlns:comp="http://xmlns.jcp.org/jsf/composite/comp"
+    template="./../common.xhtml">
+    <ui:param name="title" value="Bilder suchen"/>
+    <ui:define name="navigation">
+        <comp:navigation/>
+    </ui:define>
+    <ui:define name="content">
+        <script type="text/javascript">
+            function addStyleToAutoCompleteMultiple(widgetVar, styleClass) {
+                var widget = PF(widgetVar);
+                if (widget) {
+                    widget.jq[0].classList.add(styleClass);
+                }
+            }
+            function removeStyleToAutoCompleteMultiple(widgetVar, styleClass) {
+                var widget = PF(widgetVar);
+                if (widget) {
+                    widget.jq[0].classList.remove(styleClass);
+                }
+            }
+        </script>
+        <div class="ui-fluid formgrid grid">
+            <comp:inputElement>
+                <p:autoComplete id="keywords" var="keyword" dropdown="true" widgetVar="keywordWidget"
+                                multiple="true" value="#{imageSearchBean.searchParameter.keywords}"
+                                completeMethod="#{imageSearchBean.completeKeyword}"
+                                itemLabel="#{keyword.name}" itemValue="#{keyword}"
+                                scrollHeight="250"
+                                onfocus="addStyleToAutoCompleteMultiple('keywordWidget', 'ui-inputwrapper-focus')"
+                                onblur="removeStyleToAutoCompleteMultiple('keywordWidget', 'ui-inputwrapper-focus')"
+                                styleClass="#{imageSearchBean.searchParameter.keywords.isEmpty() ? '' : 'ui-inputwrapper-filled'}">
+                    <f:converter converterId="keywordConverter"/>
+                    <p:ajax event="itemSelect" update="keywords"/>
+                    <p:ajax event="itemUnselect" update="keywords"/>
+                </p:autoComplete>
+                <p:outputLabel for="keywords" value="#{di:label('image.keywords')}" />
+                <p:message id="keywordMsg" for="keywords" display="tooltip"/>
+            </comp:inputElement>
+            <comp:inputElement>
+                <p:autoComplete id="creator" var="creators" dropdown="true" 
+                                value="#{imageSearchBean.searchParameter.creator}"
+                                completeMethod="#{imageSearchBean.completeCreator}"
+                                itemLabel="#{creators}" itemValue="#{creators}"
+                                scrollHeight="250">
+                </p:autoComplete>
+                <p:outputLabel for="creator" value="#{di:label('image.creator')}" />
+            </comp:inputElement>
+            <comp:inputElement>
+                <p:autoComplete id="camera" var="cameras" dropdown="true"
+                                disabled="#{imageSearchBean.searchParameter.video}"
+                                value="#{imageSearchBean.searchParameter.camera}"
+                                completeMethod="#{imageSearchBean.completeCamera}"
+                                itemLabel="#{cameras}" itemValue="#{cameras}"
+                                scrollHeight="250">
+                    <p:ajax event="change" listener="#{imageSearchBean.changeAction}"/>
+                </p:autoComplete>
+                <p:outputLabel for="camera" value="#{di:label('image.camera')}" />
+            </comp:inputElement>
+            <comp:inputElement>
+                <p:selectOneMenu id="orientation" 
+                                 disabled="#{imageSearchBean.searchParameter.video}"
+                                 value="#{imageSearchBean.searchParameter.orientation}">
+                    <f:selectItems value="#{imageSearchBean.orientationValues}" var="orientation" 
+                                   itemLabel="#{orientation.name}" itemValue="#{orientation}"/>
+                    <f:converter converterId="orientationConverter"/>
+                </p:selectOneMenu>
+                <p:outputLabel for="orientation" value="Format" />
+            </comp:inputElement>
+            <comp:inputElement>
+                <p:autoComplete id="lens" var="lenses" dropdown="true" 
+                                disabled="#{imageSearchBean.searchParameter.video}"
+                                value="#{imageSearchBean.searchParameter.lens}"
+                                completeMethod="#{imageSearchBean.completeLens}"
+                                minQueryLength="2"
+                                itemLabel="#{lenses}" itemValue="#{lenses}" 
+                                scrollHeight="250">
+                </p:autoComplete>
+                <p:outputLabel for="lens" value="#{di:label('image.lens')}" />
+            </comp:inputElement>
+            <comp:inputElement>
+                <p:autoComplete id="descTitle" var="descTitle" dropdown="false" widgetVar="descTitleWidget"
+                                multiple="true" value="#{imageSearchBean.searchParameter.descTitle}"
+                                completeMethod="#{imageSearchBean.completeDescTitle}"
+                                itemLabel="#{descTitle}" itemValue="#{descTitle}"
+                                scrollHeight="250"
+                                onfocus="addStyleToAutoCompleteMultiple('descTitleWidget', 'ui-inputwrapper-focus')"
+                                onblur="removeStyleToAutoCompleteMultiple('descTitleWidget', 'ui-inputwrapper-focus')"
+                                styleClass="#{imageSearchBean.searchParameter.descTitle.isEmpty() ? '' : 'ui-inputwrapper-filled'}">
+                    <p:ajax event="itemSelect" update="descTitle"/>
+                    <p:ajax event="itemUnselect" update="descTitle"/>
+                    <p:ajax event="change" update="descTitle"/>
+                </p:autoComplete>
+                <p:outputLabel for="descTitle" value="#{di:label('image.descTitle')}" />
+                <p:message id="descTitleMsg" for="descTitle" display="tooltip"/>
+            </comp:inputElement>
+            <comp:inputPair>
+                <comp:inputElementLeft>
+                    <p:inputText id="dateFrom" value="#{imageSearchBean.searchParameter.date.from}" >
+                        <f:converter converterId="dateWrapperConverter"/>
+                        <p:ajax update="dateFromMsg @this" event="change"/>
+                    </p:inputText>
+                    <p:outputLabel for="dateFrom" value="#{di:label('image.date')} #{di:label('search.rangeFrom')}" />
+                    <p:message id="dateFromMsg" for="dateFrom" display="tooltip"/>
+                </comp:inputElementLeft>
+                <comp:inputElementRight>
+                    <p:inputText id="dateTo" value="#{imageSearchBean.searchParameter.date.to}">
+                        <f:converter converterId="dateWrapperConverter"/>
+                        <p:ajax update="dateToMsg @this" event="change"/>
+                    </p:inputText>
+                    <p:outputLabel for="dateTo" value="#{di:label('search.rangeTo')}" />
+                    <p:message id="dateToMsg" for="dateTo" display="tooltip"/>
+                </comp:inputElementRight>
+            </comp:inputPair>
+            <comp:inputPair>
+                <comp:inputElementLeft>
+                    <p:selectOneMenu id="ratingFrom"
+                                     value="#{imageSearchBean.searchParameter.ratingFrom}">
+                        <f:selectItems value="#{imageSearchBean.ratingValues}" 
+                                       var="rating" itemLabel="#{rating.name}" itemValue="#{rating}"/>
+                        <f:converter converterId="ratingConverter"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel for="@previous" value="#{di:label('image.rating')} #{di:label('search.rangeFrom')}" />
+                </comp:inputElementLeft>
+                <comp:inputElementRight>
+                    <p:selectOneMenu id="ratingTo"
+                                     value="#{imageSearchBean.searchParameter.ratingTo}">
+                        <f:selectItems value="#{imageSearchBean.ratingValues}" 
+                                       var="rating" itemLabel="#{rating.name}" itemValue="#{rating}"/>
+                        <f:converter converterId="ratingConverter"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel for="@previous" value="#{di:label('search.rangeTo')}" />
+                </comp:inputElementRight>
+            </comp:inputPair>
+            <comp:inputPair>
+                <comp:inputElementLeft>
+                    <p:selectOneMenu id="isoFrom"
+                                     disabled="#{imageSearchBean.searchParameter.video}"
+                                     value="#{imageSearchBean.searchParameter.isoFrom}">
+                        <f:selectItems value="#{imageSearchBean.isoValues}" 
+                                       var="entry" itemLabel="#{entry.name}" itemValue="#{entry}"/>
+                        <f:converter converterId="isoConverter"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel for="@previous" value="#{di:label('image.iso')} #{di:label('search.rangeFrom')}" />
+                </comp:inputElementLeft>
+                <comp:inputElementRight>
+                    <p:selectOneMenu id="isoTo"
+                                     disabled="#{imageSearchBean.searchParameter.video}"
+                                     value="#{imageSearchBean.searchParameter.isoTo}">
+                        <f:selectItems value="#{imageSearchBean.isoValues}" 
+                                       var="entry" itemLabel="#{entry.name}" itemValue="#{entry}"/>
+                        <f:converter converterId="isoConverter"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel for="@previous" value="#{di:label('search.rangeTo')}" />
+                </comp:inputElementRight>
+            </comp:inputPair>
+            <comp:inputPair>
+                <comp:inputElementLeft>
+                    <p:selectOneMenu id="apertureFrom"
+                                     disabled="#{imageSearchBean.searchParameter.video}"
+                                     value="#{imageSearchBean.searchParameter.apertureFrom}">
+                        <f:selectItems value="#{imageSearchBean.apertureValues}" 
+                                       var="entry" itemLabel="#{entry.name}" itemValue="#{entry}"/>
+                        <f:converter converterId="apertureConverter"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel for="@previous" value="#{di:label('image.aperture')} #{di:label('search.rangeFrom')}" />
+                </comp:inputElementLeft>
+                <comp:inputElementRight>
+                    <p:selectOneMenu id="apertureTo"
+                                     disabled="#{imageSearchBean.searchParameter.video}"
+                                     value="#{imageSearchBean.searchParameter.apertureTo}">
+                        <f:selectItems value="#{imageSearchBean.apertureValues}" 
+                                       var="entry" itemLabel="#{entry.name}" itemValue="#{entry}"/>
+                        <f:converter converterId="apertureConverter"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel for="@previous" value="#{di:label('search.rangeTo')}" />
+                </comp:inputElementRight>
+            </comp:inputPair>
+            <comp:inputPair>
+                <comp:inputElementLeft>
+                    <p:selectOneMenu id="focalLengthFrom"
+                                     disabled="#{imageSearchBean.searchParameter.video}"
+                                     value="#{imageSearchBean.searchParameter.focalLengthFrom}">
+                        <f:selectItems value="#{imageSearchBean.focalLengthValues}" 
+                                       var="entry" itemLabel="#{entry.name}" itemValue="#{entry}"/>
+                        <f:converter converterId="focalLengthConverter"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel for="@previous" value="#{di:label('image.focalLength')} #{di:label('search.rangeFrom')}" />
+                </comp:inputElementLeft>
+                <comp:inputElementRight>
+                    <p:selectOneMenu id="focalLengthTo"
+                                     disabled="#{imageSearchBean.searchParameter.video}"
+                                     value="#{imageSearchBean.searchParameter.focalLengthTo}">
+                        <f:selectItems value="#{imageSearchBean.focalLengthValues}" 
+                                       var="entry" itemLabel="#{entry.name}" itemValue="#{entry}"/>
+                        <f:converter converterId="focalLengthConverter"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel for="@previous" value="#{di:label('search.rangeTo')}" />
+                </comp:inputElementRight>
+            </comp:inputPair>
+            <comp:inputPair>
+                <comp:inputElementLeft>
+                    <p:selectOneMenu id="exposureFrom"
+                                     disabled="#{imageSearchBean.searchParameter.video}"
+                                     value="#{imageSearchBean.searchParameter.exposureFrom}">
+                        <f:selectItems value="#{imageSearchBean.exposureValues}" 
+                                       var="entry" itemLabel="#{entry.name}" itemValue="#{entry}"/>
+                        <f:converter converterId="exposureConverter"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel for="@previous" value="#{di:label('image.exposure')} #{di:label('search.rangeFrom')}" />
+                </comp:inputElementLeft>
+                <comp:inputElementRight>
+                    <p:selectOneMenu id="exposureTo"
+                                     disabled="#{imageSearchBean.searchParameter.video}"
+                                     value="#{imageSearchBean.searchParameter.exposureTo}">
+                        <f:selectItems value="#{imageSearchBean.exposureValues}" 
+                                       var="entry" itemLabel="#{entry.name}" itemValue="#{entry}"/>
+                        <f:converter converterId="exposureConverter"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel for="@previous" value="#{di:label('search.rangeTo')}" />
+                </comp:inputElementRight>
+            </comp:inputPair>
+        </div>
+        <div class="ui-fluid formgrid grid">
+            <comp:inputElement>
+                <ul class="options">
+                    <li>
+                        <p:selectBooleanCheckbox id="video" value="#{imageSearchBean.searchParameter.video}" itemLabel="#{di:label('search.video')}">
+                            <p:ajax listener="#{imageSearchBean.toogleVideo}" update="@form"/>
+                        </p:selectBooleanCheckbox>
+                    </li>
+                    <li>
+                        <p:selectBooleanCheckbox value="#{imageSearchBean.searchParameter.keywordsOr}" itemLabel="#{di:label('search.or')}"/>
+                    </li>
+                    <li>
+                        <p:selectBooleanCheckbox value="#{imageSearchBean.searchParameter.ascending}" itemLabel="Aufsteigend"/>
+                    </li>
+                </ul>
+            </comp:inputElement>
+            <comp:inputElement>
+                <div style="flex-flow: row; text-align: right;">
+                    <p:commandButton styleClass="di-button" style="width: auto" id="reset" value="#{di:label('common.reset')}" action="#{imageSearchBean.init()}" immediate="true" update="@form"/>
                     <p:commandButton styleClass="di-button" style="width: auto" id="execute" value="#{di:label('search.search')}" action="#{imageSearchBean.execute()}" update="@form"/>
-                        </div>
-                    </comp:inputElement>
                 </div>
-            </ui:define>
-        </ui:composition>
-    </body>
-</html>
+            </comp:inputElement>
+        </div>
+    </ui:define>
+</ui:composition>

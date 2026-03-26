@@ -7,13 +7,13 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
 import org.braun.digikam.backend.CameraFactory;
 import org.braun.digikam.backend.api.*;
-import org.braun.digikam.backend.dao.ImageMetadataFacade;
+import org.braun.digikam.backend.dao.ImageMetadataDao;
 import org.braun.digikam.backend.model.Camera;
 import org.braun.digikam.backend.util.Util;
 
 public class CameraApiServiceImpl extends CameraApiService {
     
-    @Inject private ImageMetadataFacade facade;
+    @Inject private ImageMetadataDao facade;
     
     @Override
     public Response findCamerasByMakerAndModel( @NotNull String makeAndModel, SecurityContext securityContext) throws NotFoundException {
@@ -23,14 +23,14 @@ public class CameraApiServiceImpl extends CameraApiService {
 
     @Override
     public Response refreshCameraCache(SecurityContext securityContext) throws NotFoundException {
-        ImageMetadataFacade facade = getFacade();
+        ImageMetadataDao facade = getFacade();
         CameraFactory.getInstance().refresh(facade.findAllCameras());
         return Response.ok().build();
     }
 
-    public ImageMetadataFacade getFacade() {
+    public ImageMetadataDao getFacade() {
         if (facade == null) {
-            facade = Util.Cdi.lookup(ImageMetadataFacade.class);
+            facade = Util.Cdi.lookup(ImageMetadataDao.class);
         }
         return facade;
     }

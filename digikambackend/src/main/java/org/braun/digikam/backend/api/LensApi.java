@@ -11,7 +11,7 @@ import jakarta.ws.rs.*;
 import jakarta.validation.constraints.*;
 import java.util.List;
 import org.braun.digikam.backend.CameraLensFactory;
-import org.braun.digikam.backend.dao.ImageMetadataFacade;
+import org.braun.digikam.backend.dao.ImageMetadataDao;
 import org.braun.digikam.backend.model.CameraLens;
 import org.braun.digikam.backend.util.Util;
 
@@ -22,7 +22,7 @@ import org.braun.digikam.backend.util.Util;
 public class LensApi {
 
     @Inject
-    private ImageMetadataFacade facade;
+    private ImageMetadataDao facade;
 
     public LensApi(@Context ServletConfig servletContext) {
     }
@@ -65,9 +65,9 @@ public class LensApi {
         return Response.ok().entity(result).build();
     }
     
-    public ImageMetadataFacade getFacade() {
+    public ImageMetadataDao getFacade() {
         if (facade == null) {
-            facade = Util.Cdi.lookup(ImageMetadataFacade.class);
+            facade = Util.Cdi.lookup(ImageMetadataDao.class);
         }
         return facade;
     }

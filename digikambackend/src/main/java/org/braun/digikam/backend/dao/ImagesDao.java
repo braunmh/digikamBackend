@@ -25,10 +25,10 @@ import org.braun.digikam.backend.util.Util;
  * @author mbraun
  */
 @Stateless
-public class ImagesFacade extends AbstractFacade<Images> {
+public class ImagesDao extends AbstractDao<Images> {
 
     @Inject
-    private ImageInformationFacade imageInformationFacade;
+    private ImageInformationDao imageInformationFacade;
     
     @PersistenceContext(unitName = "digikam")
     private EntityManager em;
@@ -38,7 +38,7 @@ public class ImagesFacade extends AbstractFacade<Images> {
         return em;
     }
 
-    public ImagesFacade() {
+    public ImagesDao() {
         super(Images.class);
     }
 
@@ -140,14 +140,14 @@ public class ImagesFacade extends AbstractFacade<Images> {
         }
     }
     
-    public ImageInformationFacade getImageInformationFacade() {
+    public ImageInformationDao getImageInformationFacade() {
         if (imageInformationFacade == null) {
-            imageInformationFacade = Util.Cdi.lookup(ImageInformationFacade.class);
+            imageInformationFacade = Util.Cdi.lookup(ImageInformationDao.class);
         }
         return imageInformationFacade;
     }
 
-    public void setImageInformationFacade(ImageInformationFacade imageInformationFacade) {
+    public void setImageInformationFacade(ImageInformationDao imageInformationFacade) {
         this.imageInformationFacade = imageInformationFacade;
     }
 

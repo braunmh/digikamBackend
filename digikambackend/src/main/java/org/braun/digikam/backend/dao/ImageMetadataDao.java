@@ -23,14 +23,14 @@ import org.braun.digikam.web.component.diagram.Point;
  * @author mbraun
  */
 @Stateless
-public class ImageMetadataFacade extends AbstractFacade<ImageMetadata>  {
+public class ImageMetadataDao extends AbstractDao<ImageMetadata>  {
     
     private static final String FIND_CAMERAS = "select distinct make, model from ImageMetadata order by make, model";
     
     @PersistenceContext(unitName = "digikam")
     private EntityManager em;
 
-    public ImageMetadataFacade() {
+    public ImageMetadataDao() {
         super(ImageMetadata.class);
     }
 

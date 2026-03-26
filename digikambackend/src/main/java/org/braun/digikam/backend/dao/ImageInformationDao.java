@@ -17,7 +17,7 @@ import org.braun.digikam.backend.api.NotFoundException;
  * @author mbraun
  */
 @Stateless
-public class ImageInformationFacade extends AbstractFacade<ImageInformation> {
+public class ImageInformationDao extends AbstractDao<ImageInformation> {
 
     private static final Logger LOG = LogManager.getLogger();
     
@@ -31,7 +31,7 @@ public class ImageInformationFacade extends AbstractFacade<ImageInformation> {
     @PersistenceContext(unitName = "digikam")
     private EntityManager em;
 
-    public ImageInformationFacade() {
+    public ImageInformationDao() {
         super(ImageInformation.class);
     }
 
@@ -79,5 +79,9 @@ public class ImageInformationFacade extends AbstractFacade<ImageInformation> {
     @Override
     protected EntityManager getEntityManager() {
         return em;
+    }
+    
+    public void setEntityManager(EntityManager em) {
+        this.em = em;
     }
 }

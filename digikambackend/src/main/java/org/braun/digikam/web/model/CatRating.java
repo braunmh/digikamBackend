@@ -1,5 +1,9 @@
 package org.braun.digikam.web.model;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlType;
 import java.util.Arrays;
 import java.util.List;
 
@@ -7,6 +11,8 @@ import java.util.List;
  *
  * @author mbraun
  */
+@XmlType
+@XmlAccessorType(XmlAccessType.FIELD)
 public class CatRating extends Catalogue<Integer> {
     
     public static final List<CatRating> values =
@@ -19,6 +25,19 @@ public class CatRating extends Catalogue<Integer> {
             new CatRating().id(5).value(5).name("*****")
         );
 
+    @XmlAttribute
+    private Integer value;
+
+    @Override
+    public Integer getValue() {
+        return value;
+    }
+
+    @Override
+    public void setValue(Integer value) {
+        this.value = value;
+    }
+    
     @Override
     public CatRating id(int id) {
         setId(id);
