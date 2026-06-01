@@ -39,7 +39,6 @@ import org.braun.digikam.backend.search.sql.Sql;
 import org.braun.digikam.backend.search.sql.TextCondition;
 import org.braun.digikam.web.model.SearchParameter;
 import org.braun.digikam.web.model.TopicView;
-import org.braun.digikam.web.ui.TopicDisplayBean;
 import org.braun.digikam.web.model.TopicDisplayView;
 import org.ccil.cowan.tagsoup.Parser;
 import org.xml.sax.Attributes;

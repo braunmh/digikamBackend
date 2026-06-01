@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public class DialogParameters {
 
-    private Map<String, List<String>> params;
+    private final Map<String, List<String>> params;
     
     private DialogParameters() {
         params = new HashMap<>();

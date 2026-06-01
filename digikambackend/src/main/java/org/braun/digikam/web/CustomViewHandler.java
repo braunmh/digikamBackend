@@ -36,7 +36,7 @@ public class CustomViewHandler extends ViewHandlerWrapper {
     @Override
     public String getActionURL(FacesContext context, String viewId) {
         String url = super.getActionURL(context, viewId);
-        LOG.debug("The getActionURL: " + url);
+        LOG.trace("The getActionURL: " + url);
         url = addContextPath(context, url);
         Map<String, String> params = context.getExternalContext().getRequestParameterMap();
         String pfdlgcid = params.get(Constants.DialogFramework.CONVERSATION_PARAM);
@@ -59,14 +59,14 @@ public class CustomViewHandler extends ViewHandlerWrapper {
     @Override
     public String getRedirectURL(FacesContext context, String viewId, Map<String, List<String>> parameters, boolean includeViewParams) {
         String url = super.getRedirectURL(context, viewId, parameters, includeViewParams);
-        LOG.debug("The getRedirectURL: " + url);
+        LOG.trace("The getRedirectURL: " + url);
         return url;
     }
 
     @Override
     public String getResourceURL(FacesContext context, String path) {
         String url = super.getResourceURL(context, path);
-        LOG.debug("The getResourceURL: = " + url);
+        LOG.trace("The getResourceURL: = " + url);
         return addContextPath(context, url);
     }
 
